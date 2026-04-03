@@ -1,5 +1,7 @@
 package com.dhananjaysaini.musicplayerapp.utils
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 
 
 object SongMenuManager {
@@ -58,8 +61,8 @@ object SongMenuManager {
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun handleDelete(context: Context, song: Music) {
-        DeleteManager.deleteSong(context, song)
+    fun handleDelete(activity: Activity, song: Music) {
+        DeleteManager.deleteSong(activity, song)
     }
 
     fun handleShare(context: Context, song: Music) {

@@ -1,10 +1,14 @@
 package com.dhananjaysaini.musicplayerapp.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +19,7 @@ import com.dhananjaysaini.musicplayerapp.databinding.FragmentAllSongsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
 import com.dhananjaysaini.musicplayerapp.utils.SongOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
@@ -23,33 +28,23 @@ open class AllSongsFragment : Fragment() {
 
     private lateinit var binding: FragmentAllSongsBinding
     private lateinit var allSongsAdapter: AllSongsAdapter
-
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        allSongsAdapter = AllSongsAdapter(requireContext(), ArrayList())
+
         binding = FragmentAllSongsBinding.inflate(inflater, container, false)
         return binding.root
 
-        allSongsAdapter = AllSongsAdapter(requireContext(), ArrayList())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeSongs()
-
-//        allSongsAdapter.onAddToPlaylist = { song ->
-//            showPlaylistChooser(song)
-//        }
-//        allSongsAdapter.onMenuClick = { song ->
-//
-//            SongOptionsBottomSheet
-//                .newInstance(song, SongMenuType.ALL_SONGS)
-//                .show(parentFragmentManager, "SongOptions")
-//        }
 
         allSongsAdapter.onMenuClick = { song, pos ->
 
@@ -65,7 +60,7 @@ open class AllSongsFragment : Fragment() {
                 share = true
             )
 
-            SongOptionsBottomSheet(song, pos,   config)
+            SongOptionsBottomSheet(song, pos, config)
                 .show(parentFragmentManager, "song_menu")
         }
     }
@@ -96,7 +91,7 @@ open class AllSongsFragment : Fragment() {
         }
     }
 
-     fun playSong(list: ArrayList<Music>, position: Int) {
+    fun playSong(list: ArrayList<Music>, position: Int) {
 
         MusicService.playlist = ArrayList(list)
         MusicService.position = position

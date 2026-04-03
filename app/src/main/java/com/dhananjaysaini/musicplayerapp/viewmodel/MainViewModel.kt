@@ -1,6 +1,7 @@
 package com.dhananjaysaini.musicplayerapp.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -16,20 +17,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo = MusicRepository(application)
     private val loadMusicUseCase = LoadMusicUseCase(repo)
-
     val musicListLiveData = MutableLiveData<ArrayList<Music>>()
     private val isLoading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
 
+    fun loadMusic(context: Context, force: Boolean = false) {
 
-    fun loadMusic() {
-
-        if (!musicListLiveData.value.isNullOrEmpty()) return
+        if (!force && !musicListLiveData.value.isNullOrEmpty()) return
 
         isLoading.postValue(true)
-
-        //   MusicService.playlist = musicListMA
-
 
         viewModelScope.launch {
             try {

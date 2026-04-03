@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.dhananjaysaini.musicplayerapp.databinding.BottomSheetSongOptionsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
+import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class SongOptionsBottomSheet(
@@ -96,7 +98,8 @@ class SongOptionsBottomSheet(
         binding!!.btnDeleteSong.setOnClickListener {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                SongMenuManager.handleDelete(requireContext(), song)
+                 SongMenuManager.handleDelete(requireActivity(), song)
+
             }
             dismiss()
         }
