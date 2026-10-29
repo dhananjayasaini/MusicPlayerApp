@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.AllSongsFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <TextView
+        android:id="@+id/totalSongsTv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:text="0 Song"
+        android:textColor="@color/black"
+        android:padding="12dp"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/musicRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="UselessParent">
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/totalSongsTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="0 Song"
-            android:textColor="@color/black"
-            android:padding="12dp"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/musicRV"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</FrameLayout>
+</LinearLayout>

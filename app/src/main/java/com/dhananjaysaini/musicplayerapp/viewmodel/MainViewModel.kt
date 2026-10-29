@@ -21,6 +21,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isLoading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
 
+    init {
+        if (MusicService.allSongs.isNotEmpty()) {
+            musicListLiveData.value = ArrayList(MusicService.allSongs)
+        }
+    }
+
     fun loadMusic(context: Context, force: Boolean = false) {
 
         if (!force && !musicListLiveData.value.isNullOrEmpty()) return
@@ -33,7 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 musicListLiveData.postValue(songs)
 
                 MusicService.playlist = ArrayList(songs)
-
+                MusicService.allSongs = songs
 
             } catch (e: Exception) {
                 error.postValue(e.message.toString())

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.databinding.MusicViewBinding
@@ -29,9 +30,15 @@ class AllSongsAdapter(
         holder.album.text = song.album
         holder.duration.text = formatDuration(song.duration)
 
-        Glide.with(context)
+        Glide.with(holder.itemView.context)
             .load(song.artUri)
-            .apply(RequestOptions().placeholder(R.drawable.ic_music))
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable.ic_music)
+                    .error(R.drawable.ic_music)
+                    .override(150, 150)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            )
             .into(holder.image)
 
         bindClick(holder, position)

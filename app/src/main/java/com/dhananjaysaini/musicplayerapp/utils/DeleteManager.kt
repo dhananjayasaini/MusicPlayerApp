@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.dhananjaysaini.musicplayerapp.model.Music
 
 object DeleteManager {
-
     const val DELETE_REQUEST_CODE = 1001
 
     fun deleteSong(activity: Activity, song: Music) {
@@ -19,7 +18,6 @@ object DeleteManager {
         )
 
         try {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
                 val intentSender = MediaStore.createDeleteRequest(

@@ -14,9 +14,12 @@ import android.os.IBinder
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
+import android.content.pm.ServiceInfo
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.activities.PlayerActivity
@@ -304,13 +307,30 @@ class MusicService : Service() {
 
     // ------------------ Core playback ------------------
 
+    private fun startForegroundServiceCompat(notification: Notification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ServiceCompat.startForeground(
+                this,
+                Constants.NOTIFICATION_ID,
+                notification,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                } else {
+                    0
+                }
+            )
+        } else {
+            startForeground(Constants.NOTIFICATION_ID, notification)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.P)
     fun playAt(index: Int, startForegroundNow: Boolean) {
         if (playlist.isEmpty()) return
         val track = playlist[index]
 
         if (!isServiceStarted) {
-            startForeground(Constants.NOTIFICATION_ID, buildNotification(true))
+            startForegroundServiceCompat(buildNotification(true))
             isServiceStarted = true
         } else {
             updateNotification(true)
@@ -339,7 +359,7 @@ class MusicService : Service() {
 
 
             if (!isServiceStarted) {
-                startForeground(Constants.NOTIFICATION_ID, buildNotification(true))
+                startForegroundServiceCompat(buildNotification(true))
                 isServiceStarted = true
             } else {
                 updateNotification(true)
@@ -522,7 +542,12 @@ class MusicService : Service() {
             addAction(Constants.ACTION_NEXT)
             addAction(Constants.ACTION_PREVIOUS)
         }
-        registerReceiver(receiver, filter)
+        ContextCompat.registerReceiver(
+            this,
+            receiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     // ------------------ UI broadcast helpers ------------------

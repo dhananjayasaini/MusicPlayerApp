@@ -20,6 +20,7 @@ import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
+import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
 import com.dhananjaysaini.musicplayerapp.utils.SongOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
@@ -48,14 +49,16 @@ open class AllSongsFragment : Fragment() {
 
         allSongsAdapter.onMenuClick = { song, pos ->
 
+            val isFav = FavouriteManager.isFavourite(song)
+
             val config = SongMenuConfig(
                 play = true,
                 playNext = true,
                 addToQueue = true,
                 delete = true,
                 edit = true,
-                addToFav = true,
-                removeFromFav = false,
+                addToFav = !isFav,
+                removeFromFav = isFav,
                 addToPlaylist = true,
                 share = true
             )
@@ -72,6 +75,7 @@ open class AllSongsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@AllSongsFragment.allSongsAdapter
             setHasFixedSize(true)
+            setItemViewCacheSize(20)
         }
 
         allSongsAdapter.onItemClick = { list, position ->

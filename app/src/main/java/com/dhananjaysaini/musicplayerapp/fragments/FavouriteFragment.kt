@@ -92,27 +92,32 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
         }
     }
 
+    private var currentFavIds = listOf<String>()
+    private var currentAllSongs = listOf<Music>()
+
     private fun observeFavorites() {
-
         favouriteViewModel.favouriteIds.observe(viewLifecycleOwner) { favIds ->
+            currentFavIds = favIds ?: emptyList()
+            updateFavoritesList()
+        }
 
-            mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { allSongs ->
+        mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { allSongs ->
+            currentAllSongs = allSongs ?: emptyList()
+            updateFavoritesList()
+        }
+    }
 
-                favouriteSongs.clear()
-                favouriteSongs.addAll(
-                    allSongs.filter { it.id in favIds }
-                )
-                Log.d("favSongs", "favSongs1 $allSongs")
-                favAdapter.updateList(ArrayList(favouriteSongs))
+    private fun updateFavoritesList() {
+        favouriteSongs.clear()
+        favouriteSongs.addAll(
+            currentAllSongs.filter { it.id in currentFavIds }
+        )
+        favAdapter.updateList(ArrayList(favouriteSongs))
 
-                Log.d("favSongs", "favSongs2 $favouriteSongs")
-                Log.d("favSongs", "favSongs3 $favAdapter")
-
-                if (favouriteSongs.isEmpty())
-                    binding.favFragment.visibility = View.VISIBLE
-                else
-                    binding.favFragment.visibility = View.GONE
-            }
+        if (favouriteSongs.isEmpty()) {
+            binding.favFragment.visibility = View.VISIBLE
+        } else {
+            binding.favFragment.visibility = View.GONE
         }
     }
 }

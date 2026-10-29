@@ -30,6 +30,8 @@ import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ViewPagerAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityMainBinding
 import com.dhananjaysaini.musicplayerapp.fragments.MiniPlayerFragment
+import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
+import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
@@ -41,6 +43,9 @@ import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +58,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var musicListMA = ArrayList<Music>()
+
+        private const val STORAGE_PERMISSION_CODE = 500
+        private const val NOTIFICATION_PERMISSION_CODE = 501
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,12 +86,21 @@ class MainActivity : AppCompatActivity() {
         FavouriteManager.init(applicationContext)
         PlaylistManager.init(applicationContext)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = MusicDatabase.getDatabase(applicationContext).FavouriteDao()
+            val roomFavIds = dao.getAllFavourites().map { it.songId }.toSet()
+            for (favSong in FavouriteManager.getFavourites()) {
+                if (!roomFavIds.contains(favSong.id)) {
+                    dao.addFavourite(FavouriteEntity(favSong.id))
+                }
+            }
+        }
+
         setupViewPager()
         setupDrawerMenu()
         setupMiniPlayer()
         observeViewModel()
         requestPermission()
-        checkAudioPermission()
 //        voiceControllerMa()
         mainSongsVM()
 
@@ -128,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewPager() {
 
         binding.viewPager.adapter = ViewPagerAdapter(this)
-        binding.viewPager.offscreenPageLimit = 7
+        binding.viewPager.offscreenPageLimit = 2
         val defaultPosition = 1
         binding.viewPager.setCurrentItem(defaultPosition, false)
         binding.tabLayout.getTabAt(defaultPosition)?.select()
@@ -221,15 +238,16 @@ class MainActivity : AppCompatActivity() {
 
     // -------------------- Mini Player --------------------
 
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun setupMiniPlayer() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.mini_player_container, MiniPlayerFragment())
             .commit()
 
-        registerReceiver(
+        ContextCompat.registerReceiver(
+            this,
             showMiniReceiver,
-            IntentFilter("SHOW_MINI_PLAYER")
+            IntentFilter("SHOW_MINI_PLAYER"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
         )
     }
 
@@ -270,26 +288,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // -------------------- Permissions --------------------
+//    companion object {
+//        private const val STORAGE_PERMISSION_CODE = 500
+//        private const val NOTIFICATION_PERMISSION_CODE = 501
+//    }
 
     private fun requestPermission() {
-        val permissionsToRequest = mutableListOf<String>()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (!hasPermission(Manifest.permission.READ_MEDIA_AUDIO))
-                permissionsToRequest.add(Manifest.permission.READ_MEDIA_AUDIO)
-
-            if (!hasPermission(Manifest.permission.POST_NOTIFICATIONS))
-                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE))
-                permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 500)
-        } else {
+        if (hasStoragePermission()) {
             mainViewModel.loadMusic(this)
+            requestNotificationPermission()
+        } else {
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_AUDIO
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            ActivityCompat.requestPermissions(this, arrayOf(permission), STORAGE_PERMISSION_CODE)
+        }
+    }
+
+    private fun hasStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            hasPermission(Manifest.permission.READ_MEDIA_AUDIO)
+        } else {
+            hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_CODE
+                )
+            }
         }
     }
 
@@ -302,10 +336,16 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 500 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-            mainViewModel.loadMusic(this)
-        } else {
-            toast("Permission Denied")
+        when (requestCode) {
+            STORAGE_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mainViewModel.loadMusic(this)
+                    requestNotificationPermission()
+                }
+            }
+            NOTIFICATION_PERMISSION_CODE -> {
+                // Notifications allowed or denied; playback works regardless
+            }
         }
     }
 

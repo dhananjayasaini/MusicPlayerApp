@@ -12,6 +12,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -226,7 +227,12 @@ open class PlayerActivity : AppCompatActivity() {
             addAction(Constants.ACTION_TIMER_UPDATE)
             addAction(Constants.ACTION_MUSIC_STOPPED_BY_TIMER)
         }
-        registerReceiver(timerReceiver, filter)
+        ContextCompat.registerReceiver(
+            this,
+            timerReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onDestroy() {
