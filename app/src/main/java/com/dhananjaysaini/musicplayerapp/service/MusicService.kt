@@ -27,6 +27,7 @@ import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.repository.PlayHistoryRepository
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +42,8 @@ class MusicService : Service() {
         var allSongs: List<Music> = emptyList()
         var musicService: MusicService? = null
         var song: Music? = null
+        val currentSongLiveData = MutableLiveData<Music?>()
+        val isPlayingLiveData = MutableLiveData<Boolean>()
     }
 
     private lateinit var receiver: BroadcastReceiver
@@ -61,6 +64,7 @@ class MusicService : Service() {
 
                 // Broadcast current position regularly
                 sendBroadcast(Intent("UPDATE_UI").apply {
+                    setPackage(packageName)
                     putExtra("Index", position)
                     putExtra("isPlaying", mediaPlayer?.isPlaying == true)
                     putExtra("currentMs", currentPosition)
@@ -133,9 +137,7 @@ class MusicService : Service() {
                     mediaPlayer?.pause()
                 } else {
                     mediaPlayer?.start()
-                    sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-                    sendBroadcast(Intent("UPDATE_UI"))
-// <-- ADD HERE
+                    sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
                 }
                 notifyUIAndUpdateNotification()
             }
@@ -170,13 +172,14 @@ class MusicService : Service() {
                 else if (mediaPlayer?.isPlaying != true) {
                     mediaPlayer?.start()
 
-                    sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-                    sendBroadcast(Intent("UPDATE_UI"))
-
+                    sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
                     startProgressUpdates()
                     notifyUIAndUpdateNotification()
 
-                    updatePlayHistory(song!!)
+                    val currentSong = playlist.getOrNull(position)
+                    if (currentSong != null) {
+                        updatePlayHistory(currentSong)
+                    }
                 }
             }
 
@@ -327,7 +330,12 @@ class MusicService : Service() {
     @RequiresApi(Build.VERSION_CODES.P)
     fun playAt(index: Int, startForegroundNow: Boolean) {
         if (playlist.isEmpty()) return
-        val track = playlist[index]
+        position = index.coerceIn(0, playlist.lastIndex)
+        val track = playlist[position]
+        song = track
+
+        currentSongLiveData.postValue(track)
+        isPlayingLiveData.postValue(true)
 
         if (!isServiceStarted) {
             startForegroundServiceCompat(buildNotification(true))
@@ -335,7 +343,6 @@ class MusicService : Service() {
         } else {
             updateNotification(true)
         }
-
 
         try {
             val mp = mediaPlayer ?: MediaPlayer().also {
@@ -355,8 +362,7 @@ class MusicService : Service() {
             mp.isLooping = isRepeat
             mp.start()
 
-            sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-
+            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
 
             if (!isServiceStarted) {
                 startForegroundServiceCompat(buildNotification(true))
@@ -370,8 +376,9 @@ class MusicService : Service() {
 
         } catch (e: Exception) {
             Log.e("MusicService", "playAt error: ${e.message}", e)
+            broadcastUiUpdateAll()
         }
-        updatePlayHistory(playlist[index])
+        updatePlayHistory(playlist[position])
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -383,23 +390,17 @@ class MusicService : Service() {
         if (isRepeat) {
             mediaPlayer?.seekTo(0)
             mediaPlayer?.start()
-            sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-            sendBroadcast(Intent("UPDATE_UI"))
-
-            broadcastUiUpdateAll()
-            buildNotification(true)
+            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
+            notifyUIAndUpdateNotification()
             return
         }
 
         // next
         if (playlist.isNotEmpty()) {
             position = (position + 1) % playlist.size
-            sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-            sendBroadcast(Intent("UPDATE_UI"))
-// <-- ADD HERE
+            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
             playAt(position, startForegroundNow = false)
             Log.d("musicservice1", "songPlus $position")
-            broadcastUiUpdateAll()
         }
     }
 
@@ -485,6 +486,7 @@ class MusicService : Service() {
 
                 if (intent?.action == "REQUEST_UI_UPDATE") {
                     broadcastUiUpdateAll()    // send fresh UI data
+                    return
                 }
 
                 when (intent?.action) {
@@ -494,35 +496,27 @@ class MusicService : Service() {
                         if (mediaPlayer?.isPlaying == false) {
                             mediaPlayer?.start()
                             sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-                            sendBroadcast(Intent("UPDATE_UI"))
+                            notifyUIAndUpdateNotification()
 
                         } else if (mediaPlayer == null) {
                             playAt(position, false)
                             return
                         }
-
-                        // Notification icon update
-                        updateNotification(true)
-                        broadcastUiUpdateAll()
                     }
 
                     Constants.ACTION_PAUSE -> {
 
                         if (mediaPlayer?.isPlaying == true) {
                             mediaPlayer!!.pause()
+                            notifyUIAndUpdateNotification()
                         }
-
-                        // Notification icon update
-                        updateNotification(false)
-                        broadcastUiUpdateAll()
                     }
 
                     Constants.ACTION_NEXT -> {
                         if (playlist.isNotEmpty()) {
                             position = (position + 1) % playlist.size
                             playAt(position, startForegroundNow = false)
-                            sendBroadcast(Intent("SHOW_MINI_PLAYER"))
-                            sendBroadcast(Intent("UPDATE_UI"))
+                            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
                         }
                     }
 
@@ -530,6 +524,7 @@ class MusicService : Service() {
                         if (playlist.isNotEmpty()) {
                             position = if (position == 0) playlist.lastIndex else position - 1
                             playAt(position, startForegroundNow = false)
+                            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
                         }
                     }
                 }
@@ -541,6 +536,7 @@ class MusicService : Service() {
             addAction(Constants.ACTION_PAUSE)
             addAction(Constants.ACTION_NEXT)
             addAction(Constants.ACTION_PREVIOUS)
+            addAction("REQUEST_UI_UPDATE")
         }
         ContextCompat.registerReceiver(
             this,
@@ -553,32 +549,33 @@ class MusicService : Service() {
     // ------------------ UI broadcast helpers ------------------
 
     private fun broadcastUiUpdateAll() {
+        if (playlist.isEmpty() || position !in playlist.indices) return
 
         val song = playlist[position]
-
-        val current = playlist.getOrNull(position)
         val isPlaying = mediaPlayer?.isPlaying == true
         val currentMs = mediaPlayer?.currentPosition ?: 0
         val durationMs = mediaPlayer?.duration ?: 0
 
-        if (playlist.isEmpty() || position !in playlist.indices) return
-
+        currentSongLiveData.postValue(song)
+        isPlayingLiveData.postValue(isPlaying)
 
         // Update titles, images, seekbar, etc.
         sendBroadcast(Intent("UPDATE_UI").apply {
+            setPackage(packageName)
             putExtra("Index", position)
             putExtra("title", song.title)
             putExtra("artist", song.artist)
             putExtra("path", song.path)
-
             putExtra("isPlaying", isPlaying)
             putExtra("currentMs", currentMs)
             putExtra("durationMs", durationMs)
-            putExtra("artUri", current?.artUri)
+            putExtra("artUri", song.artUri)
         })
         // Update play/pause icon
         sendBroadcast(Intent("MUSIC_PLAYER_UI_UPDATE").apply {
+            setPackage(packageName)
             putExtra("action", "playPause")
+            putExtra("isPlaying", isPlaying)
         })
     }
 

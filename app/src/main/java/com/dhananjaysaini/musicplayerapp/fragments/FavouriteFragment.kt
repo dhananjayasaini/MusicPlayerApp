@@ -2,7 +2,6 @@ package com.dhananjaysaini.musicplayerapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,7 @@ import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.SongOptionsBottomSheet
+import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 
@@ -27,6 +27,8 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
     private lateinit var mainViewModel: MainViewModel
 
     private val favouriteSongs = ArrayList<Music>()
+    private var currentFavIds = listOf<String>()
+    private var currentAllSongs = listOf<Music>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,17 +38,26 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         setupRecyclerView()
+        setupButtons()
         observeFavorites()
+    }
 
-//        favAdapter.onMenuClick = { song ->
-//
-//            SongOptionsBottomSheet
-//                .newInstance(song, SongMenuType.FAVORITES)
-//                .show(parentFragmentManager, "SongOptions")
-//        }
+    private fun setupRecyclerView() {
+        favAdapter = FavouriteAdapter(requireContext(), favouriteSongs)
+
+        binding.favRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = favAdapter
+            setHasFixedSize(true)
+        }
+
+        favAdapter.onItemClick = { list, position ->
+            if (list.isNotEmpty()) {
+                playSong(list, position)
+            }
+        }
 
         favAdapter.onMenuClick = { song, pos ->
-
             val config = SongMenuConfig(
                 play = true,
                 playNext = true,
@@ -59,67 +70,86 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
                 share = true
             )
 
-            SongOptionsBottomSheet(song, pos, config )
-                .show(parentFragmentManager, "song_menu")
+            SongOptionsBottomSheet(song, pos, config)
+                .show(parentFragmentManager, "fav_song_menu")
         }
     }
 
-    private fun setupRecyclerView() {
-
-        favAdapter = FavouriteAdapter(requireContext(), favouriteSongs)
-
-        binding.favRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = favAdapter
-            setHasFixedSize(true)
+    private fun setupButtons() {
+        binding.btnFavShuffle.setOnClickListener {
+            if (favouriteSongs.isNotEmpty()) {
+                val shuffled = ArrayList(favouriteSongs)
+                shuffled.shuffle()
+                playSong(shuffled, 0)
+            }
         }
 
-        favAdapter.onItemClick = { list, position ->
-
-            if (list.isNotEmpty()) {
-
-                MusicService.playlist = ArrayList(list)
-                MusicService.position = position
-
-                requireContext().startService(
-                    Intent(requireContext(), MusicService::class.java).apply {
-                        action = Constants.ACTION_PLAY_AT
-                        putExtra("songPosition", position)
-                    }
-                )
-                startActivity(Intent(requireContext(), PlayerActivity::class.java))
+        binding.btnFavPlay.setOnClickListener {
+            if (favouriteSongs.isNotEmpty()) {
+                playSong(ArrayList(favouriteSongs), 0)
             }
         }
     }
 
-    private var currentFavIds = listOf<String>()
-    private var currentAllSongs = listOf<Music>()
+    private fun playSong(list: ArrayList<Music>, position: Int) {
+        MusicService.playlist = ArrayList(list)
+        MusicService.position = position
+
+        requireContext().startService(
+            Intent(requireContext(), MusicService::class.java).apply {
+                action = Constants.ACTION_PLAY_AT
+                putExtra("songPosition", position)
+            }
+        )
+
+        requireContext().sendBroadcast(
+            Intent("SHOW_MINI_PLAYER").setPackage(requireContext().packageName)
+        )
+        startActivity(Intent(requireContext(), PlayerActivity::class.java))
+    }
 
     private fun observeFavorites() {
         favouriteViewModel.favouriteIds.observe(viewLifecycleOwner) { favIds ->
             currentFavIds = favIds ?: emptyList()
-            updateFavoritesList()
+            rebuildFavorites()
         }
 
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { allSongs ->
             currentAllSongs = allSongs ?: emptyList()
-            updateFavoritesList()
+            rebuildFavorites()
         }
     }
 
-    private fun updateFavoritesList() {
+    private fun rebuildFavorites() {
+        if (currentFavIds.isEmpty() || currentAllSongs.isEmpty()) {
+            favouriteSongs.clear()
+            favAdapter.updateList(arrayListOf())
+            binding.tvFavSongCount.text = "0 Song"
+            binding.layoutEmptyFav.visibility = View.VISIBLE
+            binding.favRecyclerView.visibility = View.GONE
+            return
+        }
+
+        val favIdSet = currentFavIds.toSet()
+        val filtered = currentAllSongs.filter { it.id in favIdSet }
+
         favouriteSongs.clear()
-        favouriteSongs.addAll(
-            currentAllSongs.filter { it.id in currentFavIds }
-        )
+        favouriteSongs.addAll(filtered)
         favAdapter.updateList(ArrayList(favouriteSongs))
 
-        if (favouriteSongs.isEmpty()) {
-            binding.favFragment.visibility = View.VISIBLE
+        binding.tvFavSongCount.text = if (filtered.size == 1) "1 Song" else "${filtered.size} Songs"
+
+        if (filtered.isEmpty()) {
+            binding.layoutEmptyFav.visibility = View.VISIBLE
+            binding.favRecyclerView.visibility = View.GONE
         } else {
-            binding.favFragment.visibility = View.GONE
+            binding.layoutEmptyFav.visibility = View.GONE
+            binding.favRecyclerView.visibility = View.VISIBLE
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        ThemeManager.applyThemeToActivity(requireActivity())
+    }
 }
-
-

@@ -7,17 +7,29 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.View
-import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
+import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityPlayerBinding
@@ -28,6 +40,7 @@ import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
+import com.dhananjaysaini.musicplayerapp.utils.WaveformSeekBar
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlayerViewModel
 import java.io.File
@@ -43,6 +56,7 @@ open class PlayerActivity : AppCompatActivity() {
 
     private var timerReceiver: BroadcastReceiver? = null
     private var currentRemainingTime: Long = 0L
+    private var lastSongId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +64,19 @@ open class PlayerActivity : AppCompatActivity() {
      //   setTheme(R.style.Theme_MusicPlayerApp)
 
         val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true  // dark icons
+        controller.isAppearanceLightStatusBars = false
 
         musicService = MusicService()
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.playerRoot) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.topLayerPA.updatePadding(top = systemBars.top)
+            binding.playerControls.updatePadding(bottom = systemBars.bottom)
+            insets
+        }
 
         if (MusicService.playlist.isEmpty()) {
             finish()
@@ -95,13 +116,45 @@ open class PlayerActivity : AppCompatActivity() {
             binding.startTimePA.text = formatDuration(state.positionMs.toLong())
             binding.endTimePA.text = formatDuration(state.durationMs.toLong())
 
-            Glide.with(this)
-                .load(song.artUri)
-                .apply(RequestOptions().placeholder(R.drawable.itunes))
-                .into(binding.songImgPA)
+            if (lastSongId != song.id) {
+                lastSongId = song.id
 
-            binding.seekBarPA.progress = state.positionMs
-            binding.seekBarPA.max = state.durationMs
+                Glide.with(this)
+                    .asBitmap()
+                    .load(song.artUri)
+                    .placeholder(R.drawable.itunes)
+                    .error(R.drawable.itunes)
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            binding.songImgPA.setImageBitmap(resource)
+                            applyDynamicPalette(resource)
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            binding.songImgPA.setImageResource(R.drawable.itunes)
+                        }
+
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+                            super.onLoadFailed(errorDrawable)
+                            binding.songImgPA.setImageResource(R.drawable.itunes)
+                            val defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.itunes)
+                            if (defaultBitmap != null) {
+                                applyDynamicPalette(defaultBitmap)
+                            }
+                        }
+                    })
+
+                val sessionId = musicService.getAudioSessionId()
+                if (sessionId > 0) {
+                    binding.waveformSeekBarPA.attachVisualizer(sessionId)
+                }
+            }
+
+            binding.waveformSeekBarPA.progress = state.positionMs
+            binding.waveformSeekBarPA.max = state.durationMs
 
             binding.playPauseBtnPA.setImageResource(
                 if (state.isPlaying) R.drawable.ic_pause
@@ -117,6 +170,48 @@ open class PlayerActivity : AppCompatActivity() {
                 if (state.isRepeat) R.drawable.repeat_one_icon
                 else R.drawable.repeat_icon
             )
+        }
+    }
+
+    private fun applyDynamicPalette(bitmap: Bitmap) {
+        Palette.from(bitmap).generate { palette ->
+            if (isFinishing || isDestroyed) return@generate
+
+            val dominant = palette?.getDominantColor(Color.parseColor("#1C1929"))
+                ?: Color.parseColor("#1C1929")
+            val vibrant = palette?.getVibrantColor(Color.parseColor("#FFD700"))
+                ?: palette?.getLightVibrantColor(Color.parseColor("#FFD700"))
+                ?: Color.parseColor("#FFD700")
+
+            // Ambient glow gradient
+            val topColor = ColorUtils.blendARGB(dominant, Color.BLACK, 0.25f)
+            val bottomColor = Color.parseColor("#0A0A0E")
+            val gradient = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(topColor, bottomColor)
+            )
+            binding.playerRoot.background = gradient
+
+            // Waveform Seekbar Tinting
+            binding.waveformSeekBarPA.playedColor = vibrant
+            binding.waveformSeekBarPA.unplayedColor = ColorUtils.setAlphaComponent(vibrant, 65)
+
+            // Dynamic Control Tinting
+            val tint = ColorStateList.valueOf(vibrant)
+            binding.playPauseBtnPA.imageTintList = tint
+            binding.prevBtnPA.imageTintList = tint
+            binding.nextBtnPA.imageTintList = tint
+            binding.favouriteBtnPA.imageTintList = tint
+            binding.repeatBtnPA.imageTintList = tint
+            binding.btnEqualizer.imageTintList = tint
+            binding.btnSleepTimer.imageTintList = tint
+            binding.shareBtnPA.imageTintList = tint
+            binding.backBtnPA.imageTintList = tint
+
+            binding.songNamePA.setTextColor(Color.WHITE)
+            binding.songAlbumPA.setTextColor(ColorUtils.blendARGB(vibrant, Color.WHITE, 0.45f))
+            binding.startTimePA.setTextColor(Color.WHITE)
+            binding.endTimePA.setTextColor(Color.WHITE)
         }
     }
 
@@ -141,7 +236,7 @@ open class PlayerActivity : AppCompatActivity() {
                 .getOrNull(MusicService.position)
                 ?: return@setOnClickListener
 
-            // 🔥 SAME playerViewModel jo Fragment use kar raha hai
+            // SAME playerViewModel jo Fragment use kar raha hai
             ViewModelProvider(this)[FavouriteViewModel::class.java]
                 .toggle(song.id)
         }
@@ -150,16 +245,21 @@ open class PlayerActivity : AppCompatActivity() {
             playerViewModel.toggleRepeat()
         }
 
-        binding.seekBarPA.setOnSeekBarChangeListener(
-            object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(sb: SeekBar?, p: Int, f: Boolean) {
-                    if (f) playerViewModel.seekTo(p)
+        binding.waveformSeekBarPA.onSeekListener = object : WaveformSeekBar.OnWaveformSeekListener {
+            override fun onProgressChanged(
+                waveformSeekBar: WaveformSeekBar,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                if (fromUser) {
+                    playerViewModel.seekTo(progress)
+                    binding.startTimePA.text = formatDuration(progress.toLong())
                 }
-
-                override fun onStartTrackingTouch(sb: SeekBar?) {}
-                override fun onStopTrackingTouch(sb: SeekBar?) {}
             }
-        )
+
+            override fun onStartTrackingTouch(waveformSeekBar: WaveformSeekBar) {}
+            override fun onStopTrackingTouch(waveformSeekBar: WaveformSeekBar) {}
+        }
 
         binding.backBtnPA.setOnClickListener { finish() }
     }
@@ -237,6 +337,7 @@ open class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.waveformSeekBarPA.releaseVisualizer()
         equalizerManager.release()
     }
 

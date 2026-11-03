@@ -1,8 +1,12 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.fragments.ArtistSongsFragment
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
@@ -13,8 +17,17 @@ class ArtistSongsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_songs)
 
+        val rootView = findViewById<View>(R.id.main)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = systemBars.top, bottom = systemBars.bottom)
+            insets
+        }
+
+        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
+        val isDark = sharedPref.getBoolean("dark_mode", false)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true  // dark icons
+        controller.isAppearanceLightStatusBars = !isDark
 
         if (savedInstanceState == null) {
 

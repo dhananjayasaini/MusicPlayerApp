@@ -42,17 +42,21 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
         recycler.adapter = artistSongsAdapter
 
         artistSongsAdapter.onItemClick = { list, position ->
+            playSong(ArrayList(list), position)
+        }
 
-            MusicService.playlist = list
-            MusicService.position = position
+        binding.btnArtistShuffle.setOnClickListener {
+            if (songs.isNotEmpty()) {
+                val shuffled = ArrayList(songs)
+                shuffled.shuffle()
+                playSong(shuffled, 0)
+            }
+        }
 
-            requireContext().startService(
-                Intent(requireContext(), MusicService::class.java)
-                    .setAction(Constants.ACTION_PLAY_AT)
-                    .putExtra("songPosition", position)
-            )
-
-            startActivity(Intent(requireContext(), PlayerActivity::class.java))
+        binding.btnArtistPlay.setOnClickListener {
+            if (songs.isNotEmpty()) {
+                playSong(ArrayList(songs), 0)
+            }
         }
 
         binding.btnBack.setOnClickListener {
@@ -60,6 +64,23 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
         }
 
         updateSongs(artistName)
+    }
+
+    private fun playSong(list: ArrayList<Music>, position: Int) {
+        MusicService.playlist = ArrayList(list)
+        MusicService.position = position
+
+        requireContext().startService(
+            Intent(requireContext(), MusicService::class.java).apply {
+                action = Constants.ACTION_PLAY_AT
+                putExtra("songPosition", position)
+            }
+        )
+
+        requireContext().sendBroadcast(
+            Intent("SHOW_MINI_PLAYER").setPackage(requireContext().packageName)
+        )
+        startActivity(Intent(requireContext(), PlayerActivity::class.java))
     }
 
     private fun updateSongs(artist: String) {

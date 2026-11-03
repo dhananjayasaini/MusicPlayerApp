@@ -8,4 +8,16 @@
         android:icon="@drawable/ic_theme"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:icon="@drawable/ic_nav_search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_nav_settings"
+        app:showAsAction="always" />
+
 </menu>

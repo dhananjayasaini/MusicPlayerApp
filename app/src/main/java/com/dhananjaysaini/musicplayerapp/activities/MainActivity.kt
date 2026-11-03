@@ -25,7 +25,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ViewPagerAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityMainBinding
@@ -35,14 +38,15 @@ import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
+import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
 import com.dhananjaysaini.musicplayerapp.utils.PlaylistManager
+import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,16 +75,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
+        val isDark = sharedPref.getBoolean("dark_mode", false)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true  // dark icons
+        controller.isAppearanceLightStatusBars = !isDark
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.appBarLayout.updatePadding(top = systemBars.top)
+            binding.bottomNavigation.updatePadding(bottom = systemBars.bottom)
+            insets
+        }
 
         toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-//      supportActionBar?.title = ""
-        toolbar.title = ""
-//      AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         ThemeManager.applyThemeToActivity(this)
 
         FavouriteManager.init(applicationContext)
@@ -96,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        setupViewPager()
+        setupNavigation()
         setupDrawerMenu()
         setupMiniPlayer()
         observeViewModel()
@@ -118,113 +127,36 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    // -------------------- ViewPager --------------------
+    // -------------------- Navigation & ViewPager --------------------
 
-    /*
-        private fun setupViewPager() {
-            binding.viewPager.adapter = ViewPagerAdapter(this)
-            binding.viewPager.offscreenPageLimit = 7
-
-            binding.viewPager.setCurrentItem(1, false)
-
-            TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> "Home"
-                    1 -> "Songs"
-                    2 -> "Favourite"
-                    3 -> "Playlists"
-                    4 -> "Artist"
-                    5 -> "Albums"
-                    6 -> "Folder"
-                    else -> "Songs"
-                }
-            }.attach()
-        }
-    */
-
-    private fun setupViewPager() {
-
+    private fun setupNavigation() {
         binding.viewPager.adapter = ViewPagerAdapter(this)
-        binding.viewPager.offscreenPageLimit = 2
-        val defaultPosition = 1
-        binding.viewPager.setCurrentItem(defaultPosition, false)
-        binding.tabLayout.getTabAt(defaultPosition)?.select()
+        binding.viewPager.offscreenPageLimit = 3
+        binding.viewPager.isUserInputEnabled = false
 
-        //  binding.viewPager.setCurrentItem(1, false)
-
-        val titles = listOf("Home", "Songs", "Favourite", "Playlists", "Artist", "Albums", "Folder")
-
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-
-//            tab.text = when (position) {
-//                0 -> "Home"
-//                1 -> "Songs"
-//                2 -> "Favourite"
-//                3 -> "Playlists"
-//                4 -> "Artist"
-//                5 -> "Albums"
-//                6 -> "Folder"
-//                else -> "Songs"
-//            }
-
-            val view = layoutInflater.inflate(R.layout.item_viewpager_tab, null)
-            val text = view.findViewById<TextView>(R.id.tabText)
-            text.text = titles[position]
-
-            tab.customView = view
-
-        }.attach()
-
-        // 🔥 Handle selection style
-        binding.tabLayout.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                styleTab(tab, true)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                styleTab(tab, false)
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
-
-        // 🔥 Manually trigger default selected style
-        binding.tabLayout.post {
-            val tab = binding.tabLayout.getTabAt(defaultPosition)
-            if (tab != null) {
-                styleTab(tab, true)
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    binding.viewPager.setCurrentItem(0, false)
+                    true
+                }
+                R.id.nav_favourite -> {
+                    binding.viewPager.setCurrentItem(1, false)
+                    true
+                }
+                R.id.nav_search -> {
+                    binding.viewPager.setCurrentItem(2, false)
+                    true
+                }
+                R.id.nav_settings -> {
+                    binding.viewPager.setCurrentItem(3, false)
+                    true
+                }
+                else -> false
             }
         }
-    }
 
-    private fun styleTab(tab: TabLayout.Tab, isSelected: Boolean) {
-
-        val text = tab.customView?.findViewById<TextView>(R.id.tabText)
-
-        text?.apply {
-            if (isSelected) {
-                textSize = 20f
-                setTypeface(null, Typeface.BOLD)
-
-                animate()
-                    .scaleX(1.15f)
-                    .scaleY(1.15f)
-                    .setDuration(200)
-                    .start()
-
-            } else {
-                textSize = 16f
-                setTypeface(null, Typeface.NORMAL)
-
-                animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setDuration(200)
-                    .start()
-            }
-        }
+        binding.bottomNavigation.selectedItemId = R.id.nav_home
     }
 
     // -------------------- ViewModel --------------------
@@ -243,10 +175,14 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.mini_player_container, MiniPlayerFragment())
             .commit()
 
+        val filter = IntentFilter().apply {
+            addAction("SHOW_MINI_PLAYER")
+            addAction("UPDATE_UI")
+        }
         ContextCompat.registerReceiver(
             this,
             showMiniReceiver,
-            IntentFilter("SHOW_MINI_PLAYER"),
+            filter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
     }
@@ -262,12 +198,19 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_theme -> {
-                //   toggleTheme()
                 themeClick()
                 return true
             }
+            R.id.action_search -> {
+                binding.bottomNavigation.selectedItemId = R.id.nav_search
+                return true
+            }
+            R.id.action_settings -> {
+                binding.bottomNavigation.selectedItemId = R.id.nav_settings
+                return true
+            }
         }
-        return super.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupDrawerMenu() {
@@ -276,15 +219,81 @@ class MainActivity : AppCompatActivity() {
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
+        binding.btnViewRecap.setOnClickListener {
+            toast("Music Recap coming soon")
+        }
 
-        binding.navView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.navFeedback -> sendFeedback(this)
-                R.id.navSetting -> toast("Setting")
-                R.id.navAbout -> toast("About")
-                R.id.navExit -> exitProcess(1)
+        val customDrawer = binding.customDrawer
+
+        // Top Music Recap Card
+        customDrawer.cardMusicRecap.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Music Recap coming soon")
+        }
+
+        // 1. Library -> switch to Home / Library tab
+        customDrawer.navItemLibrary.setOnClickListener {
+            drawer.closeDrawers()
+            binding.bottomNavigation.selectedItemId = R.id.nav_home
+        }
+
+        // 2. Settings -> switch to Settings tab
+        customDrawer.navItemSettings.setOnClickListener {
+            drawer.closeDrawers()
+            binding.bottomNavigation.selectedItemId = R.id.nav_settings
+        }
+
+        // 3. Equalizer -> Open Equalizer
+        customDrawer.navItemEqualizer.setOnClickListener {
+            drawer.closeDrawers()
+            val sessionId = MusicService.mediaPlayer?.audioSessionId ?: -1
+            if (sessionId != -1) {
+                EqualizerManager(this).showEqualizer(sessionId)
+            } else {
+                toast("Play a song first to open the Equalizer!")
             }
-            true
+        }
+
+        // 4. Sleep timer -> Open SleepTimerBottomSheet
+        customDrawer.navItemSleepTimer.setOnClickListener {
+            drawer.closeDrawers()
+            SleepTimerBottomSheet().show(supportFragmentManager, "SleepTimerBottomSheet")
+        }
+
+        // 5. Skin theme -> Open ThemeSelectionBottomSheet
+        customDrawer.navItemSkinTheme.setOnClickListener {
+            drawer.closeDrawers()
+            ThemeSelectionBottomSheet().show(supportFragmentManager, "ThemeSheet")
+        }
+
+        // 6. Widgets
+        customDrawer.navItemWidgets.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Widgets coming soon")
+        }
+
+        // 7. Remove ads
+        customDrawer.navItemRemoveAds.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Remove ads coming soon")
+        }
+
+        // 8. Volume booster [AD]
+        customDrawer.navItemVolumeBooster.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Volume booster coming soon")
+        }
+
+        // 9. Voice recorder [AD]
+        customDrawer.navItemVoiceRecorder.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Voice recorder coming soon")
+        }
+
+        // 10. Free ringtones [AD]
+        customDrawer.navItemFreeRingtones.setOnClickListener {
+            drawer.closeDrawers()
+            toast("Free ringtones coming soon")
         }
     }
 
@@ -445,6 +454,16 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         ThemeManager.applyThemeToActivity(this)
+        if (MusicService.mediaPlayer != null || MusicService.playlist.isNotEmpty()) {
+            binding.miniPlayerContainer.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            unregisterReceiver(showMiniReceiver)
+        } catch (_: Exception) {}
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

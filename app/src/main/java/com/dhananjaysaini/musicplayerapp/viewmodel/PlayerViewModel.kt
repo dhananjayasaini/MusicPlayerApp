@@ -18,8 +18,13 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
     val uiState = MutableLiveData<PlayerUiState>()
 
+    private val songObserver: (Music?) -> Unit = {
+        updateUiState()
+    }
+
     init {
         startSeekBarUpdates()
+        MusicService.currentSongLiveData.observeForever(songObserver)
     }
 
     fun playPause() {
@@ -83,5 +88,11 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
                 handler.postDelayed(this, 1000)
             }
         })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        handler.removeCallbacksAndMessages(null)
+        MusicService.currentSongLiveData.removeObserver(songObserver)
     }
 }

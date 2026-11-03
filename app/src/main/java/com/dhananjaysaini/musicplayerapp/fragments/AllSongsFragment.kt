@@ -45,6 +45,7 @@ open class AllSongsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setupButtons()
         observeSongs()
 
         allSongsAdapter.onMenuClick = { song, pos ->
@@ -65,6 +66,24 @@ open class AllSongsFragment : Fragment() {
 
             SongOptionsBottomSheet(song, pos, config)
                 .show(parentFragmentManager, "song_menu")
+        }
+    }
+
+    private fun setupButtons() {
+        binding.btnShuffleAll.setOnClickListener {
+            val list = mainViewModel.musicListLiveData.value
+            if (!list.isNullOrEmpty()) {
+                val shuffled = ArrayList(list)
+                shuffled.shuffle()
+                playSong(shuffled, 0)
+            }
+        }
+
+        binding.btnPlayAll.setOnClickListener {
+            val list = mainViewModel.musicListLiveData.value
+            if (!list.isNullOrEmpty()) {
+                playSong(ArrayList(list), 0)
+            }
         }
     }
 
@@ -107,7 +126,9 @@ open class AllSongsFragment : Fragment() {
             }
         )
 
-        requireContext().sendBroadcast(Intent("SHOW_MINI_PLAYER"))
+        requireContext().sendBroadcast(
+            Intent("SHOW_MINI_PLAYER").setPackage(requireContext().packageName)
+        )
 
         startActivity(Intent(requireContext(), PlayerActivity::class.java))
     }

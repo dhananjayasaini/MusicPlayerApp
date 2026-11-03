@@ -15,10 +15,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- ===== TOOLBAR WITH TABLAYOUT INSIDE ===== -->
+        <!-- ===== TOOLBAR ===== -->
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -26,55 +28,58 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorSurface"
                 android:theme="@style/ThemeOverlay.Material3.ActionBar"
-                app:title=""
-                app:contentInsetStart="0dp" />
+                app:contentInsetStartWithNavigation="0dp">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabGravity="start"
-                app:tabMinWidth="0dp"
-                app:tabPaddingStart="0dp"
-                app:tabPaddingEnd="0dp"
-                app:tabPaddingTop="0dp"
-                app:tabPaddingBottom="0dp"
-                android:background="?attr/colorSurface"
-                app:tabTextColor="?attr/colorOnSurface"
-                app:tabSelectedTextColor="?attr/colorPrimary"
-                app:tabIndicatorColor="?attr/colorPrimary"
-                app:tabIndicatorFullWidth="false"
-                app:tabRippleColor="@null"
-                app:tabMode="scrollable" />
+                <TextView
+                    android:id="@+id/btnViewRecap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:background="@drawable/bg_recap_gradient"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="View Your Recap ✨"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- ===== VIEWPAGER ===== -->
+        <!-- ===== VIEWPAGER FOR 4 HUBS ===== -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
-        <!-- ===== MINI PLAYER ===== -->
+        <!-- ===== FLOATING MINI PLAYER ===== -->
         <FrameLayout
             android:id="@+id/mini_player_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:elevation="8dp" />
+            android:visibility="gone" />
+
+        <!-- ===== MATERIAL 3 BOTTOM NAVIGATION BAR ===== -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            app:itemIconTint="@color/bottom_nav_color_selector"
+            app:itemTextColor="@color/bottom_nav_color_selector"
+            app:labelVisibilityMode="labeled"
+            app:elevation="8dp"
+            app:menu="@menu/bottom_nav_menu" />
 
     </LinearLayout>
 
-    <!-- ================= NAVIGATION DRAWER ================= -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="wrap_content"
+    <!-- ================= CUSTOM NAVIGATION DRAWER ================= -->
+    <include
+        android:id="@+id/customDrawer"
+        layout="@layout/layout_custom_drawer"
+        android:layout_width="310dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="?attr/colorSurface"
-        app:itemTextColor="?attr/colorOnSurface"
-        app:itemIconTint="?attr/colorOnSurface"
-        app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/navigation_menu" />
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

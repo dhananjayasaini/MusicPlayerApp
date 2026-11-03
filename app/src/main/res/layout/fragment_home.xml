@@ -1,103 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.HomeFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/homeScroll"
-        android:layout_width="0dp"
+    <!-- Top Horizontal Category Tabs (Songs, Playlists, Folders, Albums, Artists) -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/homeTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:tabMode="scrollable"
+        app:tabGravity="start"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabRippleColor="@null"
+        app:tabMinWidth="0dp"
+        app:tabPaddingStart="4dp"
+        app:tabPaddingEnd="4dp"
+        app:tabPaddingTop="4dp"
+        app:tabPaddingBottom="8dp" />
+
+    <!-- Child ViewPager2 for Songs, Playlists, Folders, Albums, Artists -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/homeViewPager"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_weight="1" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp">
-
-            <!-- Recently Played -->
-            <TextView
-                android:id="@+id/recentTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recently Played"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#1D1D1D"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/recentRecycler"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recentRecycler"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/recentTitle"
-                app:layout_constraintBottom_toTopOf="@id/topTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <!-- Top Tracks -->
-            <TextView
-                android:id="@+id/topTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Top Tracks"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#1D1D1D"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/recentRecycler"
-                app:layout_constraintBottom_toTopOf="@id/topRecycler"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/topRecycler"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/topTitle"
-                app:layout_constraintBottom_toTopOf="@id/recentAddedTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <!-- Recently Added -->
-            <TextView
-                android:id="@+id/recentAddedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recently Added"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#1D1D1D"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/topRecycler"
-                app:layout_constraintBottom_toTopOf="@id/recentAddedRecycler"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recentAddedRecycler"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/recentAddedTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

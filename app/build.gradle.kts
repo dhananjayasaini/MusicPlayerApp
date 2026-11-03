@@ -40,6 +40,15 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/io.netty.versions.properties",
+                "META-INF/*.kotlin_module"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -50,7 +59,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.mediarouter:mediarouter:1.6.0")
-    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.3")
 
     implementation("androidx.room:room-runtime:2.7.1")
     implementation("androidx.activity:activity:1.10.1")
@@ -67,11 +75,12 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.2")
     implementation ("androidx.media:media:1.6.0")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0") // Or the latest stable version
 
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
-    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.palette:palette-ktx:1.0.0")
 
 }
