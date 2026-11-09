@@ -34,8 +34,8 @@ class AllSongsAdapter(
             .load(song.artUri)
             .apply(
                 RequestOptions()
-                    .placeholder(R.drawable.ic_music)
-                    .error(R.drawable.ic_music)
+                    .placeholder(R.drawable.ic_neon_music_note)
+                    .error(R.drawable.ic_neon_music_note)
                     .override(150, 150)
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             )

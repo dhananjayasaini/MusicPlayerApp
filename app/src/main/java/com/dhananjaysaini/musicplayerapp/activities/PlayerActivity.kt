@@ -5,14 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Bundle
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
@@ -33,17 +35,23 @@ import com.bumptech.glide.request.transition.Transition
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityPlayerBinding
-import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
+import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
+import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
 import com.dhananjaysaini.musicplayerapp.utils.WaveformSeekBar
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlayerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.math.abs
 import kotlin.text.*
 
 open class PlayerActivity : AppCompatActivity() {
@@ -57,11 +65,16 @@ open class PlayerActivity : AppCompatActivity() {
     private var timerReceiver: BroadcastReceiver? = null
     private var currentRemainingTime: Long = 0L
     private var lastSongId: String? = null
+    private var currentBackgroundGradient: Drawable? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
      //   setTheme(R.style.Theme_MusicPlayerApp)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.isAppearanceLightStatusBars = false
@@ -72,7 +85,9 @@ open class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.playerRoot) { _, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
             binding.topLayerPA.updatePadding(top = systemBars.top)
             binding.playerControls.updatePadding(bottom = systemBars.bottom)
             insets
@@ -83,13 +98,8 @@ open class PlayerActivity : AppCompatActivity() {
             return
         }
 
-        ThemeManager.applyThemeToActivity(this)
-
         binding.themeBtnPA.setOnClickListener{
-            ThemeManager.saveTheme(this, 0)
-
-            val themeSheet = ThemeSelectionBottomSheet()
-            themeSheet.show(supportFragmentManager, "ThemeSheet")
+            startActivity(Intent(this, SkinThemeActivity::class.java))
         }
 
         observeViewModel()
@@ -118,34 +128,7 @@ open class PlayerActivity : AppCompatActivity() {
 
             if (lastSongId != song.id) {
                 lastSongId = song.id
-
-                Glide.with(this)
-                    .asBitmap()
-                    .load(song.artUri)
-                    .placeholder(R.drawable.itunes)
-                    .error(R.drawable.itunes)
-                    .into(object : CustomTarget<Bitmap>() {
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            binding.songImgPA.setImageBitmap(resource)
-                            applyDynamicPalette(resource)
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            binding.songImgPA.setImageResource(R.drawable.itunes)
-                        }
-
-                        override fun onLoadFailed(errorDrawable: Drawable?) {
-                            super.onLoadFailed(errorDrawable)
-                            binding.songImgPA.setImageResource(R.drawable.itunes)
-                            val defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.itunes)
-                            if (defaultBitmap != null) {
-                                applyDynamicPalette(defaultBitmap)
-                            }
-                        }
-                    })
+                loadAndApplySongArtBackground(song)
 
                 val sessionId = musicService.getAudioSessionId()
                 if (sessionId > 0) {
@@ -173,7 +156,63 @@ open class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyDynamicPalette(bitmap: Bitmap) {
+    private fun loadAndApplySongArtBackground(song: Music) {
+        CoroutineScope(Dispatchers.IO).launch {
+            var bitmap: Bitmap? = null
+
+            // 1. Try MediaMetadataRetriever from local file path (reliable for ID3 embedded album art on all Android versions)
+            try {
+                if (!song.path.isNullOrEmpty() && File(song.path).exists()) {
+                    val retriever = MediaMetadataRetriever()
+                    retriever.setDataSource(song.path)
+                    val artBytes = retriever.embeddedPicture
+                    retriever.release()
+                    if (artBytes != null && artBytes.isNotEmpty()) {
+                        val options = BitmapFactory.Options().apply {
+                            inSampleSize = 1
+                        }
+                        bitmap = BitmapFactory.decodeByteArray(artBytes, 0, artBytes.size, options)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            // 2. Try artUri via ContentResolver if retriever didn't yield artwork
+            if (bitmap == null && !song.artUri.isNullOrEmpty()) {
+                try {
+                    val uri = Uri.parse(song.artUri)
+                    contentResolver.openInputStream(uri)?.use { stream ->
+                        bitmap = BitmapFactory.decodeStream(stream)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            val finalBitmap = bitmap
+            withContext(Dispatchers.Main) {
+                if (isFinishing || isDestroyed) return@withContext
+
+                if (finalBitmap != null) {
+                    Glide.with(this@PlayerActivity)
+                        .load(finalBitmap)
+                        .circleCrop()
+                        .placeholder(R.drawable.itunes)
+                        .into(binding.songImgPA)
+                    applyDynamicPalette(finalBitmap, song)
+                } else {
+                    Glide.with(this@PlayerActivity)
+                        .load(R.drawable.itunes)
+                        .circleCrop()
+                        .into(binding.songImgPA)
+                    applyDynamicColorForNoArt(song)
+                }
+            }
+        }
+    }
+
+    private fun applyDynamicPalette(bitmap: Bitmap, song: Music) {
         Palette.from(bitmap).generate { palette ->
             if (isFinishing || isDestroyed) return@generate
 
@@ -181,38 +220,76 @@ open class PlayerActivity : AppCompatActivity() {
                 ?: Color.parseColor("#1C1929")
             val vibrant = palette?.getVibrantColor(Color.parseColor("#FFD700"))
                 ?: palette?.getLightVibrantColor(Color.parseColor("#FFD700"))
+                ?: palette?.getMutedColor(Color.parseColor("#FFD700"))
                 ?: Color.parseColor("#FFD700")
 
-            // Ambient glow gradient
-            val topColor = ColorUtils.blendARGB(dominant, Color.BLACK, 0.25f)
-            val bottomColor = Color.parseColor("#0A0A0E")
+            // Ambient glow gradient (smooth 3-stop vertical gradient from dominant down to deep dark)
+            val topColor = ColorUtils.blendARGB(dominant, Color.BLACK, 0.20f)
+            val midColor = ColorUtils.blendARGB(dominant, Color.BLACK, 0.65f)
+            val bottomColor = Color.parseColor("#08080C")
             val gradient = GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(topColor, bottomColor)
+                intArrayOf(topColor, midColor, bottomColor)
             )
+            currentBackgroundGradient = gradient
             binding.playerRoot.background = gradient
+            window.decorView.background = gradient
 
-            // Waveform Seekbar Tinting
-            binding.waveformSeekBarPA.playedColor = vibrant
-            binding.waveformSeekBarPA.unplayedColor = ColorUtils.setAlphaComponent(vibrant, 65)
-
-            // Dynamic Control Tinting
-            val tint = ColorStateList.valueOf(vibrant)
-            binding.playPauseBtnPA.imageTintList = tint
-            binding.prevBtnPA.imageTintList = tint
-            binding.nextBtnPA.imageTintList = tint
-            binding.favouriteBtnPA.imageTintList = tint
-            binding.repeatBtnPA.imageTintList = tint
-            binding.btnEqualizer.imageTintList = tint
-            binding.btnSleepTimer.imageTintList = tint
-            binding.shareBtnPA.imageTintList = tint
-            binding.backBtnPA.imageTintList = tint
-
-            binding.songNamePA.setTextColor(Color.WHITE)
-            binding.songAlbumPA.setTextColor(ColorUtils.blendARGB(vibrant, Color.WHITE, 0.45f))
-            binding.startTimePA.setTextColor(Color.WHITE)
-            binding.endTimePA.setTextColor(Color.WHITE)
+            applyControlsTint(vibrant)
         }
+    }
+
+    private fun applyDynamicColorForNoArt(song: Music) {
+        val hues = intArrayOf(
+            Color.parseColor("#6A11CB"), // Royal violet
+            Color.parseColor("#2575FC"), // Electric blue
+            Color.parseColor("#FF416C"), // Passion rose
+            Color.parseColor("#8E2DE2"), // Deep purple
+            Color.parseColor("#00B4DB"), // Ocean cyan
+            Color.parseColor("#F7971E"), // Sunset orange
+            Color.parseColor("#11998E"), // Emerald green
+            Color.parseColor("#E52D27"), // Crimson red
+            Color.parseColor("#B224EF"), // Magenta
+            Color.parseColor("#1A2980")  // Midnight navy
+        )
+        val hash = abs((song.title + song.artist).hashCode())
+        val baseColor = hues[hash % hues.size]
+        val topColor = ColorUtils.blendARGB(baseColor, Color.BLACK, 0.25f)
+        val midColor = ColorUtils.blendARGB(baseColor, Color.BLACK, 0.70f)
+        val bottomColor = Color.parseColor("#08080C")
+        val gradient = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(topColor, midColor, bottomColor)
+        )
+        currentBackgroundGradient = gradient
+        binding.playerRoot.background = gradient
+        window.decorView.background = gradient
+
+        applyControlsTint(baseColor)
+    }
+
+    private fun applyControlsTint(vibrant: Int) {
+        // Waveform Seekbar Tinting
+        binding.waveformSeekBarPA.playedColor = vibrant
+        binding.waveformSeekBarPA.unplayedColor = ColorUtils.setAlphaComponent(vibrant, 65)
+
+        // Dynamic Control Tinting
+        val tint = ColorStateList.valueOf(vibrant)
+        binding.playPauseBtnPA.imageTintList = tint
+        binding.prevBtnPA.imageTintList = tint
+        binding.nextBtnPA.imageTintList = tint
+        binding.favouriteBtnPA.imageTintList = tint
+        binding.repeatBtnPA.imageTintList = tint
+        binding.btnEqualizer.imageTintList = tint
+        binding.btnSleepTimer.imageTintList = tint
+        binding.shareBtnPA.imageTintList = tint
+        binding.backBtnPA.imageTintList = tint
+        binding.themeBtnPA.imageTintList = tint
+
+        binding.songNamePA.setTextColor(Color.WHITE)
+        binding.songAlbumPA.setTextColor(ColorUtils.blendARGB(vibrant, Color.WHITE, 0.45f))
+        binding.startTimePA.setTextColor(Color.WHITE)
+        binding.endTimePA.setTextColor(Color.WHITE)
     }
 
     private fun setupClicks() {
@@ -298,7 +375,15 @@ open class PlayerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ThemeManager.applyThemeToActivity(this)
+        currentBackgroundGradient?.let {
+            binding.playerRoot.background = it
+            window.decorView.background = it
+        } ?: run {
+            val song = playerViewModel.uiState.value?.currentSong
+            if (song != null) {
+                loadAndApplySongArtBackground(song)
+            }
+        }
 
         timerReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {

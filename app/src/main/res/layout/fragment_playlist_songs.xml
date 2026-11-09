@@ -24,8 +24,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/back_icon"
-                app:tint="?attr/colorOnSurface"/>
+                android:src="@drawable/ic_neon_back" />
 
             <LinearLayout
                 android:layout_height="wrap_content"
@@ -39,8 +38,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_search"
-                    app:tint="?attr/colorOnSurface"/>
+                    android:src="@drawable/ic_neon_search" />
 
                 <ImageView
                     android:id="@+id/btnPlaylistOptions"
@@ -48,8 +46,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_dots"
-                    app:tint="?attr/colorOnSurface"/>
+                    android:src="@drawable/ic_neon_dots" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -108,12 +105,14 @@
                 android:textAllCaps="false"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:icon="@drawable/shuffle_icon"
-                app:iconTint="@color/black"
+                android:textColor="@color/btn_action_text_selector"
+                app:icon="@drawable/ic_neon_shuffle"
+                app:iconTint="@null"
                 app:iconGravity="textStart"
                 app:cornerRadius="24dp"
-                app:backgroundTint="@color/white"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="@color/btn_action_stroke_selector"
+                app:backgroundTint="@color/btn_action_bg_selector"
                 app:elevation="2dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -126,12 +125,14 @@
                 android:textAllCaps="false"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:icon="@drawable/ic_play"
-                app:iconTint="@color/black"
+                android:textColor="@color/btn_action_text_selector"
+                app:icon="@drawable/ic_neon_play"
+                app:iconTint="@null"
                 app:iconGravity="textStart"
                 app:cornerRadius="24dp"
-                app:backgroundTint="@color/white"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="@color/btn_action_stroke_selector"
+                app:backgroundTint="@color/btn_action_bg_selector"
                 app:elevation="2dp" />
         </LinearLayout>
 

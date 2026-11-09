@@ -28,7 +28,7 @@ class PlaylistSongsAdapter(context: Context,
 
         Glide.with(context)
             .load(song.artUri)
-            .apply(RequestOptions().placeholder(R.drawable.ic_music).centerCrop())
+            .apply(RequestOptions().placeholder(R.drawable.ic_neon_music_note).centerCrop())
             .into(holder.image)
 
         bindClick(holder, position)

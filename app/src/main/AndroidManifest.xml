@@ -32,6 +32,12 @@
             android:name=".activities.AlbumSongsActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.SkinThemeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ThemePreviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ArtistSongsActivity"
             android:exported="false" />
         <activity
@@ -69,6 +75,22 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+
+        <receiver
+            android:name=".widget.MusicAppWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/music_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

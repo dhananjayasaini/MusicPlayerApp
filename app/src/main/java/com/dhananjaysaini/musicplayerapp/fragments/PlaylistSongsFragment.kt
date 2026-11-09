@@ -85,8 +85,8 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
         when (playlistType) {
             "favourite" -> {
                 binding.playlistCardBox.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_preset_fav)
-                binding.playlistCardIcon.setImageResource(R.drawable.favourite_filled_icon)
-                binding.playlistCardIcon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                binding.playlistCardIcon.setImageResource(R.drawable.ic_neon_favourite)
+                binding.playlistCardIcon.imageTintList = null
 
                 favouriteVM.favouriteIds.observe(viewLifecycleOwner) { ids ->
                     val all = MusicService.allSongs.ifEmpty { mainVM.musicListLiveData.value ?: emptyList() }
@@ -98,8 +98,8 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             }
             "recently_added" -> {
                 binding.playlistCardBox.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_preset_recent_add)
-                binding.playlistCardIcon.setImageResource(R.drawable.ic_music)
-                binding.playlistCardIcon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                binding.playlistCardIcon.setImageResource(R.drawable.ic_neon_music_note)
+                binding.playlistCardIcon.imageTintList = null
 
                 mainVM.musicListLiveData.observe(viewLifecycleOwner) { all ->
                     songs.clear()
@@ -110,8 +110,8 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             }
             "recently_played" -> {
                 binding.playlistCardBox.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_preset_recent_play)
-                binding.playlistCardIcon.setImageResource(R.drawable.ic_pie_chart)
-                binding.playlistCardIcon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                binding.playlistCardIcon.setImageResource(R.drawable.ic_neon_timer)
+                binding.playlistCardIcon.imageTintList = null
 
                 MusicDatabase.getDatabase(requireContext()).playHistoryDao().getRecentlyPlayed()
                     .observe(viewLifecycleOwner) { history ->
@@ -128,7 +128,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             "top_tracks" -> {
                 binding.playlistCardBox.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_preset_top)
                 binding.playlistCardIcon.setImageResource(R.drawable.ic_fire)
-                binding.playlistCardIcon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                binding.playlistCardIcon.imageTintList = null
 
                 MusicDatabase.getDatabase(requireContext()).playHistoryDao().getTopPlayed()
                     .observe(viewLifecycleOwner) { history ->
@@ -144,6 +144,8 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             }
             else -> {
                 // Custom playlist
+                binding.playlistCardIcon.setImageResource(R.drawable.ic_neon_playlist_card)
+                binding.playlistCardIcon.imageTintList = null
                 if (playlistId != -1) {
                     playlistVM.getPlaylistSongIds(playlistId).observe(viewLifecycleOwner) { ids ->
                         currentSongIds = ids

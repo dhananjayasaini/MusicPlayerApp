@@ -47,8 +47,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_menu"
-                app:tint="?attr/colorOnSurface"/>
+                android:src="@drawable/ic_neon_sort"/>
         </LinearLayout>
 
     </RelativeLayout>

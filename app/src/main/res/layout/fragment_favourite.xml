@@ -33,8 +33,7 @@
                     android:layout_width="84dp"
                     android:layout_height="84dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/favourite_filled_icon"
-                    app:tint="#38BDF8" />
+                    android:src="@drawable/ic_neon_favourite" />
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Title: My favourite -->
@@ -77,8 +76,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_menu"
-                        app:tint="?attr/colorOnSurfaceVariant" />
+                        android:src="@drawable/ic_neon_sort" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -101,12 +99,14 @@
                     android:textAllCaps="false"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    app:icon="@drawable/shuffle_icon"
-                    app:iconTint="@color/black"
+                    android:textColor="@color/btn_action_text_selector"
+                    app:icon="@drawable/ic_neon_shuffle"
+                    app:iconTint="@null"
                     app:iconGravity="textStart"
                     app:cornerRadius="24dp"
-                    app:backgroundTint="@color/white"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/btn_action_stroke_selector"
+                    app:backgroundTint="@color/btn_action_bg_selector"
                     app:elevation="2dp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -119,12 +119,16 @@
                     android:textAllCaps="false"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    app:icon="@drawable/ic_play"
-                    app:iconTint="@color/black"
+                    android:textColor="@color/btn_action_text_selector"
+                    app:icon="@drawable/ic_neon_play"
+                    app:iconTint="@null"
                     app:iconGravity="textStart"
                     app:cornerRadius="24dp"
-                    app:backgroundTint="@color/white"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/btn_action_stroke_selector"
+                    app:backgroundTint="@color/btn_action_bg_selector"
+                    app:elevation="2dp" />
+                    app:backgroundTint="@color/btn_action_bg_selector"
                     app:elevation="2dp" />
             </LinearLayout>
 

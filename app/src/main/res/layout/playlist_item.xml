@@ -12,7 +12,7 @@
         android:id="@+id/playlistIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/playlist_icon"
+        android:src="@drawable/ic_neon_playlist_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -37,8 +37,7 @@
         android:id="@+id/playlistMenuIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_dots"
-        app:tint="?attr/colorOnSurfaceVariant"
+        android:src="@drawable/ic_neon_dots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

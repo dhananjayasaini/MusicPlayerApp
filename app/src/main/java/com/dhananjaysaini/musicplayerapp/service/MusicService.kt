@@ -31,6 +31,19 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
+import android.widget.RemoteViews
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import com.dhananjaysaini.musicplayerapp.model.formatDuration
+import com.dhananjaysaini.musicplayerapp.utils.NotificationWaveformHelper
+import com.dhananjaysaini.musicplayerapp.widget.MusicAppWidgetProvider
 import java.io.IOException
 
 class MusicService : Service() {
@@ -48,6 +61,8 @@ class MusicService : Service() {
 
     private lateinit var receiver: BroadcastReceiver
     private var isServiceStarted = false
+    private var lastNotifProgressUpdateTime = 0L
+    private var mediaSession: MediaSessionCompat? = null
 
     private var sleepTimer: CountDownTimer? = null
     var remainingTime: Long = 0L
@@ -73,6 +88,13 @@ class MusicService : Service() {
                     putExtra("artist", playlist.getOrNull(position)?.artist)
                     putExtra("artUri", playlist.getOrNull(position)?.artUri)
                 })
+
+                // Periodic notification waveform update (every ~1000ms while playing)
+                val now = System.currentTimeMillis()
+                if (now - lastNotifProgressUpdateTime >= 1000L && mediaPlayer?.isPlaying == true) {
+                    lastNotifProgressUpdateTime = now
+                    updateNotification(true)
+                }
             } catch (e: Exception) { /* ignore*/
             }
             // schedule next update only if still playing
@@ -98,6 +120,7 @@ class MusicService : Service() {
         musicService = this
 
         createNotificationChannel()
+        initMediaSession()
         registerReceiver()
 
         if (mediaPlayer == null) mediaPlayer = MediaPlayer()
@@ -105,6 +128,101 @@ class MusicService : Service() {
 
         mediaPlayer?.setAudioStreamType(android.media.AudioManager.STREAM_MUSIC)
 
+    }
+
+    private fun initMediaSession() {
+        try {
+            mediaSession = MediaSessionCompat(this, "MusicPlayerServiceSession").apply {
+                setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+                setCallback(object : MediaSessionCompat.Callback() {
+                    override fun onPlay() {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_PLAY
+                        }
+                        startService(intent)
+                    }
+
+                    override fun onPause() {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_PAUSE
+                        }
+                        startService(intent)
+                    }
+
+                    override fun onSkipToNext() {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_NEXT
+                        }
+                        startService(intent)
+                    }
+
+                    override fun onSkipToPrevious() {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_PREVIOUS
+                        }
+                        startService(intent)
+                    }
+
+                    override fun onSeekTo(pos: Long) {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_SEEK_TO
+                            putExtra("seekToMs", pos.toInt())
+                        }
+                        startService(intent)
+                    }
+
+                    override fun onStop() {
+                        val intent = Intent(this@MusicService, MusicService::class.java).apply {
+                            action = Constants.ACTION_CLOSE_NOTIFICATION
+                        }
+                        startService(intent)
+                    }
+                })
+                isActive = true
+            }
+        } catch (e: Exception) {
+            Log.e("MusicService", "Error initializing MediaSession: ${e.message}")
+        }
+    }
+
+    private fun updateMediaSessionState(
+        isPlaying: Boolean,
+        currentMs: Long,
+        durationMs: Long,
+        song: Music?,
+        artwork: Bitmap?
+    ) {
+        val session = mediaSession ?: return
+        try {
+            val state = if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+            val playbackState = PlaybackStateCompat.Builder()
+                .setActions(
+                    PlaybackStateCompat.ACTION_PLAY or
+                    PlaybackStateCompat.ACTION_PAUSE or
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                    PlaybackStateCompat.ACTION_SEEK_TO or
+                    PlaybackStateCompat.ACTION_STOP
+                )
+                .setState(state, currentMs, 1.0f)
+                .build()
+            session.setPlaybackState(playbackState)
+
+            if (song != null) {
+                val metadataBuilder = MediaMetadataCompat.Builder()
+                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.title)
+                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.artist)
+                    .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, song.album)
+                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs)
+                if (artwork != null) {
+                    metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, artwork)
+                }
+                session.setMetadata(metadataBuilder.build())
+            }
+        } catch (e: Exception) {
+            Log.e("MusicService", "Error updating MediaSession: ${e.message}")
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -135,11 +253,20 @@ class MusicService : Service() {
             Constants.ACTION_TOGGLE_PLAY -> {
                 if (mediaPlayer?.isPlaying == true) {
                     mediaPlayer?.pause()
+                    notifyUIAndUpdateNotification()
                 } else {
-                    mediaPlayer?.start()
-                    sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
+                    if (song == null || song?.path.isNullOrEmpty()) {
+                        playAt(position, startForegroundNow = false)
+                    } else {
+                        try {
+                            mediaPlayer?.start()
+                            sendBroadcast(Intent("SHOW_MINI_PLAYER").setPackage(packageName))
+                            notifyUIAndUpdateNotification()
+                        } catch (e: Exception) {
+                            playAt(position, startForegroundNow = false)
+                        }
+                    }
                 }
-                notifyUIAndUpdateNotification()
             }
         }
         createNotificationChannel()
@@ -254,6 +381,38 @@ class MusicService : Service() {
                 }
             }
 
+            Constants.ACTION_REWIND_10 -> {
+                val current = mediaPlayer?.currentPosition ?: 0
+                val target = (current - 10000).coerceAtLeast(0)
+                mediaPlayer?.seekTo(target)
+                notifyUIAndUpdateNotification()
+            }
+
+            Constants.ACTION_FORWARD_10 -> {
+                val current = mediaPlayer?.currentPosition ?: 0
+                val total = mediaPlayer?.duration ?: 0
+                val target = (current + 10000).coerceAtMost(total)
+                mediaPlayer?.seekTo(target)
+                notifyUIAndUpdateNotification()
+            }
+
+            Constants.ACTION_CLOSE_NOTIFICATION -> {
+                if (mediaPlayer?.isPlaying == true) {
+                    mediaPlayer?.pause()
+                }
+                stopProgressUpdates()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+                } else {
+                    @Suppress("DEPRECATION")
+                    stopForeground(true)
+                }
+                val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                nm.cancel(Constants.NOTIFICATION_ID)
+                isServiceStarted = false
+                broadcastUiUpdateAll()
+            }
+
             // Optional: refresh notification state externally
             Constants.ACTION_REFRESH_NOTIFICATION -> {
                 buildNotification(mediaPlayer?.isPlaying == true)
@@ -298,6 +457,16 @@ class MusicService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try {
+            mediaSession?.isActive = false
+            mediaSession?.release()
+            mediaSession = null
+        } catch (_: Exception) {}
+        try {
+            val prefs = getSharedPreferences("widget_playback_state", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("isPlaying", false).apply()
+            MusicAppWidgetProvider.updateAllWidgets(this)
+        } catch (_: Exception) {}
         try {
             unregisterReceiver(receiver)
         } catch (_: Exception) { /* ignore */
@@ -421,9 +590,12 @@ class MusicService : Service() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun buildNotification(isPlaying: Boolean): Notification {
-        val currentPosition = playlist.getOrNull(position)
-        val playPauseIcon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
-        val playPauseAction = if (isPlaying) Constants.ACTION_PAUSE else Constants.ACTION_PLAY
+        val currentSong = playlist.getOrNull(position)
+        val titleText = currentSong?.title ?: getString(R.string.app_name)
+        val artistText = currentSong?.artist ?: "Unknown Artist"
+        val currentMs = mediaPlayer?.currentPosition ?: 0
+        val durationMs = (mediaPlayer?.duration ?: currentSong?.duration?.toInt() ?: 0).coerceAtLeast(1)
+        val progressFraction = (currentMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
 
         val playerIntent = Intent(this, PlayerActivity::class.java).apply {
             putExtra("class", "Notification")
@@ -432,41 +604,184 @@ class MusicService : Service() {
                     Intent.FLAG_ACTIVITY_SINGLE_TOP or
                     Intent.FLAG_ACTIVITY_NEW_TASK
         }
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, playerIntent,
+        val contentPI = PendingIntent.getActivity(
+            this, 200, playerIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val prevPI = PendingIntent.getBroadcast(
-            this, 0, Intent(Constants.ACTION_PREVIOUS), PendingIntent.FLAG_IMMUTABLE
+
+        // Explicit Service PendingIntents for Notification Buttons
+        val prevPI = PendingIntent.getService(
+            this, 201,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_PREVIOUS },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val playPausePI = PendingIntent.getBroadcast(
-            this, 1, Intent(playPauseAction), PendingIntent.FLAG_IMMUTABLE
+        val playPausePI = PendingIntent.getService(
+            this, 202,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_TOGGLE_PLAY },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val nextPI = PendingIntent.getBroadcast(
-            this, 2, Intent(Constants.ACTION_NEXT), PendingIntent.FLAG_IMMUTABLE
+        val nextPI = PendingIntent.getService(
+            this, 203,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_NEXT },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val rewindPI = PendingIntent.getService(
+            this, 204,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_REWIND_10 },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val forwardPI = PendingIntent.getService(
+            this, 205,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_FORWARD_10 },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val closePI = PendingIntent.getService(
+            this, 206,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_CLOSE_NOTIFICATION },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val artwork = BitmapFactory.decodeResource(resources, R.drawable.itunes)
-        val artworkBitmap = getBitmapFromUri(currentPosition?.artUri)
+        val artworkBitmap = getNotificationArtwork(currentSong?.artUri)
 
-        return NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-            .setContentTitle(currentPosition?.title ?: getString(R.string.app_name))
-            .setContentText(currentPosition?.artist ?: "")
+        // Dynamic Waveform
+        val waveformBitmap = NotificationWaveformHelper.generateWaveformBitmap(
+            width = 340,
+            height = 36,
+            progressFraction = progressFraction
+        )
+
+        val playPauseIcon = if (isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play
+
+        // 1. Collapsed View
+        val smallViews = RemoteViews(packageName, R.layout.layout_notification_small).apply {
+            setTextViewText(R.id.notif_small_title, titleText)
+            setTextViewText(R.id.notif_small_artist, artistText)
+            setImageViewResource(R.id.notif_small_play_pause, playPauseIcon)
+            if (artworkBitmap != null) {
+                setImageViewBitmap(R.id.notif_small_art, artworkBitmap)
+            } else {
+                setImageViewResource(R.id.notif_small_art, R.drawable.music_player_icon_splash_screen)
+            }
+            setOnClickPendingIntent(R.id.notif_small_prev, prevPI)
+            setOnClickPendingIntent(R.id.notif_small_play_pause, playPausePI)
+            setOnClickPendingIntent(R.id.notif_small_next, nextPI)
+            setOnClickPendingIntent(R.id.notif_small_root, contentPI)
+            setOnClickPendingIntent(R.id.notif_small_art, contentPI)
+        }
+
+        // 2. Expanded View
+        val bigViews = RemoteViews(packageName, R.layout.layout_notification_big).apply {
+            setTextViewText(R.id.notif_big_title, titleText)
+            setTextViewText(R.id.notif_big_artist, artistText)
+            setTextViewText(R.id.notif_time_current, formatDuration(currentMs.toLong()))
+            setTextViewText(R.id.notif_time_total, formatDuration(durationMs.toLong()))
+            setImageViewResource(R.id.notif_big_play_pause, playPauseIcon)
+            setImageViewBitmap(R.id.notif_waveform, waveformBitmap)
+            if (artworkBitmap != null) {
+                setImageViewBitmap(R.id.notif_big_art, artworkBitmap)
+            } else {
+                setImageViewResource(R.id.notif_big_art, R.drawable.music_player_icon_splash_screen)
+            }
+            setOnClickPendingIntent(R.id.notif_big_prev, prevPI)
+            setOnClickPendingIntent(R.id.notif_big_play_pause, playPausePI)
+            setOnClickPendingIntent(R.id.notif_big_next, nextPI)
+            setOnClickPendingIntent(R.id.notif_btn_rewind, rewindPI)
+            setOnClickPendingIntent(R.id.notif_btn_forward, forwardPI)
+            setOnClickPendingIntent(R.id.notif_big_close, closePI)
+            setOnClickPendingIntent(R.id.notif_big_art, contentPI)
+            setOnClickPendingIntent(R.id.notif_waveform, contentPI)
+            setOnClickPendingIntent(R.id.notif_big_root, contentPI)
+        }
+
+        val builder = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
             .setSmallIcon(R.drawable.music_player_icon_splash_screen)
+            .setContentTitle(titleText)
+            .setContentText(artistText)
             .setLargeIcon(artworkBitmap)
+            .setCustomContentView(smallViews)
+            .setCustomBigContentView(bigViews)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(contentPI)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.previous_icon, "Previous", prevPI)
-            .addAction(playPauseIcon, "PlayPause", playPausePI)
-            .addAction(R.drawable.next_icon, "Next", nextPI)
-            .setStyle(androidx.media.app.NotificationCompat.MediaStyle())
             .setOnlyAlertOnce(true)
             .setOngoing(isPlaying)
-            .build()
 
-        // If we are already foreground, this updates it; otherwise it starts foreground.
-        //   startForeground(Constants.NOTIFICATION_ID, notification)
+        // Sync with MediaSession
+        mediaSession?.let {
+            updateMediaSessionState(isPlaying, currentMs.toLong(), durationMs.toLong(), currentSong, artworkBitmap)
+        }
+
+        return builder.build()
+    }
+
+    private fun getNotificationArtwork(uriString: String?): Bitmap? {
+        if (uriString.isNullOrEmpty() || uriString == "null") {
+            return decodeSampledBitmapFromResource(resources, R.drawable.music_player_icon_splash_screen, 150, 150)?.let {
+                getRoundedBitmap(it, 20f)
+            }
+        }
+        return try {
+            val uri = Uri.parse(uriString)
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeStream(inputStream, null, options)
+            inputStream.close()
+
+            val targetSize = 150
+            var inSampleSize = 1
+            while (options.outWidth / (inSampleSize * 2) >= targetSize &&
+                options.outHeight / (inSampleSize * 2) >= targetSize
+            ) {
+                inSampleSize *= 2
+            }
+
+            val decodeOptions = BitmapFactory.Options().apply {
+                this.inSampleSize = inSampleSize
+                inPreferredConfig = Bitmap.Config.ARGB_8888
+            }
+            val stream2 = contentResolver.openInputStream(uri) ?: return null
+            val raw = BitmapFactory.decodeStream(stream2, null, decodeOptions)
+            stream2.close()
+
+            raw?.let {
+                val scaled = Bitmap.createScaledBitmap(it, targetSize, targetSize, true)
+                getRoundedBitmap(scaled, 20f)
+            }
+        } catch (e: Exception) {
+            decodeSampledBitmapFromResource(resources, R.drawable.music_player_icon_splash_screen, 150, 150)?.let {
+                getRoundedBitmap(it, 20f)
+            }
+        }
+    }
+
+    private fun decodeSampledBitmapFromResource(res: android.content.res.Resources, resId: Int, reqWidth: Int, reqHeight: Int): Bitmap? {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeResource(res, resId, options)
+        var inSampleSize = 1
+        if (options.outHeight > reqHeight || options.outWidth > reqWidth) {
+            val halfHeight = options.outHeight / 2
+            val halfWidth = options.outWidth / 2
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        options.inSampleSize = inSampleSize
+        options.inJustDecodeBounds = false
+        val decoded = BitmapFactory.decodeResource(res, resId, options) ?: return null
+        return Bitmap.createScaledBitmap(decoded, reqWidth, reqHeight, true)
+    }
+
+    private fun getRoundedBitmap(bitmap: Bitmap, cornerRadiusPx: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+        canvas.drawRoundRect(rectF, cornerRadiusPx, cornerRadiusPx, paint)
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+        return output
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -577,12 +892,24 @@ class MusicService : Service() {
             putExtra("action", "playPause")
             putExtra("isPlaying", isPlaying)
         })
+
+        // Persist state & update widget
+        try {
+            val prefs = getSharedPreferences("widget_playback_state", Context.MODE_PRIVATE)
+            prefs.edit()
+                .putString("title", song.title)
+                .putString("artist", song.artist)
+                .putString("artUri", song.artUri)
+                .putBoolean("isPlaying", isPlaying)
+                .apply()
+            MusicAppWidgetProvider.updateAllWidgets(this)
+        } catch (_: Exception) {}
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun notifyUIAndUpdateNotification() {
         broadcastUiUpdateAll()
-        buildNotification(mediaPlayer?.isPlaying == true)
+        updateNotification(mediaPlayer?.isPlaying == true)
     }
 
     private fun getBitmapFromUri(uri: String?): Bitmap? {

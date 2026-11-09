@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.GestureDetector
@@ -19,6 +21,7 @@ import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentMiniPlayerBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import kotlin.math.abs
 
 class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
@@ -26,6 +29,12 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
     private var _binding: FragmentMiniPlayerBinding? = null
     private val binding get() = _binding!!
     private lateinit var gestureDetector: GestureDetector
+
+    private val themeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            applyThemeToMiniPlayer()
+        }
+    }
 
     companion object {
         private const val SWIPE_THRESHOLD = 80
@@ -39,12 +48,28 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
         setupGestures()
         setupClicks()
         observeMusicService()
+        applyThemeToMiniPlayer()
         updateMiniPlayerFromService()
+
+        val filter = IntentFilter(ThemeManager.ACTION_THEME_CHANGED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            themeReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onResume() {
         super.onResume()
+        applyThemeToMiniPlayer()
         updateMiniPlayerFromService()
+    }
+
+    private fun applyThemeToMiniPlayer() {
+        if (_binding == null) return
+        val theme = ThemeManager.getCurrentTheme(requireContext())
+        ThemeManager.applyThemeToMiniPlayerView(binding.miniPlayerRoot, theme)
     }
 
     private fun observeMusicService() {
@@ -168,11 +193,11 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
             if (!artUri.isNullOrEmpty() && artUri != "null") {
                 Glide.with(this@MiniPlayerFragment)
                     .load(artUri)
-                    .placeholder(R.drawable.ic_music)
-                    .error(R.drawable.ic_music)
+                    .placeholder(R.drawable.ic_neon_music_note)
+                    .error(R.drawable.ic_neon_music_note)
                     .into(binding.miniArt)
             } else {
-                binding.miniArt.setImageResource(R.drawable.ic_music)
+                binding.miniArt.setImageResource(R.drawable.ic_neon_music_note)
             }
         }
     }
@@ -188,11 +213,11 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
         if (!art.isNullOrEmpty() && art != "null") {
             Glide.with(this)
                 .load(art)
-                .placeholder(R.drawable.ic_music)
-                .error(R.drawable.ic_music)
+                .placeholder(R.drawable.ic_neon_music_note)
+                .error(R.drawable.ic_neon_music_note)
                 .into(binding.miniArt)
         } else {
-            binding.miniArt.setImageResource(R.drawable.ic_music)
+            binding.miniArt.setImageResource(R.drawable.ic_neon_music_note)
         }
     }
 
@@ -270,6 +295,9 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
     }
 
     override fun onDestroyView() {
+        try {
+            requireContext().unregisterReceiver(themeReceiver)
+        } catch (_: Exception) {}
         super.onDestroyView()
         _binding = null
     }

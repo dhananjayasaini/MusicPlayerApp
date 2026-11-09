@@ -25,8 +25,8 @@
                 android:id="@+id/albumImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_music_folder"
-                android:background="@color/bright_yellow"/>
+                android:src="@drawable/ic_neon_album"
+                android:background="#150B24"/>
 
             <TextView
                 android:id="@+id/albumCount"
@@ -61,11 +61,10 @@
         android:id="@+id/itemMenu"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:src="@drawable/ic_dots"
+        android:src="@drawable/ic_neon_dots"
         app:layout_constraintTop_toTopOf="@id/albumName"
         app:layout_constraintBottom_toBottomOf="@id/itemSubName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/itemSubName"

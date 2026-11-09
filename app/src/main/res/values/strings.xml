@@ -36,7 +36,12 @@
     <string name="folder_fragment">Folder Fragment</string>
     <string name="create_playlist">Create Playlist</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-
+    <!-- Widget Strings -->
+    <string name="widget_name">Music Player Widget</string>
+    <string name="widget_description">Control music playback directly from your home screen</string>
+    <string name="widget_no_song">No song playing</string>
+    <string name="widget_tap_to_play">Tap to open Music Player</string>
+    <string name="widget_pin_dialog_title">Add Home Screen Widget</string>
+    <string name="widget_pin_dialog_msg">To add the Music Player widget to your home screen:\n\n1. Long-press any empty space on your Home Screen.\n2. Tap \'Widgets\'.\n3. Scroll or search for \'Music Player\'.\n4. Touch and hold the widget, then drag it where you want!</string>
 
 </resources>

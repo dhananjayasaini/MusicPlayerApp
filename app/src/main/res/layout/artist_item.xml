@@ -7,12 +7,12 @@
     android:paddingTop="12dp"
     android:paddingBottom="12dp">
 
-    <!-- Playlist Icon -->
+    <!-- Artist Icon -->
     <ImageView
         android:id="@+id/artistImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/playlist_icon"
+        android:src="@drawable/ic_neon_artist"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -51,8 +51,7 @@
         android:id="@+id/artistMenuIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_dots"
-        app:tint="?attr/colorOnSurfaceVariant"
+        android:src="@drawable/ic_neon_dots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

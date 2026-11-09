@@ -1,15 +1,22 @@
 package com.dhananjaysaini.musicplayerapp.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentHomeBinding
+import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -59,16 +66,55 @@ class HomeFragment : Fragment() {
 
         // Style initial selected tab (Songs)
         binding.homeTabLayout.post {
-            val tab = binding.homeTabLayout.getTabAt(0)
-            if (tab != null) {
-                styleTab(tab, true)
-            }
+            refreshThemeTabs()
+        }
+
+        registerThemeReceiver()
+    }
+
+    private val themeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            refreshThemeTabs()
+        }
+    }
+
+    private fun registerThemeReceiver() {
+        val filter = IntentFilter(ThemeManager.ACTION_THEME_CHANGED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            themeReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshThemeTabs()
+    }
+
+    private fun refreshThemeTabs() {
+        if (_binding == null) return
+        val currentContext = context ?: return
+        val isDark = ThemeManager.isDarkTheme(currentContext)
+        val indicatorColor = if (isDark) Color.WHITE else Color.parseColor("#E65100")
+        binding.homeTabLayout.setSelectedTabIndicatorColor(indicatorColor)
+
+        val selectedPos = binding.homeTabLayout.selectedTabPosition
+        for (i in 0 until binding.homeTabLayout.tabCount) {
+            val tab = binding.homeTabLayout.getTabAt(i) ?: continue
+            styleTab(tab, i == selectedPos)
         }
     }
 
     private fun styleTab(tab: TabLayout.Tab, isSelected: Boolean) {
         val text = tab.customView?.findViewById<TextView>(R.id.tabText)
+        val currentContext = context ?: return
+        val isDark = ThemeManager.isDarkTheme(currentContext)
+        val tabColor = if (isDark) Color.WHITE else Color.parseColor("#111827")
+
         text?.apply {
+            setTextColor(tabColor)
             if (isSelected) {
                 textSize = 20f
                 setTypeface(null, Typeface.BOLD)
@@ -93,6 +139,9 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        try {
+            requireContext().unregisterReceiver(themeReceiver)
+        } catch (_: Exception) {}
         _binding = null
     }
 

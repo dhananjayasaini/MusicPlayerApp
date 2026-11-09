@@ -40,8 +40,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/add_icon"
-                app:tint="?attr/colorOnSurface" />
+                android:src="@drawable/ic_neon_add" />
 
             <ImageView
                 android:id="@+id/btnPlaylistMoreTop"
@@ -49,8 +48,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_dots"
-                app:tint="?attr/colorOnSurface" />
+                android:src="@drawable/ic_neon_dots" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -86,8 +84,7 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/favourite_filled_icon"
-                        app:tint="@android:color/white" />
+                        android:src="@drawable/ic_neon_favourite" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -124,8 +121,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_dots"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    android:src="@drawable/ic_neon_dots" />
             </RelativeLayout>
 
             <!-- 2. Recently Added -->
@@ -146,8 +142,7 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_music"
-                        app:tint="@android:color/white" />
+                        android:src="@drawable/ic_neon_music_note" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -184,8 +179,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_dots"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    android:src="@drawable/ic_neon_dots" />
             </RelativeLayout>
 
             <!-- 3. Recently Played -->
@@ -206,8 +200,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_pie_chart"
-                        app:tint="@android:color/white" />
+                        android:src="@drawable/ic_neon_timer" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -244,8 +237,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_dots"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    android:src="@drawable/ic_neon_dots" />
             </RelativeLayout>
 
             <!-- 4. My Top Tracks -->
@@ -304,8 +296,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_dots"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    android:src="@drawable/ic_neon_dots" />
             </RelativeLayout>
 
             <!-- Section 2: My Playlists (X) -->
@@ -342,11 +333,10 @@
                     android:background="@drawable/bg_create_playlist_square">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/add_icon"
-                        app:tint="#FFC107" />
+                        android:src="@drawable/ic_neon_add" />
                 </FrameLayout>
 
                 <TextView
@@ -375,10 +365,9 @@
                 android:paddingEnd="24dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_restore"
-                    app:tint="#FFD600" />
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_neon_restore" />
 
                 <TextView
                     android:layout_width="wrap_content"

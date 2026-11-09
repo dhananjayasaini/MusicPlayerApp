@@ -23,6 +23,32 @@
     <color name="light_gray">#F6F5F5</color>
     <color name="background_light">#FFFFFF</color>
 
+    <!-- Theme & Text Colors for Material Components -->
+    <color name="theme_primary">#E65100</color>
+    <color name="theme_primary_dark">#FFAA1D</color>
+    <color name="theme_primary_variant">#FFAA1D</color>
+    <color name="theme_primary_variant_dark">#FFB834</color>
+
+    <color name="theme_text_primary_light">#111827</color>
+    <color name="theme_text_secondary_light">#4B5563</color>
+    <color name="theme_text_primary_dark">#FFFFFF</color>
+    <color name="theme_text_secondary_dark">#A0A0B0</color>
+
+    <color name="theme_bg_light">#F8F9FA</color>
+    <color name="theme_surface_variant_light">#F3F4F6</color>
+    <color name="theme_container_high_light">#E5E7EB</color>
+    <color name="theme_container_highest_light">#D1D5DB</color>
+    <color name="theme_outline_light">#9CA3AF</color>
+
+    <color name="theme_bg_dark">#0F0C20</color>
+    <color name="theme_surface_dark">#18142A</color>
+    <color name="theme_surface_variant_dark">#241F3D</color>
+    <color name="theme_surface_container_dark">#1E1934</color>
+    <color name="theme_surface_container_high_dark">#292244</color>
+    <color name="theme_surface_container_highest_dark">#342C56</color>
+    <color name="theme_outline_dark">#8A8A9E</color>
+    <color name="theme_outline_variant_dark">#3A3554</color>
+
 
 
 

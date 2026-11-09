@@ -42,7 +42,7 @@ class ArtistAdapter(
 
         Glide.with(holder.itemView.context)
             .load(artist.artUri)
-            .apply(RequestOptions().placeholder(R.drawable.playlist_icon).centerCrop())
+            .apply(RequestOptions().placeholder(R.drawable.ic_neon_artist).centerCrop())
             .into(holder.artistImage)
 
 

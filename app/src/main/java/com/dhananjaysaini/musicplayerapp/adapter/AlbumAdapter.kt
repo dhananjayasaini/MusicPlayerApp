@@ -46,7 +46,7 @@ class AlbumAdapter(
 
         Glide.with(holder.itemView.context)
             .load(album.artUri)
-            .apply(RequestOptions().placeholder(R.drawable.ic_music_folder).centerCrop())
+            .apply(RequestOptions().placeholder(R.drawable.ic_neon_album).centerCrop())
             .into(holder.albumImage)
 
         holder.itemView.setOnClickListener {

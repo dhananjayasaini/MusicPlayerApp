@@ -3,11 +3,15 @@ package com.dhananjaysaini.musicplayerapp.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -26,6 +30,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
@@ -33,6 +38,7 @@ import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ViewPagerAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityMainBinding
 import com.dhananjaysaini.musicplayerapp.fragments.MiniPlayerFragment
+import com.dhananjaysaini.musicplayerapp.widget.MusicAppWidgetProvider
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
 import com.dhananjaysaini.musicplayerapp.model.Music
@@ -75,13 +81,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
-        val isDark = sharedPref.getBoolean("dark_mode", false)
-        val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = !isDark
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
             binding.appBarLayout.updatePadding(top = systemBars.top)
             binding.bottomNavigation.updatePadding(bottom = systemBars.bottom)
             insets
@@ -185,11 +192,26 @@ class MainActivity : AppCompatActivity() {
             filter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+
+        val themeFilter = IntentFilter(ThemeManager.ACTION_THEME_CHANGED)
+        ContextCompat.registerReceiver(
+            this,
+            themeReceiver,
+            themeFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private val showMiniReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             binding.miniPlayerContainer.visibility = View.VISIBLE
+        }
+    }
+
+    private val themeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            ThemeManager.applyThemeToActivity(this@MainActivity)
+            updateToolbarColors()
         }
     }
 
@@ -218,6 +240,7 @@ class MainActivity : AppCompatActivity() {
         toggle = ActionBarDrawerToggle(this, drawer, binding.toolbar, R.string.open, R.string.close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+        updateToolbarColors()
 
         binding.btnViewRecap.setOnClickListener {
             toast("Music Recap coming soon")
@@ -260,16 +283,16 @@ class MainActivity : AppCompatActivity() {
             SleepTimerBottomSheet().show(supportFragmentManager, "SleepTimerBottomSheet")
         }
 
-        // 5. Skin theme -> Open ThemeSelectionBottomSheet
+        // 5. Skin theme -> Open SkinThemeActivity
         customDrawer.navItemSkinTheme.setOnClickListener {
             drawer.closeDrawers()
-            ThemeSelectionBottomSheet().show(supportFragmentManager, "ThemeSheet")
+            startActivity(Intent(this, SkinThemeActivity::class.java))
         }
 
         // 6. Widgets
         customDrawer.navItemWidgets.setOnClickListener {
             drawer.closeDrawers()
-            toast("Widgets coming soon")
+            pinMusicWidget()
         }
 
         // 7. Remove ads
@@ -421,7 +444,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        updateToolbarColors()
         return true
+    }
+
+    private fun updateToolbarColors() {
+        val isDark = ThemeManager.isDarkTheme(this)
+        val iconColor = if (isDark) Color.WHITE else Color.parseColor("#111827")
+
+        if (::toggle.isInitialized) {
+            toggle.drawerArrowDrawable.color = iconColor
+        }
+
+        binding.toolbar.menu?.let { menu ->
+            menu.findItem(R.id.action_theme)?.icon?.setTintList(null)
+            menu.findItem(R.id.action_search)?.icon?.setTintList(null)
+            menu.findItem(R.id.action_settings)?.icon?.setTintList(null)
+        }
     }
 
     private fun toggleTheme() {
@@ -443,17 +482,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun themeClick() {
-
-        ThemeManager.saveTheme(this, 0)
-
-        val themeSheet = ThemeSelectionBottomSheet()
-        themeSheet.show(supportFragmentManager, "ThemeSheet")
-
+        startActivity(Intent(this, SkinThemeActivity::class.java))
     }
 
     override fun onResume() {
         super.onResume()
         ThemeManager.applyThemeToActivity(this)
+        updateToolbarColors()
         if (MusicService.mediaPlayer != null || MusicService.playlist.isNotEmpty()) {
             binding.miniPlayerContainer.visibility = View.VISIBLE
         }
@@ -463,6 +498,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         try {
             unregisterReceiver(showMiniReceiver)
+        } catch (_: Exception) {}
+        try {
+            unregisterReceiver(themeReceiver)
         } catch (_: Exception) {}
     }
 
@@ -478,6 +516,30 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Song deleted", Toast.LENGTH_SHORT).show()
             mainViewModel.loadMusic(this, true)
         }
+    }
+
+    private fun pinMusicWidget() {
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val myProvider = ComponentName(this, MusicAppWidgetProvider::class.java)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appWidgetManager.isRequestPinAppWidgetSupported) {
+            val pinnedWidgetCallbackIntent = Intent(this, MainActivity::class.java)
+            val successCallback = PendingIntent.getActivity(
+                this, 0, pinnedWidgetCallbackIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+        } else {
+            showWidgetGuideDialog()
+        }
+    }
+
+    private fun showWidgetGuideDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.widget_pin_dialog_title)
+            .setMessage(R.string.widget_pin_dialog_msg)
+            .setPositiveButton("Got it", null)
+            .show()
     }
 
 }
