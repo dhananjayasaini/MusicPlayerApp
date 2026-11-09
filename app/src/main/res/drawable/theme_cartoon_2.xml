@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A052E"
+                android:endColor="#4D0E75"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cyber Samurai -->
+        <path android:fillColor="#00E5FF" android:pathData="M90,70 L110,70 L105,250 L95,250 Z"/>
+        <path android:fillColor="#E040FB" android:pathData="M100,130a25,25 0 1,0 0.1,0"/>
+    
+</vector>

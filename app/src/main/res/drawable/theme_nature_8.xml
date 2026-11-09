@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1F0802"
+                android:endColor="#5E2204"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Golden Sun -->
+        <path android:fillColor="#FFA726" android:pathData="M100,90a25,25 0 1,0 0.1,0"/>
+        <!-- Autumn Tree Silhouettes -->
+        <path android:fillColor="#D84315" android:pathData="M50,150a30,30 0 1,0 0.1,0"/>
+        <path android:fillColor="#EF6C00" android:pathData="M150,160a35,35 0 1,0 0.1,0"/>
+        <path android:fillColor="#140501" android:pathData="M0,240h200v80h-200z"/>
+    
+</vector>

@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#01050F"
+                android:endColor="#06132E"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Blue Earth in Orbit (matches screenshot) -->
+        <path android:fillColor="#1976D2" android:pathData="M130,120a50,50 0 1,0 0.1,0"/>
+        <!-- Atmospheric Glow -->
+        <path android:fillColor="#64B5F6" android:pathData="M120,105a45,45 0 1,0 0.1,0"/>
+        <path android:fillColor="#0D47A1" android:pathData="M140,135a46,46 0 1,0 0.1,0"/>
+        <!-- Stars -->
+        <path android:fillColor="#FFFFFF" android:pathData="M30,50a1,1 0 1,0 0.1,0M70,80a1.5,1.5 0 1,0 0.1,0M50,170a1.2,1.2 0 1,0 0.1,0M40,240a1.5,1.5 0 1,0 0.1,0"/>
+    
+</vector>

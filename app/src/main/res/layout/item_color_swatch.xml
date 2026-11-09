@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:padding="4dp">
+
+    <!-- Outer Selection Ring -->
+    <View
+        android:id="@+id/swatchSelectionRing"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_swatch_selected_ring"
+        android:visibility="gone" />
+
+    <!-- Circular Color Swatch -->
+    <ImageView
+        android:id="@+id/swatchCircle"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Color Swatch" />
+
+    <!-- VIP / Pro Crown Icon (Top Right) -->
+    <ImageView
+        android:id="@+id/swatchCrown"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_crown"
+        android:visibility="gone" />
+
+    <!-- Selected Checkmark Badge (Bottom Right) -->
+    <ImageView
+        android:id="@+id/swatchCheckBadge"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_theme_check"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#2E081F"
+                android:endColor="#6E164D"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Glowing Paw Trail -->
+        <path android:fillColor="#FF4081" android:pathData="M60,110a12,9 0 1,0 0.1,0M50,95a4,5 0 1,0 0.1,0M58,90a4,5 0 1,0 0.1,0M66,90a4,5 0 1,0 0.1,0M74,95a4,5 0 1,0 0.1,0"/>
+        <path android:fillColor="#FF80AB" android:pathData="M130,170a14,10 0 1,0 0.1,0M118,153a5,6 0 1,0 0.1,0M128,147a5,6 0 1,0 0.1,0M138,147a5,6 0 1,0 0.1,0M148,153a5,6 0 1,0 0.1,0"/>
+        <path android:fillColor="#FF4081" android:pathData="M75,240a16,12 0 1,0 0.1,0M60,220a5,7 0 1,0 0.1,0M72,213a5,7 0 1,0 0.1,0M84,213a5,7 0 1,0 0.1,0M96,220a5,7 0 1,0 0.1,0"/>
+    
+</vector>

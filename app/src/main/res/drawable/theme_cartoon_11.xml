@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#240320"
+                android:endColor="#610B55"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Kawaii Planet with Ring -->
+        <path android:fillColor="#FF80AB" android:pathData="M100,150a32,32 0 1,0 0.1,0"/>
+        <path android:strokeColor="#FFD54F" android:strokeWidth="4" android:pathData="M50,165 Q100,135 150,140"/>
+    
+</vector>

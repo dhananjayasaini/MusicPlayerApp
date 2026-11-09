@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:padding="5dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardThemeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="3dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#1A122B">
+
+        <!-- Wallpaper Image -->
+        <ImageView
+            android:id="@+id/ivThemeWallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Wallpaper Theme" />
+
+        <!-- Custom Item Container (Visible only for 'Custom' card) -->
+        <LinearLayout
+            android:id="@+id/layoutCustomContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_custom_image_add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Custom"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Selected Border Overlay -->
+        <View
+            android:id="@+id/themeSelectedBorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_theme_card_selected"
+            android:visibility="gone" />
+
+        <!-- Selected Checkmark Badge (Bottom Right) -->
+        <ImageView
+            android:id="@+id/themeCheckBadge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_theme_check"
+            android:visibility="gone" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

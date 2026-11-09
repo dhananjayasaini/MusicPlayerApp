@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0A0017"
+                android:endColor="#25003E"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- 8-Bit Pixel City -->
+        <path android:fillColor="#FFD600" android:pathData="M140,60h30v30h-30z"/>
+        <path android:fillColor="#7C4DFF" android:pathData="M20,200h30v120h-30zM60,170h35v150h-35zM105,190h30v130h-30zM145,150h40v170h-40z"/>
+    
+</vector>

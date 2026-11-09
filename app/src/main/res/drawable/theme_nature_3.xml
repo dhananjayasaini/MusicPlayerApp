@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#03071E"
+                android:endColor="#0A2540"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Moon -->
+        <path android:fillColor="#E0E1DD" android:pathData="M150,70a20,20 0 1,0 0.1,0"/>
+        <!-- Ocean Horizon & Waves -->
+        <path android:fillColor="#061A2E" android:pathData="M0,200h200v120h-200z"/>
+        <path android:fillColor="#0D2F4F" android:pathData="M0,220 Q50,210 100,220 T200,220 L200,320 L0,320 Z"/>
+        <path android:fillColor="#103B63" android:pathData="M0,250 Q50,240 100,250 T200,250 L200,320 L0,320 Z"/>
+    
+</vector>

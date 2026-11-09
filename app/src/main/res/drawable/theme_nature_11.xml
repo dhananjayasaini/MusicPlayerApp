@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#012A2D"
+                android:endColor="#08415C"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Tropical Sunset & Palms -->
+        <path android:fillColor="#FFB703" android:pathData="M100,130a35,35 0 1,0 0.1,0"/>
+        <path android:fillColor="#02181A" android:pathData="M160,320 Q150,220 120,160 M120,160 Q80,140 60,170 M120,160 Q100,120 90,140 M120,160 Q140,110 160,130 M120,160 Q160,140 180,160"/>
+        <path android:fillColor="#011214" android:pathData="M0,270h200v50h-200z"/>
+    
+</vector>

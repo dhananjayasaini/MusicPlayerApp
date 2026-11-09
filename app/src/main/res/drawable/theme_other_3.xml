@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0A0314"
+                android:endColor="#2A0B42"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cosmic Nebula (matches screenshot) -->
+        <path android:fillColor="#BA68C8" android:pathData="M100,140a45,35 45 1,0 0.1,0"/>
+        <path android:fillColor="#4FC3F7" android:pathData="M115,130a35,25 -30 1,0 0.1,0"/>
+        <path android:fillColor="#FF8A80" android:pathData="M90,155a30,20 15 1,0 0.1,0"/>
+        <path android:fillColor="#FFFFFF" android:pathData="M105,138a3,3 0 1,0 0.1,0"/>
+    
+</vector>

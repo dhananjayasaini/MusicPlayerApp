@@ -1,0 +1,155 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+
+    <!-- Dark Cyber Disc Base -->
+    <path
+        android:pathData="M48,48m-44,0a44,44 0,1 1,88 0a44,44 0,1 1,-88 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="48"
+                android:centerY="48"
+                android:gradientRadius="44"
+                android:startColor="#1E1038"
+                android:endColor="#090514" />
+        </aapt:attr>
+    </path>
+
+    <!-- Outer Neon Glow Ring (Magenta -> Violet) -->
+    <path
+        android:pathData="M48,48m-41,0a41,41 0,1 1,82 0a41,41 0,1 1,-82 0"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="7"
+                android:startY="7"
+                android:endX="89"
+                android:endY="89"
+                android:startColor="#FF007F"
+                android:centerColor="#B026FF"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Mid Neon Cyan Accent Ring -->
+    <path
+        android:pathData="M48,48m-34,0a34,34 0,1 1,68 0a34,34 0,1 1,-68 0"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.75"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="82"
+                android:startY="14"
+                android:endX="14"
+                android:endY="82"
+                android:startColor="#00F5FF"
+                android:centerColor="#00FFA3"
+                android:endColor="#00E5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Concentric Vinyl / Soundwave Grooves (Subtle Neon Glow) -->
+    <path
+        android:pathData="M48,48m-27,0a27,27 0,1 1,54 0a27,27 0,1 1,-54 0"
+        android:strokeWidth="1"
+        android:strokeColor="#33B026FF"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M48,48m-21,0a21,21 0,1 1,42 0a21,21 0,1 1,-42 0"
+        android:strokeWidth="1"
+        android:strokeColor="#2600F5FF"
+        android:fillColor="#00000000" />
+
+    <!-- Center Disc Core -->
+    <path
+        android:pathData="M48,48m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0"
+        android:fillColor="#15082E"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FF007F" />
+
+    <!-- Center Glowing Neon Double Music Note -->
+    <!-- Note 1 Head (Left) -->
+    <path
+        android:pathData="M37,59m-6.5,0a6.5,5 45,1 1,13 0a6.5,5 45,1 1,-13 0"
+        android:fillColor="#00F5FF" />
+    <path
+        android:pathData="M37,59m-4,0a4,3 45,1 1,8 0a4,3 45,1 1,-8 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Note 2 Head (Right) -->
+    <path
+        android:pathData="M57,53m-6.5,0a6.5,5 45,1 1,13 0a6.5,5 45,1 1,-13 0"
+        android:fillColor="#FF007F" />
+    <path
+        android:pathData="M57,53m-4,0a4,3 45,1 1,8 0a4,3 45,1 1,-8 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Left Stem -->
+    <path
+        android:pathData="M41,33 L41,58"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M41,33 L41,58"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Right Stem -->
+    <path
+        android:pathData="M61,27 L61,52"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M61,27 L61,52"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Connecting Beam / Flag (Gradient Glow) -->
+    <path
+        android:pathData="M39.5,33 L62.5,27 L62.5,33 L39.5,39 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="39"
+                android:startY="33"
+                android:endX="63"
+                android:endY="27"
+                android:startColor="#00F5FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M41,34.5 L61,29.5"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Neon Glow Sparkles / Electric Accents -->
+    <path
+        android:pathData="M23,28 L25,28 M24,27 L24,29"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M73,64 L75,64 M74,63 L74,65"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M72,24 L74,24 M73,23 L73,25"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00FFA3" />
+
+</vector>

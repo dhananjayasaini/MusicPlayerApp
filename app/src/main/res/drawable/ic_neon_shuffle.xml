@@ -1,0 +1,79 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Top-to-Bottom Arrow Path (Neon Cyan -> Magenta) -->
+    <path
+        android:pathData="M14.83,13.41L13.42,14.82L16.59,18H5v2h11.59l-3.17,3.17 1.41,1.41L21.41,18l-6.58,-6.59z"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M10.59,9.17L5.41,4 4,5.41l5.17,5.17 1.42,-1.41z"
+        android:fillColor="#00000000" />
+    <!-- Glowing Cross Tracks -->
+    <path
+        android:pathData="M4,6 L8,6 C10.5,6 12,10 13.5,14 C15,18 16.5,18 19,18"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="4"
+                android:startY="6"
+                android:endX="19"
+                android:endY="18"
+                android:startColor="#00F5FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+    <!-- Arrow Head 1 (Bottom Right) -->
+    <path
+        android:pathData="M16,15 L20,18 L16,21"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeColor="#FF007F"
+        android:fillColor="#00000000" />
+    <!-- White core glow for Arrow 1 -->
+    <path
+        android:pathData="M4.5,6 L8,6 C10.5,6 12,10 13.5,14 C15,18 16.5,18 19,18"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF"
+        android:fillColor="#00000000" />
+
+    <!-- Bottom-to-Top Track (Neon Magenta -> Neon Cyan) -->
+    <path
+        android:pathData="M4,18 L8,18 C10.5,18 12,14 13.5,10 C15,6 16.5,6 19,6"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="4"
+                android:startY="18"
+                android:endX="19"
+                android:endY="6"
+                android:startColor="#FF007F"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+    <!-- Arrow Head 2 (Top Right) -->
+    <path
+        android:pathData="M16,3 L20,6 L16,9"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeColor="#00F5FF"
+        android:fillColor="#00000000" />
+    <!-- White core glow for Arrow 2 -->
+    <path
+        android:pathData="M4.5,18 L8,18 C10.5,18 12,14 13.5,10 C15,6 16.5,6 19,6"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF"
+        android:fillColor="#00000000" />
+</vector>

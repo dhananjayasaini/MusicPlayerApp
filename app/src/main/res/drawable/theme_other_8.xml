@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#031B1C"
+                android:endColor="#08474A"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Abstract Flowing Ribbons -->
+        <path android:fillColor="#00B4D8" android:pathData="M-20,100 Q100,200 220,120 L220,180 Q100,260 -20,160 Z"/>
+        <path android:fillColor="#90E0EF" android:pathData="M-20,140 Q100,240 220,160 L220,190 Q100,270 -20,170 Z"/>
+    
+</vector>

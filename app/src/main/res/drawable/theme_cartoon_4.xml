@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#140024"
+                android:endColor="#47004B"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Synthwave Striped Sun & Grid -->
+        <path android:fillColor="#FF1744" android:pathData="M100,120a40,40 0 1,0 0.1,0"/>
+        <path android:fillColor="#140024" android:pathData="M60,120h80v4h-80zM62,130h76v6h-76zM65,142h70v8h-70z"/>
+        <path android:strokeColor="#00E5FF" android:strokeWidth="1.5" android:pathData="M0,210h200M0,230h200M0,260h200M0,300h200"/>
+    
+</vector>

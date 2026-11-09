@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A0B2E"
+                android:endColor="#421B73"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Chibi Star Gazing -->
+        <path android:fillColor="#FFD54F" android:pathData="M100,90a20,20 0 1,0 0.1,0"/>
+        <path android:fillColor="#7E57C2" android:pathData="M90,170a16,16 0 1,0 0.1,0"/>
+        <path android:fillColor="#512DA8" android:pathData="M0,230 Q100,210 200,230 L200,320 L0,320 Z"/>
+    
+</vector>

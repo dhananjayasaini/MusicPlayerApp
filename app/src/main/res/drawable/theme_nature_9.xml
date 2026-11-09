@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0D1B2A"
+                android:endColor="#1B263B"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Ice Crystals & Mountains -->
+        <path android:fillColor="#415A77" android:pathData="M-20,320 L50,160 L130,320 Z"/>
+        <path android:fillColor="#778DA9" android:pathData="M50,160 L75,210 L50,230 L30,200 Z"/>
+        <path android:fillColor="#1B263B" android:pathData="M80,320 L150,140 L220,320 Z"/>
+        <path android:fillColor="#E0E1DD" android:pathData="M150,140 L170,180 L150,200 L135,175 Z"/>
+    
+</vector>

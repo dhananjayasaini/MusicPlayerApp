@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#000D1A"
+                android:endColor="#002B4D"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cyber 3D Grid -->
+        <path android:strokeColor="#00E5FF" android:strokeWidth="1.5" android:pathData="M100,100 L0,320 M100,100 L40,320 M100,100 L80,320 M100,100 L120,320 M100,100 L160,320 M100,100 L200,320"/>
+        <path android:strokeColor="#00E5FF" android:strokeWidth="1" android:pathData="M40,160h120M20,200h160M10,250h180M0,310h200"/>
+    
+</vector>

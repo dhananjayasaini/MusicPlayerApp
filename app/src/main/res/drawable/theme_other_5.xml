@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#140404"
+                android:endColor="#3D0E0E"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Formula Speed Light Trails -->
+        <path android:strokeColor="#FF1744" android:strokeWidth="5" android:pathData="M0,220 Q100,150 200,180"/>
+        <path android:strokeColor="#FFD600" android:strokeWidth="3" android:pathData="M0,235 Q100,165 200,195"/>
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="2" android:pathData="M0,245 Q100,175 200,205"/>
+    
+</vector>

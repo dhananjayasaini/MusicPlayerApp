@@ -1,0 +1,129 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer Neon Glow Ring (Magenta -> Violet -> Cyan) -->
+    <path
+        android:pathData="M54,54m-34,0a34,34 0,1 1,68 0a34,34 0,1 1,-68 0"
+        android:strokeWidth="3"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="20"
+                android:startY="20"
+                android:endX="88"
+                android:endY="88"
+                android:startColor="#FF007F"
+                android:centerColor="#B026FF"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Inner Neon Cyan Ring -->
+    <path
+        android:pathData="M54,54m-27,0a27,27 0,1 1,54 0a27,27 0,1 1,-54 0"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.75"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="81"
+                android:startY="27"
+                android:endX="27"
+                android:endY="81"
+                android:startColor="#00F5FF"
+                android:centerColor="#00FFA3"
+                android:endColor="#00E5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Center Disc Core -->
+    <path
+        android:pathData="M54,54m-17,0a17,17 0,1 1,34 0a17,17 0,1 1,-34 0"
+        android:fillColor="#15082E"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FF007F" />
+
+    <!-- Center Glowing Neon Double Music Note -->
+    <!-- Note 1 Head (Left) -->
+    <path
+        android:pathData="M44,64m-5.5,0a5.5,4.5 45,1 1,11 0a5.5,4.5 45,1 1,-11 0"
+        android:fillColor="#00F5FF" />
+    <path
+        android:pathData="M44,64m-3.5,0a3.5,2.5 45,1 1,7 0a3.5,2.5 45,1 1,-7 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Note 2 Head (Right) -->
+    <path
+        android:pathData="M62,58m-5.5,0a5.5,4.5 45,1 1,11 0a5.5,4.5 45,1 1,-11 0"
+        android:fillColor="#FF007F" />
+    <path
+        android:pathData="M62,58m-3.5,0a3.5,2.5 45,1 1,7 0a3.5,2.5 45,1 1,-7 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Left Stem -->
+    <path
+        android:pathData="M47.5,40 L47.5,63"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M47.5,40 L47.5,63"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Right Stem -->
+    <path
+        android:pathData="M65.5,34 L65.5,57"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M65.5,34 L65.5,57"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Connecting Beam / Flag -->
+    <path
+        android:pathData="M46,40 L67,34 L67,39 L46,45 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="46"
+                android:startY="40"
+                android:endX="67"
+                android:endY="34"
+                android:startColor="#00F5FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M47.5,41.2 L65.5,36"
+        android:strokeWidth="1.2"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Neon Glow Sparkles -->
+    <path
+        android:pathData="M32,36 L34,36 M33,35 L33,37"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M76,68 L78,68 M77,67 L77,69"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M74,32 L76,32 M75,31 L75,33"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00FFA3" />
+
+</vector>

@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#071E1A"
+                android:endColor="#134E4A"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Mist Circles -->
+        <path android:fillColor="#1A3D36" android:pathData="M100,100a40,40 0 1,0 0.1,0"/>
+        <!-- Trees -->
+        <path android:fillColor="#061A17" android:pathData="M30,320 L30,220 L15,240 L30,190 L20,205 L30,160 L40,205 L30,190 L45,240 L30,220 Z"/>
+        <path android:fillColor="#03100E" android:pathData="M80,320 L80,200 L60,225 L80,170 L68,190 L80,140 L92,190 L80,170 L100,225 L80,200 Z"/>
+        <path android:fillColor="#051512" android:pathData="M140,320 L140,210 L125,230 L140,180 L130,195 L140,150 L150,195 L140,180 L155,230 L140,210 Z"/>
+    
+</vector>

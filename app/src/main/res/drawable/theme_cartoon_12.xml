@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#030B1E"
+                android:endColor="#0D224D"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Space Voyager Astronaut Silhouette -->
+        <path android:fillColor="#E0E0E0" android:pathData="M100,140a25,25 0 1,0 0.1,0"/>
+        <path android:fillColor="#42A5F5" android:pathData="M100,140a16,14 0 1,0 0.1,0"/>
+        <path android:fillColor="#E0E0E0" android:pathData="M85,165h30v35h-30z"/>
+    
+</vector>

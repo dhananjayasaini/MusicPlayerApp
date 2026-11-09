@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#111726"
+                android:endColor="#242E42"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- British Blue Cat Silhouette -->
+        <path android:fillColor="#37474F" android:pathData="M100,160a38,38 0 1,0 0.1,0"/>
+        <path android:fillColor="#37474F" android:pathData="M72,135 L62,95 L90,122 Z"/>
+        <path android:fillColor="#37474F" android:pathData="M128,135 L138,95 L110,122 Z"/>
+        <!-- Glowing Amber Eyes -->
+        <path android:fillColor="#FFB300" android:pathData="M85,155a6,6 0 1,0 0.1,0M115,155a6,6 0 1,0 0.1,0"/>
+    
+</vector>

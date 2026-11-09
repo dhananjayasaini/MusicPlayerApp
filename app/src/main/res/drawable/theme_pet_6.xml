@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#04261B"
+                android:endColor="#0D5940"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Little Bird on Branch -->
+        <path android:fillColor="#26A69A" android:pathData="M100,140a20,20 0 1,0 0.1,0"/>
+        <path android:fillColor="#00897B" android:pathData="M115,145 Q145,150 150,175 Q125,175 110,155 Z"/>
+        <path android:fillColor="#FFB74D" android:pathData="M82,138 L72,143 L82,148 Z"/>
+        <path android:fillColor="#02120D" android:pathData="M30,165 Q110,175 180,160 L180,172 Q110,187 30,177 Z"/>
+    
+</vector>

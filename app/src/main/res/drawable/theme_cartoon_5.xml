@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#001B2E"
+                android:endColor="#00476E"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Neon Dragon -->
+        <path android:fillColor="#00E5FF" android:pathData="M100,120 Q130,90 140,130 Q150,170 120,180 Q80,190 70,160 Z"/>
+        <path android:fillColor="#FF4081" android:pathData="M125,125a4,4 0 1,0 0.1,0"/>
+    
+</vector>

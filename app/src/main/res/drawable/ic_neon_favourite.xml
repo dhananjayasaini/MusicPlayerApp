@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Glowing neon heart outer glow -->
+    <path
+        android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5 2,5.42 4.42,3 7.5,3c1.74,0 3.41,0.81 4.5,2.09C13.09,3.81 14.76,3 16.5,3 19.58,3 22,5.42 22,8.5c0,3.78 -3.4,6.86 -8.55,11.54L12,21.35z"
+        android:strokeWidth="1.8"
+        android:fillColor="#220014">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="2"
+                android:startY="3"
+                android:endX="22"
+                android:endY="21.35"
+                android:startColor="#FF007F"
+                android:centerColor="#FF2A85"
+                android:endColor="#B026FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Inner vibrant neon fill -->
+    <path
+        android:pathData="M12,18.8l-1.05,-0.96C6.2,13.4 3.5,10.8 3.5,8.5 3.5,6.2 5.2,4.5 7.5,4.5c1.4,0 2.7,0.7 3.5,1.7 0.8,-1 2.1,-1.7 3.5,-1.7 2.3,0 4,1.7 4,3.8 0,2.3 -2.7,4.9 -7.45,9.34L12,18.8z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="7"
+                android:startY="4"
+                android:endX="17"
+                android:endY="18"
+                android:startColor="#FF007F"
+                android:endColor="#7B00FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Specular highlight reflection -->
+    <path
+        android:pathData="M7,6 A2.5,2.5 0,0 1,9.5 7.5"
+        android:strokeWidth="1.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.75"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>

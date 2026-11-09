@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#140826"
+                android:endColor="#381666"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Prismatic Crystal Prism -->
+        <path android:fillColor="#7E57C2" android:pathData="M100,80 L160,200 L40,200 Z"/>
+        <path android:fillColor="#B39DDB" android:pathData="M100,80 L130,200 L40,200 Z"/>
+        <path android:fillColor="#EDE7F6" android:pathData="M100,80 L100,200 L40,200 Z"/>
+    
+</vector>

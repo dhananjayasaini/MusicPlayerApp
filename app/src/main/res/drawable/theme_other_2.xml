@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0D0406"
+                android:endColor="#290A10"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Red Supercar (matches screenshot) -->
+        <path android:fillColor="#D50000" android:pathData="M50,180 Q80,150 140,155 Q165,165 170,185 L35,185 Z"/>
+        <!-- Windows -->
+        <path android:fillColor="#212121" android:pathData="M75,175 Q95,158 130,162 L135,175 Z"/>
+        <!-- Wheels -->
+        <path android:fillColor="#111111" android:pathData="M65,185a12,12 0 1,0 0.1,0M145,185a12,12 0 1,0 0.1,0"/>
+        <!-- Road -->
+        <path android:fillColor="#1A1A1A" android:pathData="M0,195h200v125h-200z"/>
+    
+</vector>

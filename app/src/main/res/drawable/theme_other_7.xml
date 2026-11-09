@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A1102"
+                android:endColor="#473007"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Liquid Gold Waves -->
+        <path android:fillColor="#FFB300" android:pathData="M0,150 Q50,100 100,160 T200,140 L200,320 L0,320 Z"/>
+        <path android:fillColor="#FFD54F" android:pathData="M0,190 Q60,140 120,200 T200,180 L200,320 L0,320 Z"/>
+        <path android:fillColor="#FFF8E1" android:pathData="M0,230 Q70,180 140,240 T200,220 L200,320 L0,320 Z"/>
+    
+</vector>

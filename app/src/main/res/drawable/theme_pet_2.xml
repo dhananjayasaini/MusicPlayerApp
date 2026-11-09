@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#261404"
+                android:endColor="#5C3308"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Golden Pup Silhouette -->
+        <path android:fillColor="#FFA000" android:pathData="M100,150a36,36 0 1,0 0.1,0"/>
+        <!-- Floppy Ears -->
+        <path android:fillColor="#E65100" android:pathData="M65,130 Q50,170 65,190 Q75,170 70,135 Z"/>
+        <path android:fillColor="#E65100" android:pathData="M135,130 Q150,170 135,190 Q125,170 130,135 Z"/>
+        <path android:fillColor="#FFE082" android:pathData="M100,250a18,14 0 1,0 0.1,0"/>
+    
+</vector>

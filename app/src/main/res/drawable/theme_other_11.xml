@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#040408"
+                android:endColor="#0C0C17"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Deep Void / Black Hole Ring -->
+        <path android:fillColor="#FF6D00" android:pathData="M100,150a50,25 0 1,0 0.1,0"/>
+        <path android:fillColor="#000000" android:pathData="M100,150a32,32 0 1,0 0.1,0"/>
+        <path android:fillColor="#FFD600" android:pathData="M100,150a50,15 0 1,0 0.1,0"/>
+    
+</vector>

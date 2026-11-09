@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A0026"
+                android:endColor="#4A0057"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Neon Tokyo Kanji & Street Glow -->
+        <path android:fillColor="#FF0055" android:pathData="M40,80h15v80h-15zM70,100h20v60h-20z"/>
+        <path android:fillColor="#00F5FF" android:pathData="M130,70h18v90h-18z"/>
+        <path android:fillColor="#150020" android:pathData="M0,220h200v100h-200z"/>
+    
+</vector>

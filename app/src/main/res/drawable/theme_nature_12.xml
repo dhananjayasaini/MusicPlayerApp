@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#2E1005"
+                android:endColor="#7F2E08"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Canyon Wall Left -->
+        <path android:fillColor="#4A1A08" android:pathData="M0,0 L60,0 L40,180 L70,320 L0,320 Z"/>
+        <!-- Canyon Wall Right -->
+        <path android:fillColor="#361306" android:pathData="M140,0 L200,0 L200,320 L130,320 L160,160 Z"/>
+        <path android:fillColor="#FFA726" android:pathData="M100,70a18,18 0 1,0 0.1,0"/>
+    
+</vector>

@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#020813"
+                android:endColor="#0B192C"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Starry Lake -->
+        <path android:fillColor="#FFFFFF" android:pathData="M30,40a2,2 0 1,0 0.1,0M80,60a1.5,1.5 0 1,0 0.1,0M150,30a2,2 0 1,0 0.1,0M170,80a1.5,1.5 0 1,0 0.1,0"/>
+        <path android:fillColor="#1E3E62" android:pathData="M100,75a22,22 0 1,0 0.1,0"/>
+        <path android:fillColor="#000000" android:pathData="M0,210h200v110h-200z"/>
+    
+</vector>

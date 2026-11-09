@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#240B04"
+                android:endColor="#6B2D0C"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Blazing Sun -->
+        <path android:fillColor="#FF7043" android:pathData="M100,100a30,30 0 1,0 0.1,0"/>
+        <!-- Sand Dunes -->
+        <path android:fillColor="#3D1505" android:pathData="M-20,240 Q60,190 140,250 T220,240 L220,320 L-20,320 Z"/>
+        <path android:fillColor="#240B04" android:pathData="M-20,270 Q40,240 110,280 T220,260 L220,320 L-20,320 Z"/>
+    
+</vector>

@@ -1,0 +1,66 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Vinyl Outer Disc -->
+    <path
+        android:pathData="M24,24m-21,0a21,21 0,1 1,42 0a21,21 0,1 1,-42 0"
+        android:strokeWidth="2.5">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3"
+                android:startY="3"
+                android:endX="45"
+                android:endY="45"
+                android:startColor="#FF007F"
+                android:centerColor="#B026FF"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="24"
+                android:gradientRadius="21"
+                android:startColor="#1A0A30"
+                android:endColor="#080314" />
+        </aapt:attr>
+    </path>
+    <!-- Vinyl Grooves -->
+    <path
+        android:pathData="M24,24m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0"
+        android:strokeWidth="1.2"
+        android:strokeColor="#3300F5FF"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M24,24m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0"
+        android:strokeWidth="1"
+        android:strokeColor="#33FF007F"
+        android:fillColor="#00000000" />
+    <!-- Center Disc Core -->
+    <path
+        android:pathData="M24,24m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0"
+        android:strokeWidth="1.5"
+        android:strokeColor="#00F5FF">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="17"
+                android:startY="17"
+                android:endX="31"
+                android:endY="31"
+                android:startColor="#FF007F"
+                android:endColor="#7B00FF" />
+        </aapt:attr>
+    </path>
+    <!-- Spindle Hole -->
+    <path
+        android:pathData="M24,24m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+        android:fillColor="#080314" />
+    <path
+        android:pathData="M24,24m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
+        android:fillColor="#FFFFFF" />
+</vector>

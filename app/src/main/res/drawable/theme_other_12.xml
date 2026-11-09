@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0D131A"
+                android:endColor="#1E2B3A"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Minimalist Geometry -->
+        <path android:fillColor="#00ADB5" android:pathData="M100,100a40,40 0 1,0 0.1,0"/>
+        <path android:fillColor="#EEEEEE" android:pathData="M60,170h80v80h-80z"/>
+    
+</vector>

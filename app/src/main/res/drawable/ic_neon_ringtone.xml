@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Bell Body (Neon Lime -> Cyan) -->
+    <path
+        android:pathData="M12,2A2,2 0 0,0 10,4A7,7 0 0,0 5,11C5,15 3,17 3,17H21S19,15 19,11A7,7 0 0,0 14,4A2,2 0 0,0 12,2Z"
+        android:strokeWidth="1.6"
+        android:fillColor="#1A00FFA3">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3"
+                android:startY="2"
+                android:endX="21"
+                android:endY="17"
+                android:startColor="#00FFA3"
+                android:centerColor="#00F5FF"
+                android:endColor="#00E5FF" />
+        </aapt:attr>
+    </path>
+    <!-- Bell Clapper (Neon Gold) -->
+    <path
+        android:pathData="M10.3,19A2,2 0 0,0 13.7,19"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFD600" />
+    <!-- Sound Waves (Neon Magenta) -->
+    <path
+        android:pathData="M19,8A4,4 0 0,1 21,11"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M5,8A4,4 0 0,0 3,11"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+</vector>

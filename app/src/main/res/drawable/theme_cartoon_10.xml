@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#180829"
+                android:endColor="#3F1963"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cloud Kingdom -->
+        <path android:fillColor="#BA68C8" android:pathData="M70,180a25,25 0 1,0 0.1,0M110,170a30,30 0 1,0 0.1,0M145,185a22,22 0 1,0 0.1,0"/>
+        <path android:fillColor="#EDE7F6" android:pathData="M100,130 L115,160 L85,160 Z"/>
+    
+</vector>

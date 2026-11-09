@@ -1,0 +1,80 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Outer Glow Circle Frame -->
+    <path
+        android:pathData="M24,24m-21,0a21,21 0,1 1,42 0a21,21 0,1 1,-42 0"
+        android:strokeWidth="2.5">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3"
+                android:startY="3"
+                android:endX="45"
+                android:endY="45"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="24"
+                android:gradientRadius="21"
+                android:startColor="#180B2B"
+                android:endColor="#080314" />
+        </aapt:attr>
+    </path>
+    <!-- Artist Head -->
+    <path
+        android:pathData="M24,19m-6.5,0a6.5,6.5 0,1 1,13 0a6.5,6.5 0,1 1,-13 0"
+        android:strokeWidth="2"
+        android:strokeColor="#00F5FF">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="17.5"
+                android:startY="12.5"
+                android:endX="30.5"
+                android:endY="25.5"
+                android:startColor="#1E0D38"
+                android:endColor="#321054" />
+        </aapt:attr>
+    </path>
+    <!-- Headphones Arc -->
+    <path
+        android:pathData="M14,19 C14,13.5 18.5,9 24,9 C29.5,9 34,13.5 34,19"
+        android:strokeWidth="2.8"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F"
+        android:fillColor="#00000000" />
+    <!-- Left Earcup -->
+    <path
+        android:pathData="M12,17 C12,15.5 13.5,15.5 14.5,15.5 L14.5,22.5 C13.5,22.5 12,22.5 12,21 Z"
+        android:fillColor="#00F5FF" />
+    <!-- Right Earcup -->
+    <path
+        android:pathData="M33.5,15.5 C34.5,15.5 36,15.5 36,17 L36,21 C36,22.5 34.5,22.5 33.5,22.5 Z"
+        android:fillColor="#00F5FF" />
+    <!-- Artist Shoulders / Body -->
+    <path
+        android:pathData="M13,38 C13,30.5 17.5,29 24,29 C30.5,29 35,30.5 35,38"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="13"
+                android:startY="29"
+                android:endX="35"
+                android:endY="38"
+                android:startColor="#00F5FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+</vector>

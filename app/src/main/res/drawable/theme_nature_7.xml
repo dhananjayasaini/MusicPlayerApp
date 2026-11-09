@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#051923"
+                android:endColor="#006466"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Waterfall Canyon -->
+        <path android:fillColor="#04121A" android:pathData="M0,100 L70,100 L70,320 L0,320 Z"/>
+        <path android:fillColor="#04121A" android:pathData="M130,100 L200,100 L200,320 L130,320 Z"/>
+        <path android:fillColor="#48CAE4" android:pathData="M70,100h60v220h-60z"/>
+        <path android:fillColor="#90E0EF" android:pathData="M85,100h30v220h-30z"/>
+    
+</vector>

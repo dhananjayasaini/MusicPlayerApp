@@ -1,0 +1,60 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Folder Base Glow -->
+    <path
+        android:pathData="M6,12 C6,9.8 7.8,8 10,8 L18,8 C19.5,8 20.8,8.8 21.6,10 L24,13 L38,13 C40.2,13 42,14.8 42,17 L42,36 C42,38.2 40.2,40 38,40 L10,40 C7.8,40 6,38.2 6,36 Z"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="6"
+                android:startY="8"
+                android:endX="42"
+                android:endY="40"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="6"
+                android:startY="8"
+                android:endX="42"
+                android:endY="40"
+                android:startColor="#180B2B"
+                android:endColor="#2D0D4E" />
+        </aapt:attr>
+    </path>
+    <!-- Center Music Wave inside folder -->
+    <path
+        android:pathData="M16,28 L20,24 L24,30 L28,22 L32,28"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="16"
+                android:startY="26"
+                android:endX="32"
+                android:endY="26"
+                android:startColor="#00F5FF"
+                android:endColor="#00FFA3" />
+        </aapt:attr>
+    </path>
+    <!-- Top Flap Neon Accent -->
+    <path
+        android:pathData="M10,13 L23,13"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF"
+        android:fillColor="#00000000" />
+</vector>

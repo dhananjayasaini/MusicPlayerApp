@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#24001F"
+                android:endColor="#5C004F"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cyber Idol Soundwaves -->
+        <path android:fillColor="#FF4081" android:pathData="M40,180h10v40h-10zM60,150h10v70h-10zM80,120h10v100h-10zM100,100h10v120h-10zM120,130h10v90h-10zM140,160h10v60h-10zM160,185h10v35h-10z"/>
+    
+</vector>

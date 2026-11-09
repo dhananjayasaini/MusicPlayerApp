@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/previewRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_theme_2"
+    tools:context=".activities.ThemePreviewActivity">
+
+    <!-- Top Bar with Safe Insets -->
+    <LinearLayout
+        android:id="@+id/previewTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/back_icon"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Skin theme"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Carousel Swiper for Theme Mockup Previews -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpThemePreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp" />
+
+    <!-- Bottom APPLY Button with Safe Insets -->
+    <FrameLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnApplyTheme"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/bg_btn_apply_theme"
+            android:text="APPLY"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+</LinearLayout>

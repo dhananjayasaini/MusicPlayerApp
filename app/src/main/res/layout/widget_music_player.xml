@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_widget_player"
+    android:padding="12dp">
+
+    <!-- Album Art -->
+    <ImageView
+        android:id="@+id/widget_art"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_widget_art"
+        android:src="@drawable/music_player_icon_splash_screen"
+        android:contentDescription="@string/album_art" />
+
+    <!-- Song Info -->
+    <LinearLayout
+        android:id="@+id/widget_info_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="8dp">
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/widget_no_song"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="marquee" />
+
+        <TextView
+            android:id="@+id/widget_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/widget_tap_to_play"
+            android:textColor="#A094B8"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Playback Controls -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Previous Button -->
+        <ImageView
+            android:id="@+id/widget_btn_prev"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:padding="7dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_widget_prev"
+            android:contentDescription="@string/previous_song" />
+
+        <!-- Play / Pause Button -->
+        <ImageView
+            android:id="@+id/widget_btn_play_pause"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bg_widget_play_btn"
+            android:src="@drawable/ic_widget_play"
+            android:contentDescription="@string/play_pause" />
+
+        <!-- Next Button -->
+        <ImageView
+            android:id="@+id/widget_btn_next"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:padding="7dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_widget_next"
+            android:contentDescription="@string/next_song" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#2B0927"
+                android:endColor="#5A1846"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Full Moon -->
+        <path android:fillColor="#FCE4EC" android:pathData="M100,90a32,32 0 1,0 0.1,0"/>
+        <!-- Sakura Petals -->
+        <path android:fillColor="#F48FB1" android:pathData="M50,140a8,14 30 1,0 0.1,0"/>
+        <path android:fillColor="#F06292" android:pathData="M140,120a10,16 45 1,0 0.1,0"/>
+        <path android:fillColor="#F8BBD0" android:pathData="M80,200a7,12 15 1,0 0.1,0"/>
+        <path android:fillColor="#F48FB1" android:pathData="M160,220a9,15 -30 1,0 0.1,0"/>
+        <!-- Branch Silhouette -->
+        <path android:fillColor="#190417" android:pathData="M0,170 Q70,160 120,200 T200,190 L200,205 Q120,215 70,175 L0,185 Z"/>
+    
+</vector>

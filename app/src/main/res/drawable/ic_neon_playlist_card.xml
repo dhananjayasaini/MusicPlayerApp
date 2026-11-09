@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Rounded Outer Cyber Card -->
+    <path
+        android:pathData="M9,8h30a4,4 0,0 1,4 4v24a4,4 0,0 1,-4 4H9a4,4 0,0 1,-4 -4V12a4,4 0,0 1,4 -4z"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="5"
+                android:startY="8"
+                android:endX="43"
+                android:endY="36"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="5"
+                android:startY="8"
+                android:endX="43"
+                android:endY="36"
+                android:startColor="#180B2B"
+                android:endColor="#0C0416" />
+        </aapt:attr>
+    </path>
+    <!-- Playlist Bars -->
+    <path
+        android:pathData="M13,16 L27,16"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M13,22 L24,22"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#B026FF" />
+    <path
+        android:pathData="M13,28 L21,28"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <!-- Glowing Note on Right -->
+    <path
+        android:pathData="M32,28a3,3 0,1 1,-3,-3h1v-7h5v3h-3v7z"
+        android:fillColor="#00FFA3" />
+    <path
+        android:pathData="M32,28a1.5,1.5 0,1 1,-1.5,-1.5h1.5v-7h3v1.5h-3v7z"
+        android:fillColor="#FFFFFF" />
+</vector>

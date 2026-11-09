@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Glowing neon shield outline -->
+    <path
+        android:pathData="M12,2 L4,5 L4,11 C4,16.5 7.4,21.6 12,22.8 C16.6,21.6 20,16.5 20,11 L20,5 Z"
+        android:strokeWidth="1.8"
+        android:fillColor="#1AFF007F">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="4"
+                android:startY="2"
+                android:endX="20"
+                android:endY="22"
+                android:startColor="#FF007F"
+                android:centerColor="#FF416C"
+                android:endColor="#FF4B2B" />
+        </aapt:attr>
+    </path>
+    <!-- Slash / Anti indicator -->
+    <path
+        android:pathData="M7,7 L17,17"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+    <!-- "AD" text or block -->
+    <path
+        android:pathData="M9,14 L9,10 L11,10 L11,14 M9,12 L11,12"
+        android:strokeWidth="1.2"
+        android:strokeColor="#00F5FF" />
+</vector>

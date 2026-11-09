@@ -1,0 +1,50 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Neon glowing search lens rim -->
+    <path
+        android:pathData="M10.5,10.5m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0"
+        android:strokeWidth="1.8"
+        android:fillColor="#15082E">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3.5"
+                android:startY="3.5"
+                android:endX="17.5"
+                android:endY="17.5"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Subtle inner glass glow arc -->
+    <path
+        android:pathData="M6,10 A4.5,4.5 0,0 1,10.5 5.5"
+        android:strokeWidth="1.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.7"
+        android:fillColor="#00000000" />
+
+    <!-- Neon Handle -->
+    <path
+        android:pathData="M15.5,15.5 L20.5,20.5"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="15.5"
+                android:startY="15.5"
+                android:endX="20.5"
+                android:endY="20.5"
+                android:startColor="#FF007F"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+</vector>

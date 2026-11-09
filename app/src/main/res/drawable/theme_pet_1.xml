@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A0B2E"
+                android:endColor="#3E1B68"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Cute Kitten Ears & Head -->
+        <path android:fillColor="#8A2BE2" android:pathData="M100,150a40,36 0 1,0 0.1,0"/>
+        <path android:fillColor="#8A2BE2" android:pathData="M70,130 L60,85 L90,115 Z"/>
+        <path android:fillColor="#8A2BE2" android:pathData="M130,130 L140,85 L110,115 Z"/>
+        <path android:fillColor="#FF80AB" android:pathData="M72,125 L65,95 L85,115 Z"/>
+        <path android:fillColor="#FF80AB" android:pathData="M128,125 L135,95 L115,115 Z"/>
+        <!-- Paw Print -->
+        <path android:fillColor="#D8B4F8" android:pathData="M100,240a15,12 0 1,0 0.1,0M85,218a5,6 0 1,0 0.1,0M96,212a5,6 0 1,0 0.1,0M106,212a5,6 0 1,0 0.1,0M117,218a5,6 0 1,0 0.1,0"/>
+    
+</vector>

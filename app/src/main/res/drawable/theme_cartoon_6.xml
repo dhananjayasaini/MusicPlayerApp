@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0E0024"
+                android:endColor="#2E006A"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Retro Arcade Game Controller -->
+        <path android:fillColor="#311B92" android:pathData="M60,140 Q40,160 50,185 Q65,190 85,180 L115,180 Q135,190 150,185 Q160,160 140,140 Z"/>
+        <path android:fillColor="#FF1744" android:pathData="M130,155a6,6 0 1,0 0.1,0M142,165a6,6 0 1,0 0.1,0"/>
+        <!-- D-Pad -->
+        <path android:fillColor="#00E5FF" android:pathData="M68,155h12v6h-12zM71,152h6v12h-6z"/>
+    
+</vector>

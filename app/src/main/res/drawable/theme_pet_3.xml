@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#081226"
+                android:endColor="#1A3059"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Full Moon -->
+        <path android:fillColor="#ECEFF1" android:pathData="M130,100a35,35 0 1,0 0.1,0"/>
+        <!-- Howling Husky Silhouette -->
+        <path android:fillColor="#050B17" android:pathData="M50,320 L50,220 Q70,170 95,140 L110,145 L105,165 Q115,190 120,240 L130,320 Z"/>
+    
+</vector>

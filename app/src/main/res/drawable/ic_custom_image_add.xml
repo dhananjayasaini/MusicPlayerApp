@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Rounded picture frame -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M8,14a6,6 0 0,1 6,-6h20a6,6 0 0,1 6,6v20a6,6 0 0,1 -6,6h-20a6,6 0 0,1 -6,-6z"/>
+    <!-- Mountain landscape inside -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M11,34l9,-11l6,7l5,-5l6,9"/>
+    <!-- Plus circle badge on top right -->
+    <path
+        android:fillColor="#536DFE"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M38,14a6,6 0 1,1 -12,0a6,6 0 1,1 12,0z"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M32,11v6M29,14h6"/>
+</vector>

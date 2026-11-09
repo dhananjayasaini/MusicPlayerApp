@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1F0A24"
+                android:endColor="#4D1B59"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- White Bunny Silhouette -->
+        <path android:fillColor="#F3E5F5" android:pathData="M100,180a32,32 0 1,0 0.1,0"/>
+        <path android:fillColor="#F3E5F5" android:pathData="M85,155 Q75,80 88,75 Q98,80 92,155 Z"/>
+        <path android:fillColor="#F3E5F5" android:pathData="M115,155 Q125,80 112,75 Q102,80 108,155 Z"/>
+        <path android:fillColor="#F48FB1" android:pathData="M86,140 Q80,95 87,90 Q93,95 90,140 Z"/>
+        <path android:fillColor="#F48FB1" android:pathData="M114,140 Q120,95 113,90 Q107,95 110,140 Z"/>
+    
+</vector>

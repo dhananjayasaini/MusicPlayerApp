@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#05050A"
+                android:endColor="#151226"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Midnight Cat in Darkness with Gold Eyes -->
+        <path android:fillColor="#11111E" android:pathData="M100,160a40,40 0 1,0 0.1,0"/>
+        <path android:fillColor="#11111E" android:pathData="M70,135 L58,95 L88,125 Z"/>
+        <path android:fillColor="#11111E" android:pathData="M130,135 L142,95 L112,125 Z"/>
+        <!-- Piercing Emerald Eyes -->
+        <path android:fillColor="#00E676" android:pathData="M82,155a8,5 0 1,0 0.1,0M118,155a8,5 0 1,0 0.1,0"/>
+        <path android:fillColor="#000000" android:pathData="M82,155a2,5 0 1,0 0.1,0M118,155a2,5 0 1,0 0.1,0"/>
+    
+</vector>

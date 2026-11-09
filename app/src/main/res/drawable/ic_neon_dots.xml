@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Dot 1: Top (Neon Cyan) -->
+    <path
+        android:pathData="M12,5m-2.2,0a2.2,2.2 0,1 1,4.4 0a2.2,2.2 0,1 1,-4.4 0"
+        android:fillColor="#00F5FF" />
+    <path
+        android:pathData="M12,5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Dot 2: Center (Neon Violet / Purple) -->
+    <path
+        android:pathData="M12,12m-2.2,0a2.2,2.2 0,1 1,4.4 0a2.2,2.2 0,1 1,-4.4 0"
+        android:fillColor="#B026FF" />
+    <path
+        android:pathData="M12,12m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Dot 3: Bottom (Neon Pink) -->
+    <path
+        android:pathData="M12,19m-2.2,0a2.2,2.2 0,1 1,4.4 0a2.2,2.2 0,1 1,-4.4 0"
+        android:fillColor="#FF007F" />
+    <path
+        android:pathData="M12,19m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:fillColor="#FFFFFF" />
+</vector>

@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#12072B"
+                android:endColor="#3B1360"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Anime Headphones Girl (matches screenshot) -->
+        <path android:fillColor="#E1BEE7" android:pathData="M100,140a35,42 0 1,0 0.1,0"/>
+        <!-- Hair flow -->
+        <path android:fillColor="#BA68C8" android:pathData="M65,115 Q40,180 55,220 Q70,190 72,145 Z"/>
+        <path android:fillColor="#BA68C8" android:pathData="M135,115 Q160,180 145,220 Q130,190 128,145 Z"/>
+        <!-- Headphones -->
+        <path android:fillColor="#212121" android:pathData="M60,135a12,16 0 1,0 0.1,0M140,135a12,16 0 1,0 0.1,0"/>
+        <path android:strokeColor="#7B1FA2" android:strokeWidth="4" android:pathData="M60,135 Q100,90 140,135"/>
+    
+</vector>

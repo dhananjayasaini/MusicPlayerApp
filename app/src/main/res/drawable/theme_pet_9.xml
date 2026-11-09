@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0A1D33"
+                android:endColor="#1D3E66"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Arctic Fox Silhouette -->
+        <path android:fillColor="#90CAF9" android:pathData="M100,160a30,30 0 1,0 0.1,0"/>
+        <path android:fillColor="#90CAF9" android:pathData="M75,140 L65,100 L90,128 Z"/>
+        <path android:fillColor="#90CAF9" android:pathData="M125,140 L135,100 L110,128 Z"/>
+        <!-- Bushy Tail -->
+        <path android:fillColor="#BBDEFB" android:pathData="M100,190 Q150,200 145,240 Q110,240 95,205 Z"/>
+    
+</vector>

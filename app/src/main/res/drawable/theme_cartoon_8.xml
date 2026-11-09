@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#091426"
+                android:endColor="#17335C"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Mecha Titan Core -->
+        <path android:fillColor="#00E5FF" android:pathData="M100,130 L130,160 L100,190 L70,160 Z"/>
+        <path android:fillColor="#FFFFFF" android:pathData="M100,145 L115,160 L100,175 L85,160 Z"/>
+    
+</vector>

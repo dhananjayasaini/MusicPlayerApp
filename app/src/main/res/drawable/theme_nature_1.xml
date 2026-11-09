@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#0B1B3D"
+                android:endColor="#3D1B4D"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Sun -->
+        <path android:fillColor="#FFA726" android:pathData="M100,110a26,26 0 1,0 0.1,0"/>
+        <!-- Back Mountain -->
+        <path android:fillColor="#2A1B4E" android:pathData="M-20,320 L50,150 L120,320 Z"/>
+        <path android:fillColor="#1F133B" android:pathData="M70,320 L140,130 L220,320 Z"/>
+        <!-- Front Mountain -->
+        <path android:fillColor="#120A24" android:pathData="M10,320 L90,190 L180,320 Z"/>
+    
+</vector>

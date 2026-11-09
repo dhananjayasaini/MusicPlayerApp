@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#1A1A1A"
+                android:endColor="#333333"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Frenchie Silhouette -->
+        <path android:fillColor="#555555" android:pathData="M100,165a36,36 0 1,0 0.1,0"/>
+        <!-- Bat Ears -->
+        <path android:fillColor="#555555" android:pathData="M68,140 Q55,80 80,75 Q95,85 85,135 Z"/>
+        <path android:fillColor="#555555" android:pathData="M132,140 Q145,80 120,75 Q105,85 115,135 Z"/>
+        <path android:fillColor="#FF5252" android:pathData="M75,200 Q100,215 125,200 L125,210 Q100,225 75,210 Z"/>
+    
+</vector>

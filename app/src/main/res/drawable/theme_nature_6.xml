@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/apk/res-auto"
+    android:width="200dp"
+    android:height="320dp"
+    android:viewportWidth="200"
+    android:viewportHeight="320">
+    <!-- Background Gradient -->
+    <path android:pathData="M0,0h200v320h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="100"
+                android:startY="0"
+                android:endX="100"
+                android:endY="320"
+                android:startColor="#02121A"
+                android:endColor="#0B424C"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+    
+        <!-- Aurora wave 1 -->
+        <path android:fillColor="#26A69A" android:pathData="M0,90 Q50,40 100,100 T200,80 L200,140 Q150,170 100,120 T0,130 Z"/>
+        <!-- Aurora wave 2 -->
+        <path android:fillColor="#4DB6AC" android:pathData="M0,120 Q60,80 120,130 T200,110 L200,160 Q140,190 80,140 T0,150 Z"/>
+        <!-- Dark Hills -->
+        <path android:fillColor="#020A0E" android:pathData="M-10,250 Q60,210 130,260 T220,240 L220,320 L-10,320 Z"/>
+    
+</vector>
