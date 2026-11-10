@@ -48,6 +48,9 @@ import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
 import com.dhananjaysaini.musicplayerapp.utils.PlaylistManager
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
+import com.dhananjaysaini.musicplayerapp.utils.VolumeBoosterBottomSheet
+import com.dhananjaysaini.musicplayerapp.activities.VoiceRecorderActivity
+import com.dhananjaysaini.musicplayerapp.activities.FreeRingtonesActivity
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
@@ -304,19 +307,19 @@ class MainActivity : AppCompatActivity() {
         // 8. Volume booster [AD]
         customDrawer.navItemVolumeBooster.setOnClickListener {
             drawer.closeDrawers()
-            toast("Volume booster coming soon")
+            VolumeBoosterBottomSheet(this).show()
         }
 
         // 9. Voice recorder [AD]
         customDrawer.navItemVoiceRecorder.setOnClickListener {
             drawer.closeDrawers()
-            toast("Voice recorder coming soon")
+            startActivity(Intent(this, VoiceRecorderActivity::class.java))
         }
 
         // 10. Free ringtones [AD]
         customDrawer.navItemFreeRingtones.setOnClickListener {
             drawer.closeDrawers()
-            toast("Free ringtones coming soon")
+            startActivity(Intent(this, FreeRingtonesActivity::class.java))
         }
     }
 

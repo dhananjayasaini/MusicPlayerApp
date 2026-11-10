@@ -43,6 +43,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
 import com.dhananjaysaini.musicplayerapp.utils.NotificationWaveformHelper
+import com.dhananjaysaini.musicplayerapp.utils.VolumeBoosterManager
 import com.dhananjaysaini.musicplayerapp.widget.MusicAppWidgetProvider
 import java.io.IOException
 
@@ -524,6 +525,8 @@ class MusicService : Service() {
             mp.prepare()
             mp.setOnCompletionListener { handleCompletion() }
             mp.start()
+            VolumeBoosterManager.init(this)
+            VolumeBoosterManager.attachSession(mp.audioSessionId)
 
             // repeat flag comes from PlayerActivity prefs (optional safeguard)
             val isRepeat = getSharedPreferences("settings", MODE_PRIVATE)
