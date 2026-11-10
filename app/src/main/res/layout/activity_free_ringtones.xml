@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ringtonesRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F071A"
+    android:orientation="vertical">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/ringtonesTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/btnRingtonesBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_neon_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Free Ringtones"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnToggleSearch"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="7dp"
+            android:src="@drawable/ic_neon_search" />
+    </LinearLayout>
+
+    <!-- Search Input (Hidden by default, toggled via search icon) -->
+    <LinearLayout
+        android:id="@+id/layoutSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_booster_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_neon_search" />
+
+        <EditText
+            android:id="@+id/etSearchRingtone"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Search ringtones or songs..."
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#80FFFFFF"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/btnClearSearch"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_notif_close" />
+    </LinearLayout>
+
+    <!-- Tab Selector -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/tabCuratedRingtones"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_apply_theme"
+            android:text="Featured Tones"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
+
+        <Button
+            android:id="@+id/tabDeviceSongs"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_booster_card"
+            android:text="My Music Library"
+            android:textAllCaps="false"
+            android:textColor="#A08EBC"
+            android:textSize="13sp"
+            app:backgroundTint="@null" />
+    </LinearLayout>
+
+    <!-- Ringtones RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRingtonesList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="20dp" />
+
+    <!-- Bottom Mini Preview Bar (visible when a tone is previewing) -->
+    <LinearLayout
+        android:id="@+id/layoutBottomPreview"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_notification_container"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/btnBottomPlayPause"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_widget_play_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_widget_pause" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvBottomPreviewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:text="Playing preview..."
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBottomPreviewSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tap Set to apply as ringtone"
+                android:textColor="#00F5FF"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnBottomSetRingtone"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_btn_apply_theme"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:text="Set"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
+    </LinearLayout>
+
+</LinearLayout>

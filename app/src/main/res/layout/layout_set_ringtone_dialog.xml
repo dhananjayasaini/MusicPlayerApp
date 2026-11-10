@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#150B22"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Top Handle Bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="#44FFFFFF" />
+
+    <!-- Title & Subtitle -->
+    <TextView
+        android:id="@+id/tvDialogRingtoneTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Set as Ringtone"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="16dp"
+        android:text="Select where you want to apply this sound"
+        android:textColor="#A08EBC"
+        android:textSize="12sp" />
+
+    <!-- Option 1: Phone Ringtone -->
+    <LinearLayout
+        android:id="@+id/optPhoneRingtone"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/bg_booster_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_neon_ringtone" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Phone Call Ringtone"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set ➔"
+            android:textColor="#00F5FF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Option 2: Notification Sound -->
+    <LinearLayout
+        android:id="@+id/optNotificationTone"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_booster_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_neon_music_note" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Notification Sound"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set ➔"
+            android:textColor="#00F5FF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Option 3: Alarm Tone -->
+    <LinearLayout
+        android:id="@+id/optAlarmTone"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_booster_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_neon_timer" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Alarm Tone"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set ➔"
+            android:textColor="#00F5FF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

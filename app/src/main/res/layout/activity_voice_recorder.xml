@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recorderRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F071A"
+    android:orientation="vertical">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/recorderTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/btnRecorderBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_neon_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Voice Recorder"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRecordingsCountBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ad_badge"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text="0 files"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Recording Studio Box -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_booster_card"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Timer -->
+        <TextView
+            android:id="@+id/tvRecordTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="00:00:00"
+            android:textColor="#00F5FF"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <!-- Status -->
+        <TextView
+            android:id="@+id/tvRecordStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Ready to record"
+            android:textColor="#A08EBC"
+            android:textSize="12sp" />
+
+        <!-- Live Waveform Visualizer -->
+        <com.dhananjaysaini.musicplayerapp.utils.AudioWaveformVisualizerView
+            android:id="@+id/waveformVisualizer"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Controls Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Discard Button -->
+            <ImageView
+                android:id="@+id/btnDiscardRecording"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_booster_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_notif_close"
+                android:visibility="invisible" />
+
+            <!-- Main Record / Pause / Resume Button -->
+            <ImageView
+                android:id="@+id/btnMainRecord"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/bg_record_btn_idle"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp"
+                android:src="@drawable/ic_neon_mic" />
+
+            <!-- Save / Stop Button -->
+            <ImageView
+                android:id="@+id/btnSaveRecording"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/bg_booster_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_theme_check"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Saved Recordings Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Saved Recordings"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/layoutEmptyRecordings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:alpha="0.6"
+            android:src="@drawable/ic_neon_mic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="No recordings yet"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Tap the microphone button to start recording"
+            android:textColor="#9E8EB8"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Recordings RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecordings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_booster_card"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Top Row: Icon, Info, Play, Menu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivRecordingIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_widget_art"
+            android:padding="8dp"
+            android:src="@drawable/ic_neon_mic" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvRecordingName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Recording_20261109.m4a"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRecordingDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="00:45 • Nov 9, 2026 • 750 KB"
+                android:textColor="#9E8DB8"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Play / Pause Button -->
+        <ImageView
+            android:id="@+id/btnPlayRecording"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_widget_play_btn"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="9dp"
+            android:src="@drawable/ic_widget_play" />
+
+        <!-- More Options Menu -->
+        <ImageView
+            android:id="@+id/btnMoreOptions"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_neon_dots" />
+    </LinearLayout>
+
+    <!-- Inline Progress row (visible when playing this recording) -->
+    <LinearLayout
+        android:id="@+id/layoutInlinePlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvCurrentPlayTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#00F5FF"
+            android:textSize="11sp" />
+
+        <SeekBar
+            android:id="@+id/seekRecordingProgress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progressBackgroundTint="#33FFFFFF"
+            android:progressTint="#00F5FF"
+            android:thumbTint="#00F5FF" />
+
+        <TextView
+            android:id="@+id/tvTotalPlayTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#9E8DB8"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+</LinearLayout>
