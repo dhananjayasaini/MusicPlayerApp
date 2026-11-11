@@ -23,10 +23,14 @@ class ColorThemeAdapter(
     override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
         val theme = themeList[position]
         val isSelected = theme.id == selectedThemeId
+        val isDarkTheme = com.dhananjaysaini.musicplayerapp.utils.ThemeManager.isDarkTheme(holder.itemView.context)
 
         holder.binding.swatchCircle.setImageResource(theme.swatchRes)
         holder.binding.swatchCrown.visibility = if (theme.isPro) View.VISIBLE else View.GONE
         holder.binding.swatchSelectionRing.visibility = if (isSelected) View.VISIBLE else View.GONE
+        holder.binding.swatchSelectionRing.backgroundTintList = android.content.res.ColorStateList.valueOf(
+            if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.parseColor("#E65100")
+        )
         holder.binding.swatchCheckBadge.visibility = if (isSelected) View.VISIBLE else View.GONE
 
         holder.binding.root.setOnClickListener {

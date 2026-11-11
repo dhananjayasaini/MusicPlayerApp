@@ -74,12 +74,11 @@ object ThemeManager {
                 putBoolean(KEY_IS_CUSTOM, false)
                 putString(KEY_THEME_ID, theme.id)
             }
-            apply()
-        }
+        }.commit()
 
         // Keep dark_mode in app_settings always in sync
         val settingsPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        settingsPrefs.edit().putBoolean("dark_mode", theme.isDark).apply()
+        settingsPrefs.edit().putBoolean("dark_mode", theme.isDark).commit()
 
         // Synchronize AppCompat night mode
         val targetMode = if (theme.isDark) {

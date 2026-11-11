@@ -1,6 +1,7 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
@@ -35,13 +36,14 @@ class ThemePreviewActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
 
-        // Safe status bar and navigation bar insets
+        // Safe status bar and navigation bar insets with clear top clearance
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            binding.previewTopBar.updatePadding(top = systemBars.top)
-            binding.bottomContainer.updatePadding(bottom = systemBars.bottom)
+            val extraTop = (16 * resources.displayMetrics.density).toInt()
+            binding.previewTopBar.updatePadding(top = systemBars.top + extraTop)
+            binding.bottomContainer.updatePadding(bottom = systemBars.bottom.coerceAtLeast((16 * resources.displayMetrics.density).toInt()))
             insets
         }
 
@@ -112,6 +114,10 @@ class ThemePreviewActivity : AppCompatActivity() {
                 val controller = WindowInsetsControllerCompat(window, window.decorView)
                 controller.isAppearanceLightStatusBars = !currentTheme.isDark
                 controller.isAppearanceLightNavigationBars = !currentTheme.isDark
+
+                val topColor = if (currentTheme.isDark) Color.WHITE else Color.parseColor("#111827")
+                binding.btnBack.imageTintList = ColorStateList.valueOf(topColor)
+                binding.tvPreviewTitle.setTextColor(topColor)
             }
         })
 
@@ -120,6 +126,10 @@ class ThemePreviewActivity : AppCompatActivity() {
             val controller = WindowInsetsControllerCompat(window, window.decorView)
             controller.isAppearanceLightStatusBars = !it.isDark
             controller.isAppearanceLightNavigationBars = !it.isDark
+
+            val topColor = if (it.isDark) Color.WHITE else Color.parseColor("#111827")
+            binding.btnBack.imageTintList = ColorStateList.valueOf(topColor)
+            binding.tvPreviewTitle.setTextColor(topColor)
         }
     }
 
@@ -133,9 +143,9 @@ class ThemePreviewActivity : AppCompatActivity() {
 
             Toast.makeText(this, "Theme applied successfully!", Toast.LENGTH_SHORT).show()
 
-            // 2. Return to MainActivity keeping whatever fragment was already open
+            // 2. Return to MainActivity cleanly recreating everything with the new theme
             val intent = Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             startActivity(intent)
             finish()

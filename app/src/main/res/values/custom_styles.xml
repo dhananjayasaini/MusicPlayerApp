@@ -3,4 +3,9 @@
     <style name="curved">
         <item name="cornerSize">10%</item>
     </style>
+
+    <style name="ShapeAppearance.MockupCard" parent="">
+<!--        <item name="cornerFamily">rounded</item>-->
+<!--        <item name="cornerSize">0dp</item>-->
+    </style>
 </resources>

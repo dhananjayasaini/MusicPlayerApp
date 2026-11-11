@@ -1,6 +1,8 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dhananjaysaini.musicplayerapp.adapter.ColorThemeAdapter
@@ -55,16 +58,18 @@ class SkinThemeActivity : AppCompatActivity() {
         binding = ActivitySkinThemeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Status bar & display cutout padding
+        // Status bar & display cutout padding with safe clearance
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
-            binding.topBar.updatePadding(top = systemBars.top)
+            val extraTop = (16 * resources.displayMetrics.density).toInt()
+            binding.topBar.updatePadding(top = systemBars.top + extraTop)
             insets
         }
 
         val initialTheme = ThemeManager.getCurrentTheme(this)
         currentActiveThemeId = initialTheme.id
         ThemeManager.applyThemeToActivity(this)
+        applySkinThemeUI(initialTheme)
 
         binding.btnBack.setOnClickListener {
             finish()
@@ -80,7 +85,28 @@ class SkinThemeActivity : AppCompatActivity() {
         val currentTheme = ThemeManager.getCurrentTheme(this)
         currentActiveThemeId = currentTheme.id
         ThemeManager.applyThemeToActivity(this)
+        applySkinThemeUI(currentTheme)
         refreshSelection(currentActiveThemeId)
+    }
+
+    private fun applySkinThemeUI(theme: AppTheme) {
+        ThemeManager.applyThemeBackground(this, binding.skinThemeRoot, theme)
+        val isDark = theme.isDark
+
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = !isDark
+        controller.isAppearanceLightNavigationBars = !isDark
+
+        val topColor = if (isDark) Color.WHITE else Color.parseColor("#111827")
+        val subColor = if (isDark) Color.parseColor("#99FFFFFF") else Color.parseColor("#6B7280")
+        val accentColor = if (isDark) Color.parseColor("#FF9800") else Color.parseColor("#E65100")
+
+        binding.btnBack.imageTintList = ColorStateList.valueOf(topColor)
+        binding.tvSkinThemeTitle.setTextColor(topColor)
+        binding.tvColorSectionTitle.setTextColor(topColor)
+
+        binding.tabLayoutCategories.setTabTextColors(subColor, topColor)
+        binding.tabLayoutCategories.setSelectedTabIndicatorColor(accentColor)
     }
 
     private fun setupColorSection() {
