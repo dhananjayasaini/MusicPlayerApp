@@ -11,17 +11,17 @@
     tools:context=".activities.MainActivity">
 
     <!-- ================= MAIN CONTENT ================= -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainContentLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <!-- ===== TOOLBAR ===== -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
             app:elevation="0dp"
             app:liftOnScroll="false">
@@ -54,14 +54,16 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/appBarLayout"
+            android:layout_above="@id/bottomNavigation" />
 
         <!-- ===== FLOATING MINI PLAYER ===== -->
         <FrameLayout
             android:id="@+id/mini_player_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/bottomNavigation"
             android:visibility="gone" />
 
         <!-- ===== MATERIAL 3 BOTTOM NAVIGATION BAR ===== -->
@@ -69,6 +71,7 @@
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:background="?attr/colorSurface"
             app:itemIconTint="@color/bottom_nav_color_selector"
             app:itemTextColor="@color/bottom_nav_color_selector"
@@ -76,7 +79,7 @@
             app:elevation="8dp"
             app:menu="@menu/bottom_nav_menu" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- ================= CUSTOM NAVIGATION DRAWER ================= -->
     <include

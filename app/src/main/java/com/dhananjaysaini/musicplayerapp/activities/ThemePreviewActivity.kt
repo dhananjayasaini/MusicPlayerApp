@@ -128,15 +128,7 @@ class ThemePreviewActivity : AppCompatActivity() {
             val currentPos = binding.vpThemePreview.currentItem
             val themeToApply = previewAdapter.getThemeAt(currentPos) ?: return@setOnClickListener
 
-            // 1. Save and apply theme globally
-            val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
-            sharedPref.edit().putBoolean("dark_mode", themeToApply.isDark).apply()
-            if (themeToApply.isDark) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-
+            // 1. Save and apply theme globally (handles dark_mode and AppCompatDelegate)
             ThemeManager.saveTheme(this, themeToApply)
 
             Toast.makeText(this, "Theme applied successfully!", Toast.LENGTH_SHORT).show()

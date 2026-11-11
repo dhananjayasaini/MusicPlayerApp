@@ -1,228 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sleepTimerRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_sleep_timer_sheet"
     android:orientation="vertical"
-    android:padding="18dp"
-    android:background="@color/accent_gray">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="22dp"
+    android:paddingBottom="28dp">
 
-    <!-- Main Card -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Title: Stop music after -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="18dp"
-        android:layout_marginBottom="10dp">
+        android:text="Stop music after"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sleep Timer"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <!-- Wheel Time Picker: Hours : Minutes : Seconds -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp">
 
-        <!-- Space -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <!-- Timer Layout -->
+        <!-- Background Rounded Boxes for the selected middle row -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="72dp"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_sleep_timer_box" />
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="1dp" />
+
+            <View
+                android:layout_width="72dp"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_sleep_timer_box" />
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="1dp" />
+
+            <View
+                android:layout_width="72dp"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_sleep_timer_box" />
+        </LinearLayout>
+
+        <!-- NumberPickers with Colons overlaying the center row -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
 
             <NumberPicker
                 android:id="@+id/npHours"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/ThemeOverlay.MaterialComponents" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text=":"
+                android:textColor="#FFFFFF"
                 android:textSize="28sp"
-                android:textColor="#000000"
-                android:padding="6dp"
                 android:textStyle="bold" />
 
             <NumberPicker
                 android:id="@+id/npMinutes"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/ThemeOverlay.MaterialComponents" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text=":"
+                android:textColor="#FFFFFF"
                 android:textSize="28sp"
-                android:textColor="#000000"
-                android:padding="6dp"
                 android:textStyle="bold" />
 
             <NumberPicker
                 android:id="@+id/npSeconds"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content" />
-
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/ThemeOverlay.MaterialComponents" />
         </LinearLayout>
+    </FrameLayout>
 
-        <!-- Space -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
+    <!-- Quick Presets Row: 15m, 30m, 45m, 60m -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <!-- Quick Buttons -->
+        <!-- 15m -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/btn15"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_sleep_timer_preset"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/btn15"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="@drawable/bg_quick_timer">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/timer_icon"
+                app:tint="#D0D2DE" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_lock_idle_alarm"
-                    app:tint="#000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15m"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn30"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="@drawable/bg_quick_timer">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_lock_idle_alarm"
-                    app:tint="#000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30m"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn45"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="@drawable/bg_quick_timer">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_lock_idle_alarm"
-                    app:tint="#000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="45m"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn60"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:layout_margin="6dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="@drawable/bg_quick_timer">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_lock_idle_alarm"
-                    app:tint="#000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="60m"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="15m"
+                android:textColor="#D0D2DE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Space -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="18dp" />
-
-        <!-- Bottom Buttons -->
+        <!-- 30m -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:id="@+id/btn30"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_sleep_timer_preset"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
-                android:text="CANCEL"
-                android:textAllCaps="true"
-                android:backgroundTint="@color/gray"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginEnd="10dp"/>
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/timer_icon"
+                app:tint="#D0D2DE" />
 
-            <Button
-                android:id="@+id/btnStart"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
-                android:text="START"
-                android:textAllCaps="true"
-                android:backgroundTint="@color/gray"
-                android:textStyle="bold"
-                android:textColor="#000000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="30m"
+                android:textColor="#D0D2DE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- 45m -->
+        <LinearLayout
+            android:id="@+id/btn45"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_sleep_timer_preset"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/timer_icon"
+                app:tint="#D0D2DE" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="45m"
+                android:textColor="#D0D2DE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- 60m -->
+        <LinearLayout
+            android:id="@+id/btn60"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_sleep_timer_preset"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/timer_icon"
+                app:tint="#D0D2DE" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="60m"
+                android:textColor="#D0D2DE"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Stop when current song ends Option Button -->
+    <LinearLayout
+        android:id="@+id/btnSongEnd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_sleep_timer_preset"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_neon_music_note"
+            app:tint="#D0D2DE" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Stop when current song ends"
+            android:textColor="#D0D2DE"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Bottom Action Buttons: CANCEL & START -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="#282A3A"
+            android:text="CANCEL"
+            android:textColor="#D0D2DE"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="26dp"
+            app:elevation="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStart"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:backgroundTint="#965518"
+            android:text="START"
+            android:textColor="#FFA726"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="26dp"
+            app:elevation="0dp" />
     </LinearLayout>
 
 </LinearLayout>

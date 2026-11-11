@@ -23,8 +23,7 @@ class AlbumSongsActivity : AppCompatActivity()  {
             insets
         }
 
-        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
-        val isDark = sharedPref.getBoolean("dark_mode", false)
+        val isDark = ThemeManager.isDarkTheme(this)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.isAppearanceLightStatusBars = !isDark
 

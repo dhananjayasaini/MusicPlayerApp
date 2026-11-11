@@ -201,6 +201,7 @@
 
         </LinearLayout>
 
+        <!-- Seek Bar Row with -10s / +10s and Capsule Timer In/Out Thumb -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,31 +209,46 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/startTimePA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="00:00"
-                android:textColor="#000000"
-                android:textSize="12sp" />
+            <ImageButton
+                android:id="@+id/btnRewind10"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Rewind 10 seconds"
+                android:padding="5dp"
+                android:src="@drawable/ic_replay_10"
+                app:tint="#FFFFFF" />
 
             <com.dhananjaysaini.musicplayerapp.utils.WaveformSeekBar
                 android:id="@+id/waveformSeekBarPA"
                 android:layout_width="0dp"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp" />
+
+            <ImageButton
+                android:id="@+id/btnForward10"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Forward 10 seconds"
+                android:padding="5dp"
+                android:src="@drawable/ic_forward_10"
+                app:tint="#FFFFFF" />
+
+            <!-- Hidden for backwards-compatibility -->
+            <TextView
+                android:id="@+id/startTimePA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/endTimePA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="00:00"
-                android:textColor="#000000"
-                android:textSize="12sp" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

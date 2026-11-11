@@ -61,6 +61,7 @@ class MusicService : Service() {
     }
 
     private lateinit var receiver: BroadcastReceiver
+    private var noisyReceiver: BroadcastReceiver? = null
     private var isServiceStarted = false
     private var lastNotifProgressUpdateTime = 0L
     private var mediaSession: MediaSessionCompat? = null
@@ -123,6 +124,7 @@ class MusicService : Service() {
         createNotificationChannel()
         initMediaSession()
         registerReceiver()
+        registerNoisyReceiver()
 
         if (mediaPlayer == null) mediaPlayer = MediaPlayer()
         mediaPlayer?.setOnCompletionListener { handleCompletion() }
@@ -470,6 +472,11 @@ class MusicService : Service() {
         } catch (_: Exception) {}
         try {
             unregisterReceiver(receiver)
+        } catch (_: Exception) { /* ignore */
+        }
+        try {
+            noisyReceiver?.let { unregisterReceiver(it) }
+            noisyReceiver = null
         } catch (_: Exception) { /* ignore */
         }
         mediaPlayer?.release()
@@ -862,6 +869,24 @@ class MusicService : Service() {
             filter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+    }
+
+    private fun registerNoisyReceiver() {
+        if (noisyReceiver != null) return
+        noisyReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
+                    val prefs = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+                    val pauseOnDetach = prefs.getBoolean("pause_on_detach", true)
+                    if (pauseOnDetach && mediaPlayer?.isPlaying == true) {
+                        mediaPlayer?.pause()
+                        notifyUIAndUpdateNotification()
+                    }
+                }
+            }
+        }
+        val filter = IntentFilter(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+        registerReceiver(noisyReceiver, filter)
     }
 
     // ------------------ UI broadcast helpers ------------------

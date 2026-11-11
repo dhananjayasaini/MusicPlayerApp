@@ -38,6 +38,7 @@ import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ViewPagerAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityMainBinding
 import com.dhananjaysaini.musicplayerapp.fragments.MiniPlayerFragment
+import com.dhananjaysaini.musicplayerapp.repository.ThemeRepository
 import com.dhananjaysaini.musicplayerapp.widget.MusicAppWidgetProvider
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
@@ -125,16 +126,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private var lastRecordedNightMode: Int? = null
+
     private fun applySavedTheme() {
-        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
-        val isDark = sharedPref.getBoolean("dark_mode", false)
-
-        if (isDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        val isDark = ThemeManager.isDarkTheme(this)
+        val targetMode = if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        lastRecordedNightMode = targetMode
+        if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+            AppCompatDelegate.setDefaultNightMode(targetMode)
         }
-
     }
 
     // -------------------- Navigation & ViewPager --------------------
@@ -467,20 +467,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleTheme() {
-        val sharedPref = getSharedPreferences("app_settings", MODE_PRIVATE)
-        val isDark = sharedPref.getBoolean("dark_mode", false)
-
+        val isDark = ThemeManager.isDarkTheme(this)
         if (isDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            //    sharedPref.edit().putBoolean("dark_mode", false).apply()
-
+            val lightTheme = ThemeRepository.findThemeById("color_6")
+                ?: ThemeRepository.getColorThemes().firstOrNull { !it.isDark }
+                ?: ThemeRepository.getColorThemes()[0]
+            ThemeManager.saveTheme(this, lightTheme)
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            //      sharedPref.edit().putBoolean("dark_mode", true).apply()
-
+            val darkTheme = ThemeRepository.findThemeById("color_2")
+                ?: ThemeRepository.getColorThemes().firstOrNull { it.isDark }
+                ?: ThemeRepository.getColorThemes()[0]
+            ThemeManager.saveTheme(this, darkTheme)
         }
-
-        //   sharedPref.edit().putBoolean("dark_mode", !isDark).apply()
         recreate()
     }
 
@@ -490,6 +488,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val expectedMode = if (ThemeManager.isDarkTheme(this)) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        if (lastRecordedNightMode != null && lastRecordedNightMode != expectedMode) {
+            lastRecordedNightMode = expectedMode
+            recreate()
+            return
+        }
+        lastRecordedNightMode = expectedMode
         ThemeManager.applyThemeToActivity(this)
         updateToolbarColors()
         if (MusicService.mediaPlayer != null || MusicService.playlist.isNotEmpty()) {

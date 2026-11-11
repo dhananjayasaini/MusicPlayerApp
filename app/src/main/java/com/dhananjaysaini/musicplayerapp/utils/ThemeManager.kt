@@ -59,10 +59,8 @@ object ThemeManager {
     }
 
     fun isDarkTheme(context: Context): Boolean {
-        val sharedPref = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        val isDarkModeSetting = sharedPref.getBoolean("dark_mode", false)
         val currentTheme = getCurrentTheme(context)
-        return isDarkModeSetting && currentTheme.isDark
+        return currentTheme.isDark
     }
 
     fun saveTheme(context: Context, theme: AppTheme) {
@@ -78,12 +76,36 @@ object ThemeManager {
             }
             apply()
         }
+
+        // Keep dark_mode in app_settings always in sync
+        val settingsPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        settingsPrefs.edit().putBoolean("dark_mode", theme.isDark).apply()
+
+        // Synchronize AppCompat night mode
+        val targetMode = if (theme.isDark) {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        }
+        if (androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode() != targetMode) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(targetMode)
+        }
+
         context.sendBroadcast(Intent(ACTION_THEME_CHANGED).setPackage(context.packageName))
     }
 
     fun applyThemeToActivity(activity: Activity) {
         val theme = getCurrentTheme(activity)
         val isDark = isDarkTheme(activity)
+
+        val targetMode = if (isDark) {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        }
+        if (androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode() != targetMode) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(targetMode)
+        }
 
         // 1. Edge-to-edge + Transparent Status & Navigation Bars with dynamic icon tint
         WindowCompat.setDecorFitsSystemWindows(activity.window, false)
@@ -169,7 +191,7 @@ object ThemeManager {
     }
 
     fun applyThemeToMiniPlayerView(root: View, theme: AppTheme) {
-        val isDark = isDarkTheme(root.context)
+        val isDark = theme.isDark
         val bgView = root.findViewById<ImageView>(R.id.mini_theme_bg)
         val scrimView = root.findViewById<View>(R.id.mini_theme_scrim)
         val cardView = root as? MaterialCardView
@@ -180,18 +202,12 @@ object ThemeManager {
             cardView.strokeColor = if (isDark) Color.parseColor("#33FFFFFF") else Color.parseColor("#E5E7EB")
         }
 
-        val effectiveTheme = if (!isDark && theme.isDark) {
-            ThemeRepository.findThemeById("color_6") ?: theme
-        } else {
-            theme
-        }
-
         if (bgView != null) {
-            when (effectiveTheme.type) {
+            when (theme.type) {
                 ThemeType.CUSTOM -> {
-                    if (effectiveTheme.customImageUri != null) {
+                    if (theme.customImageUri != null) {
                         Glide.with(root.context)
-                            .load(Uri.parse(effectiveTheme.customImageUri))
+                            .load(Uri.parse(theme.customImageUri))
                             .centerCrop()
                             .into(bgView)
                     } else {
@@ -200,8 +216,8 @@ object ThemeManager {
                     }
                 }
                 ThemeType.GRADIENT, ThemeType.IMAGE -> {
-                    if (effectiveTheme.drawableRes != 0) {
-                        bgView.setImageResource(effectiveTheme.drawableRes)
+                    if (theme.drawableRes != 0) {
+                        bgView.setImageResource(theme.drawableRes)
                     } else {
                         val fallback = if (isDark) R.drawable.gradient_theme_2 else R.drawable.gradient_theme_6
                         bgView.setImageResource(fallback)
@@ -230,17 +246,12 @@ object ThemeManager {
     }
 
     fun applyThemeBackground(context: Context, targetView: View, theme: AppTheme) {
-        val isDark = isDarkTheme(context)
-        val effectiveTheme = if (!isDark && theme.isDark) {
-            ThemeRepository.findThemeById("color_6") ?: theme
-        } else {
-            theme
-        }
+        val isDark = theme.isDark
 
-        when (effectiveTheme.type) {
+        when (theme.type) {
             ThemeType.CUSTOM -> {
-                if (effectiveTheme.customImageUri != null) {
-                    val uri = Uri.parse(effectiveTheme.customImageUri)
+                if (theme.customImageUri != null) {
+                    val uri = Uri.parse(theme.customImageUri)
                     Glide.with(context)
                         .load(uri)
                         .centerCrop()
@@ -259,8 +270,8 @@ object ThemeManager {
                 }
             }
             ThemeType.GRADIENT, ThemeType.IMAGE -> {
-                if (effectiveTheme.drawableRes != 0) {
-                    targetView.setBackgroundResource(effectiveTheme.drawableRes)
+                if (theme.drawableRes != 0) {
+                    targetView.setBackgroundResource(theme.drawableRes)
                 } else {
                     val fallback = if (isDark) R.drawable.gradient_theme_2 else R.drawable.gradient_theme_6
                     targetView.setBackgroundResource(fallback)

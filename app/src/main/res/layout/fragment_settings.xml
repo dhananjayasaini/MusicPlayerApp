@@ -2,8 +2,10 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,14 +15,42 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="12dp"
-        android:paddingBottom="24dp">
+        android:paddingBottom="100dp">
 
-        <!-- Pro Feature Banner Card -->
+        <!-- Top Header: Back Arrow & Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/ivSettingsBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_settings_back"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Settings"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Pro Feature Banner Card (Retained at Top) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="1.5dp"
@@ -73,321 +103,1123 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Section: Appearance -->
+        <!-- ============================================================== -->
+        <!-- SECTION 1: GENERAL                                             -->
+        <!-- ============================================================== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
-            android:text="Appearance"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
+            android:layout_marginBottom="6dp"
+            android:text="General"
+            android:textColor="#FFA500"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.card.MaterialCardView
+        <!-- 1. Hidden Music -->
+        <LinearLayout
+            android:id="@+id/rowHiddenMusic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="?attr/colorSurfaceContainer">
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_hidden_music"
+                app:tint="#C5B4E3" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Themes item -->
-                <LinearLayout
-                    android:id="@+id/btnSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hidden music"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_theme"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="Color Themes &amp; Accent"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/next_icon"
-                        app:tint="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="56dp"
-                    android:background="?attr/colorOutlineVariant" />
-
-                <!-- Dark Mode Toggle -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_dark_mode"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Dark Mode"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvDarkModeStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Off"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switchDarkMode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:thumbTint="@color/switch_thumb_tint_selector"
-                        app:trackTint="@color/switch_track_tint_selector"
-                        app:trackDecorationTint="@color/switch_track_decoration_tint_selector" />
-                </LinearLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="View and manage hidden music"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Section: Audio FX -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 2. Music Transfer -->
+        <LinearLayout
+            android:id="@+id/rowMusicTransfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_transfer"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Music transfer"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Transfer your songs, playlists, etc. between devices"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 3. Themes & Accents (Preserved Functionality) -->
+        <LinearLayout
+            android:id="@+id/btnSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_theme"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Color Themes &amp; Accent"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Customize app theme colors and skins"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 4. Dark Mode (Preserved Functionality) -->
+        <LinearLayout
+            android:id="@+id/rowDarkMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_dark_mode"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dark Mode"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDarkModeStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Off"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 5. Equalizer & Bass Boost (Preserved Functionality) -->
+        <LinearLayout
+            android:id="@+id/btnSettingEqualizer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/equalizer_icon"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equalizer &amp; Bass Boost"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Studio 10-band equalizer and 3D effects"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 6. Sleep Timer (Preserved Functionality) -->
+        <LinearLayout
+            android:id="@+id/btnSettingSleepTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/timer_icon"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sleep Timer"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Auto stop music playback after time"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- ============================================================== -->
+        <!-- SECTION 2: PLAYBACK                                            -->
+        <!-- ============================================================== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
-            android:text="Audio &amp; Playback"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:text="Playback"
+            android:textColor="#FFA500"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.card.MaterialCardView
+        <!-- 1. Simultaneous playback -->
+        <LinearLayout
+            android:id="@+id/rowSimultaneous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="?attr/colorSurfaceContainer">
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_simultaneous"
+                app:tint="#C5B4E3" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Equalizer item -->
-                <LinearLayout
-                    android:id="@+id/btnSettingEqualizer"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Simultaneous playback"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/equalizer_icon"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="Equalizer &amp; Bass Boost"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/next_icon"
-                        app:tint="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="56dp"
-                    android:background="?attr/colorOutlineVariant" />
-
-                <!-- Sleep Timer item -->
-                <LinearLayout
-                    android:id="@+id/btnSettingSleepTimer"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/timer_icon"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="Sleep Timer"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/next_icon"
-                        app:tint="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Allow music to play with other apps"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Section: Support & Info -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchSimultaneous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 2. Crossfade -->
+        <LinearLayout
+            android:id="@+id/rowCrossfade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_crossfade"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crossfade"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Previous song fades out, next song fades in\n(Only available when equalizer is off)"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchCrossfade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 3. Gapless playback -->
+        <LinearLayout
+            android:id="@+id/rowGapless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_gapless"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gapless playback"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Play seamlessly between songs. Some devices may experience playback issues"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchGapless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 4. Pause on detach -->
+        <LinearLayout
+            android:id="@+id/rowPauseDetach"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_pause_detach"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pause on detach"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Toggle for pausing playback when headphone is detached"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchPauseDetach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- ============================================================== -->
+        <!-- SECTION 3: PREFERENCE                                          -->
+        <!-- ============================================================== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
-            android:text="About &amp; Feedback"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:text="Preference"
+            android:textColor="#FFA500"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.card.MaterialCardView
+        <!-- 1. Keep screen on -->
+        <LinearLayout
+            android:id="@+id/rowKeepScreenOn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="?attr/colorSurfaceContainer">
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_screen_on"
+                app:tint="#C5B4E3" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Feedback item -->
-                <LinearLayout
-                    android:id="@+id/btnSettingFeedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Keep screen on"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/feedback_icon"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="Send Feedback"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/next_icon"
-                        app:tint="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="56dp"
-                    android:background="?attr/colorOutlineVariant" />
-
-                <!-- About item -->
-                <LinearLayout
-                    android:id="@+id/btnSettingAbout"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/about_icon"
-                        app:tint="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:id="@+id/tvAppVersion"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:text="About MusicAir"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tvVersionTag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="v1.0.0"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Stay on while on the player screen"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchKeepScreenOn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 2. Lock screen playing -->
+        <LinearLayout
+            android:id="@+id/rowLockScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_lock_screen"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lock screen playing"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Show now playing when lock screen"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchLockScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 3. Notifications -->
+        <LinearLayout
+            android:id="@+id/rowNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_notifications"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notifications"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Stay informed with the latest content"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchNotifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/switch_thumb_golden_selector"
+                app:trackTint="@color/switch_track_golden_selector"
+                app:trackDecorationTint="@android:color/transparent" />
+        </LinearLayout>
+
+        <!-- 4. Language -->
+        <LinearLayout
+            android:id="@+id/rowLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_language"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Language"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCurrentLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="English"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- ============================================================== -->
+        <!-- SECTION 4: HELP                                                -->
+        <!-- ============================================================== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:text="Help"
+            android:textColor="#FFA500"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- 1. FAQ -->
+        <LinearLayout
+            android:id="@+id/rowFaq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_faq"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FAQ"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Help you better use the app"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 2. Feedback -->
+        <LinearLayout
+            android:id="@+id/btnSettingFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_feedback"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feedback"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Report bugs and tell us what to improve"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 3. Rate us -->
+        <LinearLayout
+            android:id="@+id/rowRateUs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_rate"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rate us"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Like this app? Please rate us!"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 4. Manage subscription -->
+        <LinearLayout
+            android:id="@+id/rowManageSubscription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_subscription"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manage subscription"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Manage your Pro subscription &amp; billing"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 5. Privacy policy -->
+        <LinearLayout
+            android:id="@+id/rowPrivacyPolicy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_privacy"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Privacy policy"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 6. Terms of use -->
+        <LinearLayout
+            android:id="@+id/rowTermsOfUse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_terms"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terms of use"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings_arrow_right" />
+        </LinearLayout>
+
+        <!-- 7. Version -->
+        <LinearLayout
+            android:id="@+id/btnSettingAbout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_version"
+                app:tint="#C5B4E3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Version"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAppVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="4.5.0.190"
+                    android:textColor="#9E9EB8"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <!-- Hidden compatibility tag if needed -->
+            <TextView
+                android:id="@+id/tvVersionTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -28,8 +28,13 @@ class ThemeSelectionBottomSheet : BottomSheetDialogFragment() {
         binding.themeRecycler.adapter = themeAdapter
 
         themeAdapter.onThemeClick = { theme ->
+            val wasDark = ThemeManager.isDarkTheme(requireContext())
             ThemeManager.saveTheme(requireContext(), theme)
-            ThemeManager.applyThemeToActivity(requireActivity())
+            if (wasDark != theme.isDark) {
+                requireActivity().recreate()
+            } else {
+                ThemeManager.applyThemeToActivity(requireActivity())
+            }
             dismiss()
         }
 

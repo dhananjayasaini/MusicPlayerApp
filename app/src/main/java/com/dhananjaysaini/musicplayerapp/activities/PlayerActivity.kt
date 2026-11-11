@@ -136,6 +136,8 @@ open class PlayerActivity : AppCompatActivity() {
                 }
             }
 
+            binding.waveformSeekBarPA.durationMs = state.durationMs.toLong()
+            binding.waveformSeekBarPA.positionMs = state.positionMs.toLong()
             binding.waveformSeekBarPA.progress = state.positionMs
             binding.waveformSeekBarPA.max = state.durationMs
 
@@ -285,6 +287,8 @@ open class PlayerActivity : AppCompatActivity() {
         binding.shareBtnPA.imageTintList = tint
         binding.backBtnPA.imageTintList = tint
         binding.themeBtnPA.imageTintList = tint
+        binding.btnRewind10.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        binding.btnForward10.imageTintList = ColorStateList.valueOf(Color.WHITE)
 
         binding.songNamePA.setTextColor(Color.WHITE)
         binding.songAlbumPA.setTextColor(ColorUtils.blendARGB(vibrant, Color.WHITE, 0.45f))
@@ -322,6 +326,25 @@ open class PlayerActivity : AppCompatActivity() {
             playerViewModel.toggleRepeat()
         }
 
+        binding.btnRewind10.setOnClickListener {
+            val current = (MusicService.mediaPlayer?.currentPosition ?: playerViewModel.uiState.value?.positionMs ?: 0)
+            val target = (current - 10000).coerceAtLeast(0)
+            playerViewModel.seekTo(target)
+            binding.waveformSeekBarPA.positionMs = target.toLong()
+            binding.waveformSeekBarPA.progress = target
+            binding.startTimePA.text = formatDuration(target.toLong())
+        }
+
+        binding.btnForward10.setOnClickListener {
+            val current = (MusicService.mediaPlayer?.currentPosition ?: playerViewModel.uiState.value?.positionMs ?: 0)
+            val duration = (MusicService.mediaPlayer?.duration ?: playerViewModel.uiState.value?.durationMs ?: 0)
+            val target = (current + 10000).coerceAtMost(duration)
+            playerViewModel.seekTo(target)
+            binding.waveformSeekBarPA.positionMs = target.toLong()
+            binding.waveformSeekBarPA.progress = target
+            binding.startTimePA.text = formatDuration(target.toLong())
+        }
+
         binding.waveformSeekBarPA.onSeekListener = object : WaveformSeekBar.OnWaveformSeekListener {
             override fun onProgressChanged(
                 waveformSeekBar: WaveformSeekBar,
@@ -330,6 +353,7 @@ open class PlayerActivity : AppCompatActivity() {
             ) {
                 if (fromUser) {
                     playerViewModel.seekTo(progress)
+                    waveformSeekBar.positionMs = progress.toLong()
                     binding.startTimePA.text = formatDuration(progress.toLong())
                 }
             }
@@ -375,6 +399,14 @@ open class PlayerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        val settingsPrefs = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        if (settingsPrefs.getBoolean("keep_screen_on", false)) {
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+
         currentBackgroundGradient?.let {
             binding.playerRoot.background = it
             window.decorView.background = it
