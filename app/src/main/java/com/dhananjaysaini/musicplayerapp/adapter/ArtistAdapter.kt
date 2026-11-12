@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.model.MusicArtist
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 
 class ArtistAdapter(
     private val list: MutableList<MusicArtist>
@@ -34,11 +35,7 @@ class ArtistAdapter(
         val artist = list[position]
 
         holder.name.text = artist.name
-        holder.count.text =
-            if (artist.songCount == 1)
-                "1 song"
-            else
-                "${artist.songCount} songs"
+        holder.count.text = LocaleHelper.getSongCountString(holder.itemView.context, artist.songCount)
 
         Glide.with(holder.itemView.context)
             .load(artist.artUri)

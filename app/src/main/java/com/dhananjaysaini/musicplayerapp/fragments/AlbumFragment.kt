@@ -12,6 +12,7 @@ import com.dhananjaysaini.musicplayerapp.activities.AlbumSongsActivity
 import com.dhananjaysaini.musicplayerapp.adapter.AlbumAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentAlbumBinding
 import com.dhananjaysaini.musicplayerapp.model.MusicArtist
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 
 class AlbumFragment : Fragment(R.layout.fragment_album) {
@@ -44,8 +45,9 @@ class AlbumFragment : Fragment(R.layout.fragment_album) {
 
             mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { songs ->
 
+                val unknownAlbum = getString(R.string.unknown_album)
                 val albums = songs
-                    .groupBy { it.album ?: "Unknown Album" }
+                    .groupBy { it.album ?: unknownAlbum }
                     .map { (name, list) ->
                         MusicArtist(name, list.size, list.firstOrNull()?.artUri)
                     }
@@ -53,11 +55,7 @@ class AlbumFragment : Fragment(R.layout.fragment_album) {
 
                 albumAdapter.update(albums)
 
-                binding.totalArtist.text = when (albums.size) {
-                    0 -> "0 Album"
-                    1 -> "1 Album"
-                    else ->  "${albums.size} Albums"
-                }
+                binding.totalArtist.text = LocaleHelper.getAlbumCountString(requireContext(), albums.size)
             }
         }
     }

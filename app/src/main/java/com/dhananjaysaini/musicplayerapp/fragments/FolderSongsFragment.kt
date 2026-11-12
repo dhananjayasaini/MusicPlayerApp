@@ -13,6 +13,7 @@ import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentFolderSongsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.viewmodel.FolderViewModel
 import java.io.File
 
@@ -29,8 +30,8 @@ class FolderSongsFragment : Fragment(R.layout.fragment_folder_songs) {
         binding = FragmentFolderSongsBinding.bind(view)
 
         val folderPath = requireArguments().getString("folderPath") ?: return
-        val folderName = requireArguments().getString("folderName")  ?: File(
-            requireArguments().getString("folderPath") ?: "").name ?: "Folder"
+        val folderName = requireArguments().getString("folderName")
+            ?: File(folderPath).name.ifEmpty { getString(R.string.tab_folders) }
 
         binding.folderTitle.text = folderName
 
@@ -97,11 +98,7 @@ class FolderSongsFragment : Fragment(R.layout.fragment_folder_songs) {
 
         folderSongsAdapter.updateList(ArrayList(songs))
 
-        binding.folderSongCount.text = when (songs.size) {
-            0 -> "No Song"
-            1 -> "1 Song"
-            else -> "${songs.size} Songs"
-        }
+        binding.folderSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
     }
 
 }

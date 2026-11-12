@@ -1,5 +1,6 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +10,13 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.fragments.FolderSongsFragment
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 
 class FolderSongsActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder_songs)

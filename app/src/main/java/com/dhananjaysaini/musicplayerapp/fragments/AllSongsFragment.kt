@@ -21,6 +21,7 @@ import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
 import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SongOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
@@ -106,11 +107,7 @@ open class AllSongsFragment : Fragment() {
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { list ->
             allSongsAdapter.updateList(ArrayList(list))
 
-            binding.totalSongsTv.text =
-                if (list.size == 1)
-                    "1 Song"
-                else
-                    "${list.size} Songs"
+            binding.totalSongsTv.text = LocaleHelper.getSongCountString(requireContext(), list.size)
         }
     }
 

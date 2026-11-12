@@ -4,8 +4,8 @@
         <item name="cornerSize">10%</item>
     </style>
 
-    <style name="ShapeAppearance.MockupCard" parent="">
-<!--        <item name="cornerFamily">rounded</item>-->
-<!--        <item name="cornerSize">0dp</item>-->
+    <style name="ShapeAppearance.MockupCard" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
     </style>
 </resources>

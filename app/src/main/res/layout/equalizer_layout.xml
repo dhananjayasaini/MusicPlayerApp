@@ -34,7 +34,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Equalizer"
+                android:text="@string/equalizer_title"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -48,7 +48,7 @@
                 android:id="@+id/switchEqualizer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ON"
+                android:text="@string/status_on"
                 android:textColor="#FFFFFF"
                 android:thumbTint="#FF9F00"
                 android:trackTint="#444444"
@@ -482,7 +482,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reverb"
+                    android:text="@string/reverb"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -511,7 +511,7 @@
                 <TextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Bass Boost"
+                    android:text="@string/bass_boost"
                     android:textColor="@color/white"
                     android:textSize="14sp"/>
 
@@ -543,7 +543,7 @@
                 <TextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Virtualizer"
+                    android:text="@string/virtualizer"
                     android:textColor="@color/white"
                     android:textSize="14sp"/>
 

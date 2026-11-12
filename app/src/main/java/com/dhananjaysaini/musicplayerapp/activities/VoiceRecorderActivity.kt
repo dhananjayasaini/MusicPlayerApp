@@ -3,6 +3,7 @@ package com.dhananjaysaini.musicplayerapp.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -30,6 +31,7 @@ import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.RecordingsAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityVoiceRecorderBinding
 import com.dhananjaysaini.musicplayerapp.model.RecordingItem
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import java.io.File
 import java.text.SimpleDateFormat
@@ -37,6 +39,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class VoiceRecorderActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
 
     private lateinit var binding: ActivityVoiceRecorderBinding
     private val recordings = mutableListOf<RecordingItem>()
@@ -195,7 +201,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
             binding.btnMainRecord.setBackgroundResource(R.drawable.bg_record_btn_active)
             binding.btnMainRecord.setImageResource(R.drawable.ic_widget_pause)
-            binding.tvRecordStatus.text = "Recording in progress..."
+            binding.tvRecordStatus.text = getString(R.string.recording_in_progress)
             binding.tvRecordStatus.setTextColor(Color.parseColor("#FF1744"))
 
             binding.btnDiscardRecording.visibility = View.VISIBLE
@@ -205,7 +211,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
             handler.post(amplitudeRunnable)
 
         } catch (e: Exception) {
-            Toast.makeText(this, "Failed to start recorder: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_error_start_recorder, e.message ?: ""), Toast.LENGTH_SHORT).show()
             resetRecordingState()
         }
     }
@@ -221,13 +227,13 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
             binding.btnMainRecord.setBackgroundResource(R.drawable.bg_record_btn_idle)
             binding.btnMainRecord.setImageResource(R.drawable.ic_widget_play)
-            binding.tvRecordStatus.text = "Recording paused"
+            binding.tvRecordStatus.text = getString(R.string.recording_paused)
             binding.tvRecordStatus.setTextColor(Color.parseColor("#00F5FF"))
 
             handler.removeCallbacks(timerRunnable)
             handler.removeCallbacks(amplitudeRunnable)
         } catch (e: Exception) {
-            Toast.makeText(this, "Error pausing recording", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_error_pausing), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -242,13 +248,13 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
             binding.btnMainRecord.setBackgroundResource(R.drawable.bg_record_btn_active)
             binding.btnMainRecord.setImageResource(R.drawable.ic_widget_pause)
-            binding.tvRecordStatus.text = "Recording in progress..."
+            binding.tvRecordStatus.text = getString(R.string.recording_in_progress)
             binding.tvRecordStatus.setTextColor(Color.parseColor("#FF1744"))
 
             handler.post(timerRunnable)
             handler.post(amplitudeRunnable)
         } catch (e: Exception) {
-            Toast.makeText(this, "Error resuming recording", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_error_resuming), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -261,18 +267,18 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
         mediaRecorder = null
         resetRecordingState()
-        Toast.makeText(this, "Recording saved! 🎙️", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.recording_saved), Toast.LENGTH_SHORT).show()
         loadSavedRecordings()
     }
 
     private fun confirmDiscardRecording() {
         AlertDialog.Builder(this)
-            .setTitle("Discard Recording?")
-            .setMessage("Are you sure you want to delete this recording?")
-            .setPositiveButton("Discard") { _, _ ->
+            .setTitle(getString(R.string.discard_recording_title))
+            .setMessage(getString(R.string.discard_recording_msg))
+            .setPositiveButton(getString(R.string.btn_discard)) { _, _ ->
                 discardRecording()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
@@ -284,7 +290,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
         mediaRecorder = null
         currentRecordingFile?.delete()
         resetRecordingState()
-        Toast.makeText(this, "Recording discarded", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.recording_discarded), Toast.LENGTH_SHORT).show()
     }
 
     private fun resetRecordingState() {
@@ -295,7 +301,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
         handler.removeCallbacks(amplitudeRunnable)
 
         binding.tvRecordTimer.text = "00:00:00"
-        binding.tvRecordStatus.text = "Ready to record"
+        binding.tvRecordStatus.text = getString(R.string.ready_to_record)
         binding.tvRecordStatus.setTextColor(Color.parseColor("#A08EBC"))
         binding.btnMainRecord.setBackgroundResource(R.drawable.bg_record_btn_idle)
         binding.btnMainRecord.setImageResource(R.drawable.ic_neon_mic)
@@ -328,7 +334,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
         }
 
         adapter.updateList(recordings)
-        binding.tvRecordingsCountBadge.text = "${recordings.size} files"
+        binding.tvRecordingsCountBadge.text = getString(R.string.recordings_count_badge, recordings.size)
 
         if (recordings.isEmpty()) {
             binding.layoutEmptyRecordings.visibility = View.VISIBLE
@@ -376,7 +382,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
             )
             handler.post(playbackProgressRunnable)
         } catch (e: Exception) {
-            Toast.makeText(this, "Cannot play recording: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_cannot_play_recording, e.message ?: ""), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -397,17 +403,17 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
     private fun confirmDeleteRecording(item: RecordingItem) {
         AlertDialog.Builder(this)
-            .setTitle("Delete Recording?")
-            .setMessage("Delete ${item.name} permanently?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle(getString(R.string.delete_recording_title))
+            .setMessage(getString(R.string.delete_recording_prompt, item.name))
+            .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
                 if (currentlyPlayingIndex != -1 && recordings.getOrNull(currentlyPlayingIndex)?.file == item.file) {
                     stopPlayback()
                 }
                 item.file.delete()
                 loadSavedRecordings()
-                Toast.makeText(this, "Recording deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.recording_discarded), Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
@@ -420,22 +426,22 @@ class VoiceRecorderActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Rename Recording")
+            .setTitle(getString(R.string.rename_recording_title))
             .setView(input)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(getString(R.string.btn_save)) { _, _ ->
                 val newName = input.text.toString().trim()
                 if (newName.isNotEmpty()) {
                     val ext = item.file.extension
                     val newFile = File(item.file.parentFile, "$newName.$ext")
                     if (item.file.renameTo(newFile)) {
                         loadSavedRecordings()
-                        Toast.makeText(this, "Renamed successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.toast_renamed_success), Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Failed to rename", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.toast_rename_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
@@ -451,9 +457,9 @@ class VoiceRecorderActivity : AppCompatActivity() {
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(shareIntent, "Share Recording"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_audio_title)))
         } catch (e: Exception) {
-            Toast.makeText(this, "Share failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_share_failed, e.message ?: ""), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -514,7 +520,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Microphone permission is required to record voice",
+                    getString(R.string.mic_permission_required),
                     Toast.LENGTH_LONG
                 ).show()
             }

@@ -81,7 +81,7 @@
         android:minWidth="60dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:text="Set"
+        android:text="@string/btn_set"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="12sp"

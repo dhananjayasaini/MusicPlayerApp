@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.model.Music
 
 object DeleteManager {
@@ -43,7 +44,7 @@ object DeleteManager {
 
         } catch (e: Exception) {
 
-            Toast.makeText(activity, "Unable to delete", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, activity.getString(R.string.toast_unable_to_delete), Toast.LENGTH_SHORT).show()
         }
     }
 }

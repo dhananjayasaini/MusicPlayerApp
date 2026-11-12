@@ -39,6 +39,7 @@ import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
@@ -55,6 +56,10 @@ import kotlin.math.abs
 import kotlin.text.*
 
 open class PlayerActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
 
     private lateinit var binding: ActivityPlayerBinding
     private val playerViewModel: PlayerViewModel by viewModels()
@@ -431,7 +436,7 @@ open class PlayerActivity : AppCompatActivity() {
                     } else {
                         binding.playPauseBtnPA.setImageResource(R.drawable.ic_play)
                         binding.txtTimerStatus.visibility = View.GONE
-                        binding.txtTimerStatus.text = "Timer: Off"
+                        binding.txtTimerStatus.text = getString(R.string.timer_off)
                     }
                 } else if (intent?.action == Constants.ACTION_MUSIC_STOPPED_BY_TIMER) {
                     binding.playPauseBtnPA.setImageResource(R.drawable.ic_play)
@@ -480,7 +485,7 @@ open class PlayerActivity : AppCompatActivity() {
             val file = File(audio.path)
 
             if (!file.exists()) {
-                Toast.makeText(this, "File not found!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_file_not_found), Toast.LENGTH_SHORT).show()
                 return
             }
 
@@ -500,10 +505,10 @@ open class PlayerActivity : AppCompatActivity() {
                 )
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(shareIntent, "Share audio file via"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_audio_title)))
         }
         catch (e: Exception) {
-            Toast.makeText(this, "Error sharing file", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_error_sharing), Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
     }

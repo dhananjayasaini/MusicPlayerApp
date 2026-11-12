@@ -1,5 +1,6 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -14,11 +15,13 @@ import androidx.core.view.updatePadding
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ThemePreviewAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityThemePreviewBinding
 import com.dhananjaysaini.musicplayerapp.model.AppTheme
 import com.dhananjaysaini.musicplayerapp.model.ThemeType
 import com.dhananjaysaini.musicplayerapp.repository.ThemeRepository
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import kotlin.math.abs
 
@@ -27,6 +30,10 @@ class ThemePreviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThemePreviewBinding
     private lateinit var previewAdapter: ThemePreviewAdapter
     private val themeList = ArrayList<AppTheme>()
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +148,7 @@ class ThemePreviewActivity : AppCompatActivity() {
             // 1. Save and apply theme globally (handles dark_mode and AppCompatDelegate)
             ThemeManager.saveTheme(this, themeToApply)
 
-            Toast.makeText(this, "Theme applied successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_theme_applied), Toast.LENGTH_SHORT).show()
 
             // 2. Return to MainActivity cleanly recreating everything with the new theme
             val intent = Intent(this, MainActivity::class.java).apply {

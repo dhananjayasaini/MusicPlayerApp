@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:text="Skin theme"
+            android:text="@string/skin_theme_title"
             android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -61,7 +61,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="10dp"
-                android:text="Color"
+                android:text="@string/color_section_title"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:textStyle="bold" />

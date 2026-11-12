@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import com.dhananjaysaini.musicplayerapp.R
 import java.io.File
 import java.io.FileInputStream
 
@@ -55,16 +56,16 @@ object RingtoneHelper {
                 RingtoneManager.setActualDefaultRingtoneUri(context, type, contentUri)
                 vibrateSuccess(context)
                 val typeName = when (type) {
-                    RingtoneManager.TYPE_NOTIFICATION -> "Notification sound"
-                    RingtoneManager.TYPE_ALARM -> "Alarm tone"
-                    else -> "Phone ringtone"
+                    RingtoneManager.TYPE_NOTIFICATION -> context.getString(R.string.ringtone_type_notification)
+                    RingtoneManager.TYPE_ALARM -> context.getString(R.string.ringtone_type_alarm)
+                    else -> context.getString(R.string.ringtone_type_phone)
                 }
-                Toast.makeText(context, "$typeName set successfully! 🎵", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.toast_ringtone_success, typeName), Toast.LENGTH_SHORT).show()
                 return true
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to apply ringtone: ${e.message}")
-            Toast.makeText(context, "Could not set ringtone: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.toast_ringtone_error, e.message ?: ""), Toast.LENGTH_SHORT).show()
         }
         return false
     }

@@ -17,6 +17,7 @@ import com.dhananjaysaini.musicplayerapp.activities.PlaylistSongsActivity
 import com.dhananjaysaini.musicplayerapp.adapter.FolderAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentFolderBinding
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentFolderSongsBinding
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.viewmodel.FolderViewModel
 
 class FolderFragment : Fragment(R.layout.fragment_folder) {
@@ -42,11 +43,7 @@ class FolderFragment : Fragment(R.layout.fragment_folder) {
             folderViewModel.folders.observe(viewLifecycleOwner) {
                 folderAdapter.update(it)
 
-                binding.totalFolder.text = when (it.size) {
-                    0 -> "0 Folder"
-                    1 -> "1 Folder"
-                    else ->  "${it.size} Folders"
-                }
+                binding.totalFolder.text = LocaleHelper.getFolderCountString(requireContext(), it.size)
             }
             folderViewModel.loadFolders(requireContext())
 
@@ -58,6 +55,7 @@ class FolderFragment : Fragment(R.layout.fragment_folder) {
         folderAdapter.onItemClick = { folder ->
             val intent = Intent(requireContext(), FolderSongsActivity::class.java)
             intent.putExtra("folderPath", folder.path)
+            intent.putExtra("folderName", folder.name)
             intent.putExtra("playlistName", folder.name)
 
             startActivity(intent)

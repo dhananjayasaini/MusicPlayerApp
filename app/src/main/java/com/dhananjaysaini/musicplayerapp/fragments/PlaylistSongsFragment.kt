@@ -18,6 +18,7 @@ import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentPlaylistSongsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlaylistViewModel
@@ -64,9 +65,15 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             }
         }
 
-        val playlistName = arguments?.getString("playlistName") ?: "Playlist"
         val playlistType = arguments?.getString("playlistType")
         val playlistId = arguments?.getInt("playlistId", -1) ?: -1
+        val playlistName = when (playlistType) {
+            "favourite" -> getString(R.string.my_favourite)
+            "recently_added" -> getString(R.string.recently_added)
+            "recently_played" -> getString(R.string.recently_played)
+            "top_tracks" -> getString(R.string.my_top_tracks)
+            else -> arguments?.getString("playlistName") ?: getString(R.string.tab_playlists)
+        }
 
         binding.playlistTitle.text = playlistName
 
@@ -75,11 +82,11 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
         }
 
         binding.btnPlaylistSearch.setOnClickListener {
-            Toast.makeText(requireContext(), "Search coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnPlaylistOptions.setOnClickListener {
-            Toast.makeText(requireContext(), "Options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         when (playlistType) {
@@ -93,7 +100,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                     songs.clear()
                     songs.addAll(all.filter { it.id in ids })
                     playlistSongsAdapter.updateList(ArrayList(songs))
-                    binding.playlistSongCount.text = "${songs.size} ${if (songs.size == 1) "song" else "songs"}"
+                    binding.playlistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
                 }
             }
             "recently_added" -> {
@@ -105,7 +112,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                     songs.clear()
                     songs.addAll(all.sortedByDescending { it.date })
                     playlistSongsAdapter.updateList(ArrayList(songs))
-                    binding.playlistSongCount.text = "${songs.size} ${if (songs.size == 1) "song" else "songs"}"
+                    binding.playlistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
                 }
             }
             "recently_played" -> {
@@ -122,7 +129,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                             songMap[item.songId]?.let { songs.add(it) }
                         }
                         playlistSongsAdapter.updateList(ArrayList(songs))
-                        binding.playlistSongCount.text = "${songs.size} ${if (songs.size == 1) "song" else "songs"}"
+                        binding.playlistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
                     }
             }
             "top_tracks" -> {
@@ -139,7 +146,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                             songMap[item.songId]?.let { songs.add(it) }
                         }
                         playlistSongsAdapter.updateList(ArrayList(songs))
-                        binding.playlistSongCount.text = "${songs.size} ${if (songs.size == 1) "song" else "songs"}"
+                        binding.playlistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
                     }
             }
             else -> {
@@ -193,11 +200,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
 
         playlistSongsAdapter.updateList(ArrayList(songs))
 
-        binding.playlistSongCount.text = when (songs.size){
-            0 -> "0 song"
-            1 -> "1 song"
-            else -> "${songs.size} songs"
-        }
+        binding.playlistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
     }
 
     private fun removeSong(){

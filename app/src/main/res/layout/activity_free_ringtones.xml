@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="Free Ringtones"
+            android:text="@string/free_ringtones_title"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -108,7 +108,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_apply_theme"
-            android:text="Featured Tones"
+            android:text="@string/featured_tones"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
@@ -123,7 +123,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_booster_card"
-            android:text="My Music Library"
+            android:text="@string/my_music_library"
             android:textAllCaps="false"
             android:textColor="#A08EBC"
             android:textSize="13sp"
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:maxLines="1"
-                android:text="Playing preview..."
+                android:text="@string/playing_preview"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -186,7 +186,7 @@
                 android:id="@+id/tvBottomPreviewSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tap Set to apply as ringtone"
+                android:text="@string/tap_set_to_apply"
                 android:textColor="#00F5FF"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -199,7 +199,7 @@
             android:background="@drawable/bg_btn_apply_theme"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
-            android:text="Set"
+            android:text="@string/btn_set"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="13sp"

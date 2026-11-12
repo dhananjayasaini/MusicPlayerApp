@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Play"
+                    android:text="@string/action_play"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -125,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Play next"
+                    android:text="@string/action_play_next"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -154,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Add To Queue"
+                    android:text="@string/action_add_to_queue"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -195,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Add to favourite"
+                    android:text="@string/action_add_to_favourite"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -225,7 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Remove from favourite"
+                    android:text="@string/action_remove_from_favourite"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -254,7 +254,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Add to playlist"
+                    android:text="@string/action_add_to_playlist"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -285,7 +285,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Remove from playlist"
+                    android:text="@string/action_remove_from_playlist"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -326,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Edit"
+                    android:text="@string/action_edit"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>
@@ -358,7 +358,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Delete"
+                    android:text="@string/action_delete"
                     android:textColor="#111111"
                     android:textSize="16sp"/>
             </LinearLayout>

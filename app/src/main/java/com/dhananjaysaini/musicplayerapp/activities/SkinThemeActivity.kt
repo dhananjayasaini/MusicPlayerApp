@@ -1,5 +1,6 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -14,12 +15,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ColorThemeAdapter
 import com.dhananjaysaini.musicplayerapp.adapter.ImageThemeAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.ActivitySkinThemeBinding
 import com.dhananjaysaini.musicplayerapp.model.AppTheme
 import com.dhananjaysaini.musicplayerapp.model.ThemeType
 import com.dhananjaysaini.musicplayerapp.repository.ThemeRepository
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import java.io.File
@@ -31,6 +34,19 @@ class SkinThemeActivity : AppCompatActivity() {
     private lateinit var colorAdapter: ColorThemeAdapter
     private lateinit var imageAdapter: ImageThemeAdapter
     private var currentActiveThemeId: String = "color_2"
+
+    private val categoryKeys = listOf("All images", "Nature", "Pet", "Cartoon", "Other")
+    private val categoryTitles = listOf(
+        R.string.cat_all_images,
+        R.string.cat_nature,
+        R.string.cat_pet,
+        R.string.cat_cartoon,
+        R.string.cat_other
+    )
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { sourceUri ->
@@ -123,15 +139,16 @@ class SkinThemeActivity : AppCompatActivity() {
     }
 
     private fun setupCategoryTabs() {
-        val categories = listOf("All images", "Nature", "Pet", "Cartoon", "Other")
-        categories.forEach { title ->
-            val tab = binding.tabLayoutCategories.newTab().setText(title)
+        categoryTitles.forEachIndexed { index, resId ->
+            val tab = binding.tabLayoutCategories.newTab()
+                .setText(resId)
+                .setTag(categoryKeys[index])
             binding.tabLayoutCategories.addTab(tab)
         }
 
         binding.tabLayoutCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val categoryName = tab?.text?.toString() ?: "All images"
+                val categoryName = tab?.tag as? String ?: "All images"
                 loadCategoryThemes(categoryName)
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -186,7 +203,7 @@ class SkinThemeActivity : AppCompatActivity() {
         currentActiveThemeId = selectedId
         colorAdapter.setSelectedId(selectedId)
         val selectedTabPosition = binding.tabLayoutCategories.selectedTabPosition
-        val category = binding.tabLayoutCategories.getTabAt(selectedTabPosition)?.text?.toString() ?: "All images"
+        val category = binding.tabLayoutCategories.getTabAt(selectedTabPosition)?.tag as? String ?: "All images"
         loadCategoryThemes(category)
     }
 }

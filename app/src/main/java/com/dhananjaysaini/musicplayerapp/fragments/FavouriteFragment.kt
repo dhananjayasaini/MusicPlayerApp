@@ -14,6 +14,7 @@ import com.dhananjaysaini.musicplayerapp.databinding.FragmentFavouriteBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SongOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
@@ -124,7 +125,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
         if (currentFavIds.isEmpty() || currentAllSongs.isEmpty()) {
             favouriteSongs.clear()
             favAdapter.updateList(arrayListOf())
-            binding.tvFavSongCount.text = "0 Song"
+            binding.tvFavSongCount.text = LocaleHelper.getSongCountString(requireContext(), 0)
             binding.layoutEmptyFav.visibility = View.VISIBLE
             binding.favRecyclerView.visibility = View.GONE
             return
@@ -137,7 +138,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
         favouriteSongs.addAll(filtered)
         favAdapter.updateList(ArrayList(favouriteSongs))
 
-        binding.tvFavSongCount.text = if (filtered.size == 1) "1 Song" else "${filtered.size} Songs"
+        binding.tvFavSongCount.text = LocaleHelper.getSongCountString(requireContext(), filtered.size)
 
         if (filtered.isEmpty()) {
             binding.layoutEmptyFav.visibility = View.VISIBLE

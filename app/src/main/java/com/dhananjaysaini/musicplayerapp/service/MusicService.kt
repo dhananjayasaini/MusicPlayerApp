@@ -42,6 +42,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
+import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.NotificationWaveformHelper
 import com.dhananjaysaini.musicplayerapp.utils.VolumeBoosterManager
 import com.dhananjaysaini.musicplayerapp.widget.MusicAppWidgetProvider
@@ -479,6 +480,8 @@ class MusicService : Service() {
             noisyReceiver = null
         } catch (_: Exception) { /* ignore */
         }
+        EqualizerManager.releaseShared()
+        VolumeBoosterManager.release()
         mediaPlayer?.release()
         mediaPlayer = null
     }

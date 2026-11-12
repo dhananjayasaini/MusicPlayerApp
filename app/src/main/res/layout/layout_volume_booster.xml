@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Volume Booster"
+                android:text="@string/volume_booster_title"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -45,7 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Boost audio beyond 100%"
+                android:text="@string/boost_audio_desc"
                 android:textColor="#A08EBC"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -86,7 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Media Volume"
+                android:text="@string/media_volume"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -129,7 +129,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Loudness Boost"
+                android:text="@string/loudness_boost"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -138,7 +138,7 @@
                 android:id="@+id/tvBoostValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+0% (Normal)"
+                android:text="@string/boost_normal_plus"
                 android:textColor="#FF007F"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -170,7 +170,7 @@
                 android:layout_height="38dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_booster_preset_btn"
-                android:text="Off"
+                android:text="@string/status_off"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
@@ -226,7 +226,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_booster_preset_btn"
-                android:text="MAX"
+                android:text="@string/boost_max_label"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
@@ -248,7 +248,7 @@
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
-            android:text="Mute"
+            android:text="@string/mute_label"
             android:textColor="#B0A0C8"
             android:textSize="13sp"
             app:strokeColor="#4DFFFFFF" />
@@ -261,7 +261,7 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:backgroundTint="#FF007F"
-            android:text="Max Loudness"
+            android:text="@string/max_loudness_label"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
     </LinearLayout>
@@ -286,7 +286,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Playing at high volume boost may cause audio distortion or damage hearing/speakers. Use responsibly."
+            android:text="@string/booster_warning"
             android:textColor="#DDAA55"
             android:textSize="11sp" />
     </LinearLayout>

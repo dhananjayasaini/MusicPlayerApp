@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Music Player"
+            android:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Music Recap ✨"
+            android:text="@string/drawer_recap"
             android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Library"
+                    android:text="@string/drawer_library"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -131,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Settings"
+                    android:text="@string/drawer_settings"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Equalizer"
+                    android:text="@string/drawer_equalizer"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Sleep timer"
+                    android:text="@string/drawer_sleep_timer"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -214,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Skin theme"
+                    android:text="@string/drawer_skin_theme"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -239,7 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Widgets"
+                    android:text="@string/drawer_widgets"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -272,7 +272,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Remove ads"
+                    android:text="@string/drawer_remove_ads"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -297,7 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Volume booster"
+                    android:text="@string/drawer_volume_booster"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -332,7 +332,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Voice recorder"
+                    android:text="@string/drawer_voice_recorder"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -367,7 +367,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Free ringtones"
+                    android:text="@string/drawer_free_ringtones"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 

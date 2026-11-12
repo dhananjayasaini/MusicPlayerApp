@@ -53,8 +53,8 @@ class PlaylistAdapter(
 
             val popup = PopupMenu(view.context, view)
 
-            popup.menu.add(0, 1, 0, "Rename playlist")
-            popup.menu.add(0, 2, 1, "Delete playlist")
+            popup.menu.add(0, 1, 0, view.context.getString(R.string.rename_playlist))
+            popup.menu.add(0, 2, 1, view.context.getString(R.string.delete_playlist_title))
 
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {

@@ -1,6 +1,7 @@
 package com.dhananjaysaini.musicplayerapp.activities
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.RingtoneManager
@@ -24,6 +25,7 @@ import com.dhananjaysaini.musicplayerapp.adapter.RingtoneModel
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityFreeRingtonesBinding
 import com.dhananjaysaini.musicplayerapp.databinding.LayoutSetRingtoneDialogBinding
 import com.dhananjaysaini.musicplayerapp.repository.MusicRepository
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.MelodicToneGenerator
 import com.dhananjaysaini.musicplayerapp.utils.RingtoneHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
@@ -34,6 +36,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class FreeRingtonesActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
 
     private lateinit var binding: ActivityFreeRingtonesBinding
 
@@ -266,7 +272,7 @@ class FreeRingtonesActivity : AppCompatActivity() {
             binding.btnBottomPlayPause.setImageResource(R.drawable.ic_widget_pause)
 
         } catch (e: Exception) {
-            Toast.makeText(this, "Failed to preview: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_failed_preview, e.message ?: ""), Toast.LENGTH_SHORT).show()
             stopPreview()
         }
     }
@@ -322,12 +328,12 @@ class FreeRingtonesActivity : AppCompatActivity() {
 
     private fun showPermissionExplanationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Permission Required")
-            .setMessage("To set a ringtone, notification sound, or alarm tone, Music Player needs permission to modify system audio settings.")
-            .setPositiveButton("Allow") { _, _ ->
+            .setTitle(R.string.permission_required_title)
+            .setMessage(R.string.permission_ringtone_msg)
+            .setPositiveButton(R.string.btn_allow) { _, _ ->
                 RingtoneHelper.openSettingsPermission(this)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.btn_cancel, null)
             .show()
     }
 

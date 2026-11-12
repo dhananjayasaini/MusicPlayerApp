@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import com.dhananjaysaini.musicplayerapp.R
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhananjaysaini.musicplayerapp.adapter.PlaylistAdapter
@@ -62,7 +63,7 @@ class PlaylistPickerBottomSheet(
                 song.id
             )
 
-            Toast.makeText(requireContext(), "Added to ${playlist.name}",
+            Toast.makeText(requireContext(), getString(R.string.toast_added_to_playlist, playlist.name),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -86,13 +87,13 @@ class PlaylistPickerBottomSheet(
     private fun showCreatePlaylistDialog() {
 
         val editText = EditText(requireContext())
-        editText.hint = "Playlist name"
+        editText.hint = getString(R.string.playlist_name_hint)
 
          val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Create Playlist")
+            .setTitle(R.string.create_playlist)
             .setView(editText)
-            .setPositiveButton("Create", null)
-            .setNegativeButton("Cancel", null)
+            .setPositiveButton(R.string.btn_create, null)
+            .setNegativeButton(R.string.btn_cancel, null)
             .create()
 
             dialog.show()
@@ -109,7 +110,7 @@ class PlaylistPickerBottomSheet(
             val name = editText.text.toString().trim()
 
             if (name.isEmpty()) {
-                editText.error = "Enter playlist name"
+                editText.error = getString(R.string.error_enter_playlist_name)
                 return@setOnClickListener
             }
 
@@ -117,7 +118,7 @@ class PlaylistPickerBottomSheet(
                 ?.any { it.name.equals(name, true) }
 
             if (exists == true) {
-                editText.error = "Playlist already exists"
+                editText.error = getString(R.string.error_playlist_exists)
                 return@setOnClickListener
             }
 
@@ -125,7 +126,7 @@ class PlaylistPickerBottomSheet(
 
             Toast.makeText(
                 requireContext(),
-                "Playlist Created",
+                getString(R.string.playlist_created_msg),
                 Toast.LENGTH_SHORT
             ).show()
 

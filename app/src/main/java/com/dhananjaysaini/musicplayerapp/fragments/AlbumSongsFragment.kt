@@ -18,6 +18,7 @@ import com.dhananjaysaini.musicplayerapp.databinding.FragmentAlbumSongsBinding
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentArtistSongsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 
 class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
@@ -35,9 +36,10 @@ class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
 
         binding.albumTitle.text = albumName
 
+        val unknownAlbum = getString(R.string.unknown_album)
         songs.addAll(
             MusicService.allSongs.filter {
-                it.album == albumName
+                (it.album ?: unknownAlbum) == albumName
             }
         )
 
@@ -103,11 +105,7 @@ class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
 
         albumSongsAdapter.updateList(ArrayList(songs))
 
-        binding.albumSongCount.text = when (songs.size) {
-            0 -> "No Song"
-            1 -> "1 Song"
-            else -> "${songs.size} Songs"
-        }
+        binding.albumSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
     }
     override fun onResume() {
         super.onResume()

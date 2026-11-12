@@ -13,6 +13,7 @@ import com.dhananjaysaini.musicplayerapp.activities.ArtistSongsActivity
 import com.dhananjaysaini.musicplayerapp.adapter.ArtistAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentArtistBinding
 import com.dhananjaysaini.musicplayerapp.model.MusicArtist
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 
@@ -49,8 +50,9 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
 
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { songs ->
 
+            val unknownArtist = getString(R.string.unknown_artist)
             val artists = songs
-                .groupBy { it.artist ?: "Unknown Artist" }
+                .groupBy { it.artist ?: unknownArtist }
                 .map { (name, list) ->
                     MusicArtist(name, list.size, list.firstOrNull()?.artUri)
                 }
@@ -58,11 +60,7 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
 
             artistAdapter.updateList(artists)
 
-            binding.totalArtist.text = when (artists.size) {
-                0 -> "0 Artist"
-                1 -> "1 Artist"
-                else ->  "${artists.size} Artists"
-            }
+            binding.totalArtist.text = LocaleHelper.getArtistCountString(requireContext(), artists.size)
         }
     }
 

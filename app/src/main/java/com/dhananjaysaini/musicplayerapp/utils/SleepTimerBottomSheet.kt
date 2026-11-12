@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.databinding.BottomSheetSleepTimerBinding
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -103,20 +104,20 @@ class SleepTimerBottomSheet : BottomSheetDialogFragment() {
                     setTime(hrs, mins, secs)
                     Toast.makeText(
                         requireContext(),
-                        "Set to end of current track (${String.format("%02d:%02d", mins, secs)})",
+                        getString(R.string.toast_set_end_of_track, String.format("%02d:%02d", mins, secs)),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    Toast.makeText(requireContext(), "Song is near end", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.toast_song_near_end), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Play a song first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_play_song_first), Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.btnCancel.setOnClickListener {
             MusicService.musicService?.cancelSleepTimer()
-            Toast.makeText(requireContext(), "Sleep Timer cancelled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_sleep_timer_cancelled), Toast.LENGTH_SHORT).show()
             dismiss()
         }
 
@@ -124,14 +125,14 @@ class SleepTimerBottomSheet : BottomSheetDialogFragment() {
             val totalMillis = getTotalMillis()
 
             if (totalMillis <= 0) {
-                Toast.makeText(requireContext(), "Please select time", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_select_time), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             MusicService.musicService?.startSleepTimer(totalMillis)
             Toast.makeText(
                 requireContext(),
-                "Sleep Timer set for ${formatTotalTime(totalMillis)}",
+                getString(R.string.toast_sleep_timer_set, formatTotalTime(totalMillis)),
                 Toast.LENGTH_SHORT
             ).show()
             dismiss()

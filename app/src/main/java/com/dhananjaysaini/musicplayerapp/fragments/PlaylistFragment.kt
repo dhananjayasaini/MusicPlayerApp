@@ -16,6 +16,7 @@ import com.dhananjaysaini.musicplayerapp.adapter.PlaylistAdapter
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentPlaylistBinding
 import com.dhananjaysaini.musicplayerapp.model.PlaylistEntity
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlaylistViewModel
@@ -51,53 +52,34 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
             playlistAdapter.update(ordered)
 
             val total = 4 + it.size
-            binding.totalPlaylist.text = when (total) {
-                1 -> "1 Playlist"
-                else -> "$total Playlists"
-            }
-            binding.tvMyPlaylistsHeader.text = "My playlists (${it.size})"
+            binding.totalPlaylist.text = LocaleHelper.getPlaylistCountString(requireContext(), total)
+            binding.tvMyPlaylistsHeader.text = getString(R.string.my_playlists_header, it.size)
         }
 
         // Preset 1: Favourite count
         favouriteViewModel.favouriteIds.observe(viewLifecycleOwner) { ids ->
-            val count = ids.size
-            binding.tvFavCount.text = when (count) {
-                1 -> "1 song"
-                else -> "$count songs"
-            }
+            binding.tvFavCount.text = LocaleHelper.getSongCountString(requireContext(), ids.size)
         }
 
         // Preset 2: Recently Added count
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { list ->
-            val count = list.size
-            binding.tvRecentAddedCount.text = when (count) {
-                1 -> "1 song"
-                else -> "$count songs"
-            }
+            binding.tvRecentAddedCount.text = LocaleHelper.getSongCountString(requireContext(), list.size)
         }
 
         // Preset 3: Recently Played count
         db.playHistoryDao().getRecentlyPlayed().observe(viewLifecycleOwner) { history ->
-            val count = history.size
-            binding.tvRecentPlayedCount.text = when (count) {
-                1 -> "1 song"
-                else -> "$count songs"
-            }
+            binding.tvRecentPlayedCount.text = LocaleHelper.getSongCountString(requireContext(), history.size)
         }
 
         // Preset 4: Top Tracks count
         db.playHistoryDao().getTopPlayed().observe(viewLifecycleOwner) { history ->
-            val count = history.size
-            binding.tvTopTracksCount.text = when (count) {
-                1 -> "1 song"
-                else -> "$count songs"
-            }
+            binding.tvTopTracksCount.text = LocaleHelper.getSongCountString(requireContext(), history.size)
         }
 
         // Click: Preset Rows
         binding.rowMyFavourite.setOnClickListener {
             val intent = Intent(requireContext(), PlaylistSongsActivity::class.java).apply {
-                putExtra("playlistName", "My favourite")
+                putExtra("playlistName", getString(R.string.my_favourite))
                 putExtra("playlistType", "favourite")
             }
             startActivity(intent)
@@ -105,7 +87,7 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
         binding.rowRecentlyAdded.setOnClickListener {
             val intent = Intent(requireContext(), PlaylistSongsActivity::class.java).apply {
-                putExtra("playlistName", "Recently added")
+                putExtra("playlistName", getString(R.string.recently_added))
                 putExtra("playlistType", "recently_added")
             }
             startActivity(intent)
@@ -113,7 +95,7 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
         binding.rowRecentlyPlayed.setOnClickListener {
             val intent = Intent(requireContext(), PlaylistSongsActivity::class.java).apply {
-                putExtra("playlistName", "Recently played")
+                putExtra("playlistName", getString(R.string.recently_played))
                 putExtra("playlistType", "recently_played")
             }
             startActivity(intent)
@@ -121,7 +103,7 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
         binding.rowTopTracks.setOnClickListener {
             val intent = Intent(requireContext(), PlaylistSongsActivity::class.java).apply {
-                putExtra("playlistName", "My top tracks")
+                putExtra("playlistName", getString(R.string.my_top_tracks))
                 putExtra("playlistType", "top_tracks")
             }
             startActivity(intent)
@@ -137,28 +119,28 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
         }
 
         binding.btnRestorePlaylist.setOnClickListener {
-            Toast.makeText(requireContext(), "Restore playlist coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         // Clicks: 3 dots menus
         binding.btnPlaylistMoreTop.setOnClickListener {
-            Toast.makeText(requireContext(), "Playlist options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnMenuFav.setOnClickListener {
-            Toast.makeText(requireContext(), "Favourite options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnMenuRecentAdded.setOnClickListener {
-            Toast.makeText(requireContext(), "Recently added options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnMenuRecentPlayed.setOnClickListener {
-            Toast.makeText(requireContext(), "Recently played options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnMenuTopTracks.setOnClickListener {
-            Toast.makeText(requireContext(), "Top tracks options coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         playlistAdapter.onRenameClick = { playlist ->
@@ -181,15 +163,20 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
     }
 
     private fun showCreateDialog() {
-        val editText = EditText(requireContext())
+        val editText = EditText(requireContext()).apply {
+            hint = getString(R.string.playlist_name_hint)
+        }
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Create Playlist")
+            .setTitle(R.string.create_playlist)
             .setView(editText)
-            .setPositiveButton("Create") { _, _ ->
-                playlistViewModel.createPlaylist(editText.text.toString())
+            .setPositiveButton(R.string.btn_create) { _, _ ->
+                val name = editText.text.toString().trim()
+                if (name.isNotEmpty()) {
+                    playlistViewModel.createPlaylist(name)
+                }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.btn_cancel, null)
             .show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -203,12 +190,12 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
         playlistAdapter.onDeleteClick = { playlist ->
 
             val dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Delete playlist")
-                .setMessage("Delete '${playlist.name}'?")
-                .setPositiveButton("Delete") { _, _ ->
+                .setTitle(R.string.delete_playlist_title)
+                .setMessage(getString(R.string.delete_playlist_prompt, playlist.name))
+                .setPositiveButton(R.string.btn_delete) { _, _ ->
                     playlistViewModel.deletePlaylist(playlist.songId)
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.btn_cancel, null)
                 .show()
 
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -227,9 +214,9 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
         }
 
        val dialog =  MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Rename playlist")
+            .setTitle(R.string.rename_playlist)
             .setView(editText)
-            .setPositiveButton("Rename") { _, _ ->
+            .setPositiveButton(R.string.btn_rename) { _, _ ->
 
                 val editName = editText.text.toString().trim()
 
@@ -240,7 +227,7 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
                     )
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.btn_cancel, null)
             .show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)

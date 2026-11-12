@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Settings"
+                android:text="@string/settings_title"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -73,7 +73,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="MusicAir PRO"
+                        android:text="@string/pro_upgrade_title"
                         android:textColor="#FFD700"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -86,7 +86,7 @@
                         android:paddingEnd="10dp"
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
-                        android:text="UPGRADE"
+                        android:text="@string/pro_upgrade_btn"
                         android:textColor="#FFD700"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -96,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Unlock 10-Band EQ, Ultra HD Audio Visualizer, Dynamic Themes and 100% Ad-Free Experience."
+                    android:text="@string/pro_upgrade_desc"
                     android:textColor="#E0E0E0"
                     android:textSize="13sp" />
 
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="6dp"
-            android:text="General"
+            android:text="@string/section_general"
             android:textColor="#FFA500"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -146,7 +146,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hidden music"
+                    android:text="@string/setting_hidden_music"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -155,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="View and manage hidden music"
+                    android:text="@string/setting_hidden_music_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -196,7 +196,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Music transfer"
+                    android:text="@string/setting_music_transfer"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -205,7 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Transfer your songs, playlists, etc. between devices"
+                    android:text="@string/setting_music_transfer_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -246,7 +246,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Color Themes &amp; Accent"
+                    android:text="@string/setting_theme"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -255,7 +255,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Customize app theme colors and skins"
+                    android:text="@string/setting_theme_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -296,7 +296,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dark Mode"
+                    android:text="@string/setting_dark_mode"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -306,7 +306,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Off"
+                    android:text="@string/status_off"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -350,7 +350,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Equalizer &amp; Bass Boost"
+                    android:text="@string/setting_equalizer"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -359,7 +359,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Studio 10-band equalizer and 3D effects"
+                    android:text="@string/setting_equalizer_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -400,7 +400,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sleep Timer"
+                    android:text="@string/setting_sleep_timer"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -409,7 +409,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Auto stop music playback after time"
+                    android:text="@string/setting_sleep_timer_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -429,7 +429,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="6dp"
-            android:text="Playback"
+            android:text="@string/section_playback"
             android:textColor="#FFA500"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -464,7 +464,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Simultaneous playback"
+                    android:text="@string/setting_simultaneous"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -473,7 +473,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Allow music to play with other apps"
+                    android:text="@string/setting_simultaneous_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -517,7 +517,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Crossfade"
+                    android:text="@string/setting_crossfade"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -526,7 +526,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Previous song fades out, next song fades in\n(Only available when equalizer is off)"
+                    android:text="@string/setting_crossfade_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -570,7 +570,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gapless playback"
+                    android:text="@string/setting_gapless"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -579,7 +579,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Play seamlessly between songs. Some devices may experience playback issues"
+                    android:text="@string/setting_gapless_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -623,7 +623,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pause on detach"
+                    android:text="@string/setting_pause_detach"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -632,7 +632,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Toggle for pausing playback when headphone is detached"
+                    android:text="@string/setting_pause_detach_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -655,7 +655,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="6dp"
-            android:text="Preference"
+            android:text="@string/section_preference"
             android:textColor="#FFA500"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -690,7 +690,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Keep screen on"
+                    android:text="@string/setting_keep_screen_on"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -699,7 +699,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Stay on while on the player screen"
+                    android:text="@string/setting_keep_screen_on_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -743,7 +743,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lock screen playing"
+                    android:text="@string/setting_lock_screen"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -752,7 +752,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Show now playing when lock screen"
+                    android:text="@string/setting_lock_screen_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -796,7 +796,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notifications"
+                    android:text="@string/setting_notifications"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -805,7 +805,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Stay informed with the latest content"
+                    android:text="@string/setting_notifications_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -849,7 +849,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Language"
+                    android:text="@string/setting_language"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -879,7 +879,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="6dp"
-            android:text="Help"
+            android:text="@string/section_help"
             android:textColor="#FFA500"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -914,7 +914,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FAQ"
+                    android:text="@string/setting_faq"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -923,7 +923,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Help you better use the app"
+                    android:text="@string/setting_faq_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -964,7 +964,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Feedback"
+                    android:text="@string/setting_feedback"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -973,7 +973,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Report bugs and tell us what to improve"
+                    android:text="@string/setting_feedback_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -1014,7 +1014,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rate us"
+                    android:text="@string/setting_rate_us"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -1023,7 +1023,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Like this app? Please rate us!"
+                    android:text="@string/setting_rate_us_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -1064,7 +1064,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Manage subscription"
+                    android:text="@string/setting_manage_subscription"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -1073,7 +1073,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Manage your Pro subscription &amp; billing"
+                    android:text="@string/setting_manage_subscription_desc"
                     android:textColor="#9E9EB8"
                     android:textSize="12.5sp" />
             </LinearLayout>
@@ -1114,7 +1114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Privacy policy"
+                    android:text="@string/setting_privacy_policy"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -1156,7 +1156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Terms of use"
+                    android:text="@string/setting_terms"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -1198,7 +1198,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Version"
+                    android:text="@string/setting_version"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />

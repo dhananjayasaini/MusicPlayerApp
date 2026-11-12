@@ -13,6 +13,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.activities.PlayerActivity
 import com.dhananjaysaini.musicplayerapp.adapter.AllSongsAdapter
 import com.dhananjaysaini.musicplayerapp.constants.Constants
@@ -136,12 +137,12 @@ class SearchFragment : Fragment() {
 
         if (filteredSongs.isEmpty()) {
             binding.layoutEmptySearch.visibility = View.VISIBLE
-            binding.tvEmptySearchMsg.text = if (query.isEmpty()) "No songs found" else "No songs matching \"$query\""
+            binding.tvEmptySearchMsg.text = if (query.isEmpty()) getString(R.string.no_songs_found) else getString(R.string.no_songs_matching, query)
             binding.tvSearchResultCount.visibility = View.GONE
         } else {
             binding.layoutEmptySearch.visibility = View.GONE
             binding.tvSearchResultCount.visibility = View.VISIBLE
-            binding.tvSearchResultCount.text = "${filteredSongs.size} songs found"
+            binding.tvSearchResultCount.text = getString(R.string.songs_found_count, filteredSongs.size)
         }
     }
 
@@ -149,11 +150,11 @@ class SearchFragment : Fragment() {
         try {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                putExtra(RecognizerIntent.EXTRA_PROMPT, "Say a song, artist, or album name...")
+                putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_search_prompt))
             }
             voiceSearchLauncher.launch(intent)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Voice search not available on this device", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_voice_search_unavailable), Toast.LENGTH_SHORT).show()
         }
     }
 

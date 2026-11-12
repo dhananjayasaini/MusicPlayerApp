@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -47,6 +48,7 @@ import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.PlaylistManager
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.VolumeBoosterBottomSheet
@@ -77,7 +79,17 @@ class MainActivity : AppCompatActivity() {
         private const val NOTIFICATION_PERMISSION_CODE = 501
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val savedLang = LocaleHelper.getSavedLanguageCode(this)
+        val appLocale = LocaleListCompat.forLanguageTags(savedLang)
+        if (AppCompatDelegate.getApplicationLocales() != appLocale) {
+            AppCompatDelegate.setApplicationLocales(appLocale)
+        }
+        LocaleHelper.applyLocale(this)
 
         applySavedTheme()
         super.onCreate(savedInstanceState)
@@ -246,7 +258,7 @@ class MainActivity : AppCompatActivity() {
         updateToolbarColors()
 
         binding.btnViewRecap.setOnClickListener {
-            toast("Music Recap coming soon")
+            toast(getString(R.string.toast_coming_soon))
         }
 
         val customDrawer = binding.customDrawer
@@ -254,7 +266,7 @@ class MainActivity : AppCompatActivity() {
         // Top Music Recap Card
         customDrawer.cardMusicRecap.setOnClickListener {
             drawer.closeDrawers()
-            toast("Music Recap coming soon")
+            toast(getString(R.string.toast_coming_soon))
         }
 
         // 1. Library -> switch to Home / Library tab
@@ -273,10 +285,10 @@ class MainActivity : AppCompatActivity() {
         customDrawer.navItemEqualizer.setOnClickListener {
             drawer.closeDrawers()
             val sessionId = MusicService.mediaPlayer?.audioSessionId ?: -1
-            if (sessionId != -1) {
+            if (sessionId > 0) {
                 EqualizerManager(this).showEqualizer(sessionId)
             } else {
-                toast("Play a song first to open the Equalizer!")
+                toast(getString(R.string.play_song_first_eq))
             }
         }
 
@@ -301,7 +313,7 @@ class MainActivity : AppCompatActivity() {
         // 7. Remove ads
         customDrawer.navItemRemoveAds.setOnClickListener {
             drawer.closeDrawers()
-            toast("Remove ads coming soon")
+            toast(getString(R.string.toast_coming_soon))
         }
 
         // 8. Volume booster [AD]
@@ -421,7 +433,7 @@ class MainActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_SUBJECT, "Feedback - Music Player App")
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Write your feedback here...\n\n" +
+                context.getString(R.string.feedback_body_prefix) + "\n\n" +
                         "---- Device Info ----\n" +
                         "Device: ${Build.MANUFACTURER} ${Build.MODEL}\n" +
                         "Android Version: ${Build.VERSION.RELEASE}\n" +
@@ -430,9 +442,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         try {
-            context.startActivity(Intent.createChooser(intent, "Send Feedback"))
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.send_feedback_title)))
         } catch (e: Exception) {
-            Toast.makeText(context, "No email app found!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.toast_no_email_app), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -521,7 +533,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == DeleteManager.DELETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(this, "Song deleted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_song_deleted), Toast.LENGTH_SHORT).show()
             mainViewModel.loadMusic(this, true)
         }
     }
@@ -546,7 +558,7 @@ class MainActivity : AppCompatActivity() {
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle(R.string.widget_pin_dialog_title)
             .setMessage(R.string.widget_pin_dialog_msg)
-            .setPositiveButton("Got it", null)
+            .setPositiveButton(R.string.btn_got_it, null)
             .show()
     }
 

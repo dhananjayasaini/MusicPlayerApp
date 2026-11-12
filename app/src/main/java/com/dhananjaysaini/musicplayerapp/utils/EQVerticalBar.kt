@@ -37,7 +37,8 @@ class EQVerticalBar @JvmOverloads constructor(
     var onProgressChanged: ((Int) -> Unit)? = null
 
     fun setMax(max: Int) {
-        maxValue = max
+        maxValue = max.coerceAtLeast(1)
+        currentValue = currentValue.coerceIn(0, maxValue)
         invalidate()
     }
 
@@ -58,7 +59,8 @@ class EQVerticalBar @JvmOverloads constructor(
         // background line
         canvas.drawLine(centerX, top, centerX, bottom, bgPaint)
 
-        val progressY = bottom - ((currentValue.toFloat() / maxValue) * (bottom - top))
+        val safeMax = maxValue.coerceAtLeast(1)
+        val progressY = bottom - ((currentValue.toFloat() / safeMax) * (bottom - top))
 
         // progress line
         canvas.drawLine(centerX, progressY, centerX, bottom, progressPaint)
@@ -68,14 +70,16 @@ class EQVerticalBar @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!isEnabled) return false
 
-            parent.requestDisallowInterceptTouchEvent(true)
+        parent?.requestDisallowInterceptTouchEvent(true)
 
         when (event.action) {
             MotionEvent.ACTION_DOWN,
             MotionEvent.ACTION_MOVE -> {
                 val top = paddingTop + 20f
                 val bottom = height - paddingBottom - 20f
+                if (bottom <= top) return true
 
                 val y = event.y.coerceIn(top, bottom)
 
@@ -90,11 +94,10 @@ class EQVerticalBar @JvmOverloads constructor(
 
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL -> {
-                parent.requestDisallowInterceptTouchEvent(false)
+                parent?.requestDisallowInterceptTouchEvent(false)
                 return true
             }
         }
-      //  return super.onTouchEvent(event)
         return false
     }
 

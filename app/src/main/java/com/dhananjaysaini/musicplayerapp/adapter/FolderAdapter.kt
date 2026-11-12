@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.model.SongFolder
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 
 class FolderAdapter(
     private val list: MutableList<SongFolder>
@@ -30,11 +31,7 @@ class FolderAdapter(
         val folder = list[position]
 
         holder.name.text = folder.name
-        holder.count.text =
-            if (folder.songCount == 1)
-                "1 song"
-            else
-                "${folder.songCount} songs"
+        holder.count.text = LocaleHelper.getSongCountString(holder.itemView.context, folder.songCount)
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(folder)

@@ -43,7 +43,13 @@ class HomeFragment : Fragment() {
         binding.homeViewPager.adapter = HomePagerAdapter(this)
         binding.homeViewPager.offscreenPageLimit = 2
 
-        val titles = listOf("Songs", "Playlists", "Folders", "Albums", "Artists")
+        val titles = listOf(
+            getString(R.string.tab_songs),
+            getString(R.string.tab_playlists),
+            getString(R.string.tab_folders),
+            getString(R.string.tab_albums),
+            getString(R.string.tab_artists)
+        )
 
         TabLayoutMediator(binding.homeTabLayout, binding.homeViewPager) { tab, position ->
             val tabView = layoutInflater.inflate(R.layout.item_viewpager_tab, null)

@@ -12,6 +12,7 @@ import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentArtistSongsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 
 class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
 
@@ -28,9 +29,10 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
 
         binding.artistTitle.text = artistName
 
+        val unknownArtist = getString(R.string.unknown_artist)
         songs.addAll(
             MusicService.allSongs.filter {
-                it.artist == artistName
+                (it.artist ?: unknownArtist) == artistName
             }
         )
 
@@ -94,10 +96,6 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
 
         artistSongsAdapter.updateList(ArrayList(songs))
 
-        binding.artistSongCount.text = when (songs.size) {
-            0 -> "No Song"
-            1 -> "1 Song"
-            else -> "${songs.size} Songs"
-        }
+        binding.artistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
     }
 }

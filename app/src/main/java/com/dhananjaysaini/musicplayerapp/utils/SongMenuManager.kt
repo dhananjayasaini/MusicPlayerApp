@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentManager
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
@@ -66,7 +67,7 @@ object SongMenuManager {
             val dao = MusicDatabase.getDatabase(context.applicationContext).FavouriteDao()
             dao.addFavourite(FavouriteEntity(song.id))
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Added to favourite", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.added_to_favourite_msg), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -86,7 +87,7 @@ object SongMenuManager {
             val dao = MusicDatabase.getDatabase(context.applicationContext).FavouriteDao()
             dao.removeFavourite(FavouriteEntity(song.id))
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Removed from favourite", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.removed_from_favourite_msg), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -129,12 +130,12 @@ object SongMenuManager {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-            val chooser = Intent.createChooser(shareIntent, "Share Audio").apply {
+            val chooser = Intent.createChooser(shareIntent, context.getString(R.string.share_audio_title)).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(chooser)
         } catch (e: Exception) {
-            Toast.makeText(context, "Unable to share audio", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.unable_to_share_audio), Toast.LENGTH_SHORT).show()
         }
     }
 }

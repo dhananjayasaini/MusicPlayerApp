@@ -19,6 +19,8 @@ import com.dhananjaysaini.musicplayerapp.databinding.FragmentSettingsBinding
 import com.dhananjaysaini.musicplayerapp.repository.ThemeRepository
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
+import com.dhananjaysaini.musicplayerapp.utils.LanguageBottomSheetDialog
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 
@@ -120,10 +122,10 @@ class SettingsFragment : Fragment() {
         // 4. Dark Mode
         val isDark = ThemeManager.isDarkTheme(requireContext())
         binding.switchDarkMode.isChecked = isDark
-        binding.tvDarkModeStatus.text = if (isDark) "On" else "Off"
+        binding.tvDarkModeStatus.text = if (isDark) getString(R.string.status_on) else getString(R.string.status_off)
 
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            binding.tvDarkModeStatus.text = if (isChecked) "On" else "Off"
+            binding.tvDarkModeStatus.text = if (isChecked) getString(R.string.status_on) else getString(R.string.status_off)
 
             if (isChecked) {
                 val currentTheme = ThemeManager.getCurrentTheme(requireContext())
@@ -148,12 +150,12 @@ class SettingsFragment : Fragment() {
         equalizerManager = EqualizerManager(requireContext())
         binding.btnSettingEqualizer.setOnClickListener {
             val sessionId = MusicService.mediaPlayer?.audioSessionId ?: -1
-            if (sessionId != -1) {
+            if (sessionId > 0) {
                 equalizerManager?.showEqualizer(sessionId)
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Play a song first to open the Equalizer!",
+                    getString(R.string.play_song_first_eq),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -177,11 +179,7 @@ class SettingsFragment : Fragment() {
         binding.switchSimultaneous.isChecked = simultaneous
         binding.switchSimultaneous.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("simultaneous_playback", isChecked).apply()
-            val msg = if (isChecked) {
-                "Simultaneous playback enabled"
-            } else {
-                "Simultaneous playback disabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_simultaneous_enabled) else getString(R.string.toast_simultaneous_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
@@ -190,11 +188,7 @@ class SettingsFragment : Fragment() {
         binding.switchCrossfade.isChecked = crossfade
         binding.switchCrossfade.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("crossfade_playback", isChecked).apply()
-            val msg = if (isChecked) {
-                "Crossfade enabled (fades out previous, fades in next)"
-            } else {
-                "Crossfade disabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_crossfade_enabled) else getString(R.string.toast_crossfade_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
@@ -203,11 +197,7 @@ class SettingsFragment : Fragment() {
         binding.switchGapless.isChecked = gapless
         binding.switchGapless.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("gapless_playback", isChecked).apply()
-            val msg = if (isChecked) {
-                "Gapless playback enabled"
-            } else {
-                "Gapless playback disabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_gapless_enabled) else getString(R.string.toast_gapless_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
@@ -216,11 +206,7 @@ class SettingsFragment : Fragment() {
         binding.switchPauseDetach.isChecked = pauseOnDetach
         binding.switchPauseDetach.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("pause_on_detach", isChecked).apply()
-            val msg = if (isChecked) {
-                "Playback will pause when headphone is detached"
-            } else {
-                "Playback will continue when headphone is detached"
-            }
+            val msg = if (isChecked) getString(R.string.toast_pause_detach_enabled) else getString(R.string.toast_pause_detach_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
     }
@@ -236,11 +222,7 @@ class SettingsFragment : Fragment() {
         binding.switchKeepScreenOn.isChecked = keepScreenOn
         binding.switchKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("keep_screen_on", isChecked).apply()
-            val msg = if (isChecked) {
-                "Screen will stay on while playing"
-            } else {
-                "Normal screen timeout enabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_screen_on_enabled) else getString(R.string.toast_screen_on_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
@@ -249,11 +231,7 @@ class SettingsFragment : Fragment() {
         binding.switchLockScreen.isChecked = lockScreen
         binding.switchLockScreen.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("lock_screen_playing", isChecked).apply()
-            val msg = if (isChecked) {
-                "Now Playing enabled on lock screen"
-            } else {
-                "Lock screen controls disabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_lock_screen_enabled) else getString(R.string.toast_lock_screen_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
@@ -262,19 +240,25 @@ class SettingsFragment : Fragment() {
         binding.switchNotifications.isChecked = notifications
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("notifications_enabled", isChecked).apply()
-            val msg = if (isChecked) {
-                "Playback notifications enabled"
-            } else {
-                "Playback notifications disabled"
-            }
+            val msg = if (isChecked) getString(R.string.toast_notifications_enabled) else getString(R.string.toast_notifications_disabled)
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 
         // 4. Language
-        val currentLang = sharedPref.getString("app_language", "English") ?: "English"
-        binding.tvCurrentLanguage.text = currentLang
+        val currentLang = LocaleHelper.getCurrentLanguage(requireContext())
+        binding.tvCurrentLanguage.text = if (currentLang.nativeName.equals(currentLang.englishName, ignoreCase = true)) {
+            currentLang.nativeName
+        } else {
+            "${currentLang.nativeName} (${currentLang.englishName})"
+        }
         binding.rowLanguage.setOnClickListener {
-            showLanguageDialog(sharedPref)
+            LanguageBottomSheetDialog.newInstance { selectedLang ->
+                binding.tvCurrentLanguage.text = if (selectedLang.nativeName.equals(selectedLang.englishName, ignoreCase = true)) {
+                    selectedLang.nativeName
+                } else {
+                    "${selectedLang.nativeName} (${selectedLang.englishName})"
+                }
+            }.show(parentFragmentManager, LanguageBottomSheetDialog.TAG)
         }
     }
 
@@ -393,31 +377,6 @@ class SettingsFragment : Fragment() {
             .show()
     }
 
-    private fun showLanguageDialog(sharedPref: android.content.SharedPreferences) {
-        val languages = arrayOf(
-            "English",
-            "Hindi (हिन्दी)",
-            "Spanish (Español)",
-            "French (Français)",
-            "German (Deutsch)",
-            "Japanese (日本語)"
-        )
-        val current = sharedPref.getString("app_language", "English") ?: "English"
-        var selectedIndex = languages.indexOfFirst { it.startsWith(current) }
-        if (selectedIndex < 0) selectedIndex = 0
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Select Language 🌐")
-            .setSingleChoiceItems(languages, selectedIndex) { dialog, which ->
-                val chosen = languages[which].split(" ")[0]
-                sharedPref.edit().putString("app_language", chosen).apply()
-                binding.tvCurrentLanguage.text = chosen
-                Toast.makeText(requireContext(), "Language set to $chosen", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
 
     private fun showFaqDialog() {
         AlertDialog.Builder(requireContext())

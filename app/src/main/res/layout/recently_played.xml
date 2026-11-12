@@ -63,7 +63,7 @@
 
         <!-- Title -->
         <TextView
-            android:text="Recently played"
+            android:text="@string/recently_played_title"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -91,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="Shuffle"
+                android:text="@string/btn_shuffle"
                 android:textAllCaps="false"
                 android:background="@drawable/bg_button_white"
                 android:textColor="@android:color/black"/>
@@ -104,7 +104,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="Play"
+                android:text="@string/btn_play"
                 android:textAllCaps="false"
                 android:background="@drawable/bg_button_white"
                 android:textColor="@android:color/black"/>

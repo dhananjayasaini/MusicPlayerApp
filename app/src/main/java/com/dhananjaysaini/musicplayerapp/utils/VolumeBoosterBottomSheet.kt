@@ -7,6 +7,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.SeekBar
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.databinding.LayoutVolumeBoosterBinding
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -133,12 +134,12 @@ class VolumeBoosterBottomSheet(private val context: Context) {
 
     private fun updateBoostText(percent: Int) {
         if (!VolumeBoosterManager.isBoostEnabled()) {
-            binding.tvBoostValue.text = "Disabled"
+            binding.tvBoostValue.text = context.getString(R.string.status_disabled)
             return
         }
         val dbGain = (percent.toFloat() / 100f * 20).toInt()
         if (percent == 0) {
-            binding.tvBoostValue.text = "0% (Normal)"
+            binding.tvBoostValue.text = context.getString(R.string.boost_normal)
         } else {
             binding.tvBoostValue.text = "+$percent% (+$dbGain dB)"
         }

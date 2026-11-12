@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:text="Add to Playlist"
+        android:text="@string/add_to_playlist_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_height="24dp"/>
 
         <TextView
-            android:text="Create Playlist"
+            android:text="@string/create_playlist"
             android:layout_marginStart="12dp"
             android:textSize="16sp"
             android:layout_width="wrap_content"
