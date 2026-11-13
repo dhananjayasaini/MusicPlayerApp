@@ -61,7 +61,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
     // Player for listening to saved recordings
     private var playbackMediaPlayer: MediaPlayer? = null
-    private var currentlyPlayingIndex: Int = -1
+    private var currentlyPlayingFilePath: String? = null
 
     private val timerRunnable = object : Runnable {
         override fun run() {
@@ -88,12 +88,12 @@ class VoiceRecorderActivity : AppCompatActivity() {
     private val playbackProgressRunnable = object : Runnable {
         override fun run() {
             val player = playbackMediaPlayer
-            if (player != null && player.isPlaying && currentlyPlayingIndex != -1) {
-                adapter.updatePlaybackProgress(
-                    currentlyPlayingIndex,
-                    player.currentPosition,
-                    player.duration,
-                    true
+            val path = currentlyPlayingFilePath
+            if (player != null && player.isPlaying && path != null) {
+                adapter.updateProgress(
+                    filePath = path,
+                    progressMs = player.currentPosition,
+                    durationMs = player.duration
                 )
                 handler.postDelayed(this, 250)
             }
@@ -113,10 +113,15 @@ class VoiceRecorderActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            binding.recorderTopBar.updatePadding(top = systemBars.top)
+            val extraTop = (12 * resources.displayMetrics.density).toInt()
+            binding.recorderTopBar.updatePadding(
+                top = systemBars.top + extraTop,
+                bottom = (8 * resources.displayMetrics.density).toInt()
+            )
             binding.rvRecordings.updatePadding(bottom = systemBars.bottom)
             insets
         }
+        ViewCompat.requestApplyInsets(binding.recorderRoot)
 
         ThemeManager.applyThemeToActivity(this)
 
@@ -148,13 +153,16 @@ class VoiceRecorderActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = RecordingsAdapter(
             items = recordings,
-            onPlayClick = { item, position -> handlePlayRecording(item, position) },
+            onPlayClick = { item, _ -> handlePlayRecording(item) },
             onDeleteClick = { item -> confirmDeleteRecording(item) },
             onRenameClick = { item -> showRenameDialog(item) },
             onShareClick = { item -> shareRecording(item) },
             onSeek = { item, progressMs ->
-                if (currentlyPlayingIndex != -1 && playbackMediaPlayer != null) {
-                    playbackMediaPlayer?.seekTo(progressMs)
+                if (currentlyPlayingFilePath == item.file.absolutePath) {
+                    adapter.currentPlayProgressMs = progressMs
+                    if (playbackMediaPlayer != null) {
+                        playbackMediaPlayer?.seekTo(progressMs)
+                    }
                 }
             }
         )
@@ -172,7 +180,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun startRecording() {
-        stopPlayback()
+        stopPlayback(keepOpen = true)
 
         val dir = getRecordingsDir()
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -258,14 +266,33 @@ class VoiceRecorderActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadSavedRecordings()
+    }
+
     private fun stopAndSaveRecording() {
         if (currentState == RecordState.IDLE) return
         try {
             mediaRecorder?.stop()
             mediaRecorder?.release()
-        } catch (_: Exception) {}
+        } catch (e: Exception) {
+            android.util.Log.e("VoiceRecorder", "stopAndSaveRecording error: ${e.message}")
+        }
 
         mediaRecorder = null
+        currentRecordingFile?.let { savedFile ->
+            if (savedFile.exists() && savedFile.length() > 0L) {
+                try {
+                    android.media.MediaScannerConnection.scanFile(
+                        this,
+                        arrayOf(savedFile.absolutePath),
+                        arrayOf("audio/mp4", "audio/m4a"),
+                        null
+                    )
+                } catch (_: Exception) {}
+            }
+        }
         resetRecordingState()
         Toast.makeText(this, getString(R.string.recording_saved), Toast.LENGTH_SHORT).show()
         loadSavedRecordings()
@@ -313,7 +340,7 @@ class VoiceRecorderActivity : AppCompatActivity() {
     private fun loadSavedRecordings() {
         val dir = getRecordingsDir()
         val files = dir.listFiles { file ->
-            file.isFile && (file.extension.equals("m4a", true) ||
+            file.isFile && file.length() > 0L && (file.extension.equals("m4a", true) ||
                     file.extension.equals("mp3", true) ||
                     file.extension.equals("wav", true) ||
                     file.extension.equals("aac", true))
@@ -345,59 +372,87 @@ class VoiceRecorderActivity : AppCompatActivity() {
         }
     }
 
-    private fun handlePlayRecording(item: RecordingItem, position: Int) {
-        if (currentlyPlayingIndex == position && playbackMediaPlayer != null) {
-            if (playbackMediaPlayer?.isPlaying == true) {
-                playbackMediaPlayer?.pause()
-                adapter.isPlaying = false
-                adapter.notifyItemChanged(position)
+    private fun handlePlayRecording(item: RecordingItem) {
+        val path = item.file.absolutePath
+
+        if (currentlyPlayingFilePath == path) {
+            val player = playbackMediaPlayer
+            if (player != null) {
+                if (player.isPlaying) {
+                    player.pause()
+                    val pos = player.currentPosition
+                    val dur = player.duration
+                    adapter.setPlaybackState(path, pos, dur, false)
+                    handler.removeCallbacks(playbackProgressRunnable)
+                } else {
+                    player.start()
+                    val pos = player.currentPosition
+                    val dur = player.duration
+                    adapter.setPlaybackState(path, pos, dur, true)
+                    handler.post(playbackProgressRunnable)
+                }
             } else {
-                playbackMediaPlayer?.start()
-                adapter.isPlaying = true
-                adapter.notifyItemChanged(position)
-                handler.post(playbackProgressRunnable)
+                startPlaybackForFile(item, startPositionMs = adapter.currentPlayProgressMs)
             }
             return
         }
 
-        stopPlayback()
-        currentlyPlayingIndex = position
+        stopPlayback(keepOpen = false)
+        startPlaybackForFile(item, startPositionMs = 0)
+    }
+
+    private fun startPlaybackForFile(item: RecordingItem, startPositionMs: Int) {
+        val path = item.file.absolutePath
+        currentlyPlayingFilePath = path
 
         try {
             playbackMediaPlayer = MediaPlayer().apply {
                 setDataSource(this@VoiceRecorderActivity, Uri.fromFile(item.file))
                 prepare()
+                if (startPositionMs in 1 until duration) {
+                    seekTo(startPositionMs)
+                }
                 setOnCompletionListener {
-                    adapter.updatePlaybackProgress(position, 0, duration, false)
-                    currentlyPlayingIndex = -1
-                    stopPlayback()
+                    adapter.setPlaybackState(
+                        filePath = path,
+                        progressMs = 0,
+                        durationMs = duration,
+                        playing = false
+                    )
+                    stopPlayback(keepOpen = true)
                 }
                 start()
             }
-            adapter.updatePlaybackProgress(
-                position,
-                0,
-                playbackMediaPlayer?.duration ?: 0,
-                true
-            )
+            val cur = playbackMediaPlayer?.currentPosition ?: startPositionMs
+            val dur = playbackMediaPlayer?.duration ?: item.durationMs.toInt()
+            adapter.setPlaybackState(path, cur, dur, true)
             handler.post(playbackProgressRunnable)
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.toast_cannot_play_recording, e.message ?: ""), Toast.LENGTH_SHORT).show()
+            stopPlayback(keepOpen = false)
         }
     }
 
-    private fun stopPlayback() {
+    private fun stopPlayback(keepOpen: Boolean = false) {
         handler.removeCallbacks(playbackProgressRunnable)
         try {
             playbackMediaPlayer?.stop()
             playbackMediaPlayer?.release()
         } catch (_: Exception) {}
         playbackMediaPlayer = null
-        if (currentlyPlayingIndex != -1) {
-            val oldPos = currentlyPlayingIndex
-            currentlyPlayingIndex = -1
-            adapter.isPlaying = false
-            adapter.notifyItemChanged(oldPos)
+
+        if (!keepOpen) {
+            currentlyPlayingFilePath = null
+            adapter.clearPlayback()
+        } else {
+            currentlyPlayingFilePath?.let { path ->
+                adapter.setPlaybackState(
+                    filePath = path,
+                    progressMs = adapter.currentPlayProgressMs,
+                    durationMs = adapter.currentPlayDurationMs,
+                    playing = false
+                )
+            }
         }
     }
 
@@ -406,8 +461,8 @@ class VoiceRecorderActivity : AppCompatActivity() {
             .setTitle(getString(R.string.delete_recording_title))
             .setMessage(getString(R.string.delete_recording_prompt, item.name))
             .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
-                if (currentlyPlayingIndex != -1 && recordings.getOrNull(currentlyPlayingIndex)?.file == item.file) {
-                    stopPlayback()
+                if (currentlyPlayingFilePath == item.file.absolutePath) {
+                    stopPlayback(keepOpen = false)
                 }
                 item.file.delete()
                 loadSavedRecordings()
@@ -433,7 +488,12 @@ class VoiceRecorderActivity : AppCompatActivity() {
                 if (newName.isNotEmpty()) {
                     val ext = item.file.extension
                     val newFile = File(item.file.parentFile, "$newName.$ext")
+                    val wasPlaying = currentlyPlayingFilePath == item.file.absolutePath
                     if (item.file.renameTo(newFile)) {
+                        if (wasPlaying) {
+                            currentlyPlayingFilePath = newFile.absolutePath
+                            adapter.updatePlayingFilePath(newFile.absolutePath)
+                        }
                         loadSavedRecordings()
                         Toast.makeText(this, getString(R.string.toast_renamed_success), Toast.LENGTH_SHORT).show()
                     } else {

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class RecordingsAdapter(
-    private var items: MutableList<RecordingItem>,
+    items: List<RecordingItem> = emptyList(),
     private val onPlayClick: (RecordingItem, Int) -> Unit,
     private val onDeleteClick: (RecordingItem) -> Unit,
     private val onRenameClick: (RecordingItem) -> Unit,
@@ -21,33 +21,68 @@ class RecordingsAdapter(
     private val onSeek: (RecordingItem, Int) -> Unit
 ) : RecyclerView.Adapter<RecordingsAdapter.RecordingViewHolder>() {
 
-    var playingPosition: Int = -1
+    private val items: MutableList<RecordingItem> = ArrayList(items)
+    var playingFilePath: String? = null
     var isPlaying: Boolean = false
-    private var currentPlayProgressMs: Int = 0
-    private var currentPlayDurationMs: Int = 0
+    var currentPlayProgressMs: Int = 0
+    var currentPlayDurationMs: Int = 0
 
     private val dateFormat = SimpleDateFormat("MMM d, yyyy • h:mm a", Locale.getDefault())
 
     fun updateList(newItems: List<RecordingItem>) {
+        val copy = ArrayList(newItems)
         items.clear()
-        items.addAll(newItems)
+        items.addAll(copy)
         notifyDataSetChanged()
     }
 
-    fun updatePlaybackProgress(position: Int, progressMs: Int, durationMs: Int, playing: Boolean) {
-        val prevPos = playingPosition
-        val posChanged = prevPos != position
-        playingPosition = position
+    fun setPlaybackState(filePath: String?, progressMs: Int, durationMs: Int, playing: Boolean) {
+        val oldPath = playingFilePath
+        playingFilePath = filePath
         isPlaying = playing
         currentPlayProgressMs = progressMs
         currentPlayDurationMs = durationMs
 
-        if (posChanged && prevPos != -1) {
-            notifyItemChanged(prevPos)
+        if (oldPath != null && oldPath != filePath) {
+            val oldIndex = items.indexOfFirst { it.file.absolutePath == oldPath }
+            if (oldIndex != -1) {
+                notifyItemChanged(oldIndex)
+            }
         }
-        if (position in items.indices) {
-            notifyItemChanged(position, "PROGRESS_PAYLOAD")
+        if (filePath != null) {
+            val newIndex = items.indexOfFirst { it.file.absolutePath == filePath }
+            if (newIndex != -1) {
+                notifyItemChanged(newIndex)
+            }
         }
+    }
+
+    fun updateProgress(filePath: String, progressMs: Int, durationMs: Int) {
+        if (playingFilePath != filePath) return
+        currentPlayProgressMs = progressMs
+        currentPlayDurationMs = durationMs
+        val index = items.indexOfFirst { it.file.absolutePath == filePath }
+        if (index != -1) {
+            notifyItemChanged(index, "PROGRESS_PAYLOAD")
+        }
+    }
+
+    fun clearPlayback() {
+        val oldPath = playingFilePath
+        playingFilePath = null
+        isPlaying = false
+        currentPlayProgressMs = 0
+        currentPlayDurationMs = 0
+        if (oldPath != null) {
+            val oldIndex = items.indexOfFirst { it.file.absolutePath == oldPath }
+            if (oldIndex != -1) {
+                notifyItemChanged(oldIndex)
+            }
+        }
+    }
+
+    fun updatePlayingFilePath(newPath: String) {
+        playingFilePath = newPath
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordingViewHolder {
@@ -84,7 +119,7 @@ class RecordingsAdapter(
             val sizeStr = formatFileSize(item.sizeBytes)
             binding.tvRecordingDetails.text = "$durationStr • $dateStr • $sizeStr"
 
-            val isThisPlaying = position == playingPosition
+            val isThisPlaying = item.file.absolutePath == playingFilePath
 
             binding.btnPlayRecording.setImageResource(
                 if (isThisPlaying && isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play
@@ -112,6 +147,8 @@ class RecordingsAdapter(
                     fromUser: Boolean
                 ) {
                     if (fromUser) {
+                        currentPlayProgressMs = progress
+                        binding.tvCurrentPlayTime.text = formatDuration(progress.toLong())
                         onSeek(item, progress)
                     }
                 }
@@ -121,9 +158,9 @@ class RecordingsAdapter(
 
             binding.btnMoreOptions.setOnClickListener { v ->
                 val popup = PopupMenu(v.context, v)
-                popup.menu.add(0, 1, 0, "Rename")
-                popup.menu.add(0, 2, 1, "Share")
-                popup.menu.add(0, 3, 2, "Delete")
+                popup.menu.add(0, 1, 0, v.context.getString(R.string.btn_rename))
+                popup.menu.add(0, 2, 1, v.context.getString(R.string.action_share))
+                popup.menu.add(0, 3, 2, v.context.getString(R.string.btn_delete))
                 popup.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         1 -> onRenameClick(item)
@@ -137,7 +174,7 @@ class RecordingsAdapter(
         }
 
         fun updateProgressOnly(item: RecordingItem, position: Int) {
-            val isThisPlaying = position == playingPosition
+            val isThisPlaying = item.file.absolutePath == playingFilePath
             binding.btnPlayRecording.setImageResource(
                 if (isThisPlaying && isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play
             )

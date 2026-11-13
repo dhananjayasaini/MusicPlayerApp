@@ -67,10 +67,15 @@ class FreeRingtonesActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            binding.ringtonesTopBar.updatePadding(top = systemBars.top)
+            val extraTop = (12 * resources.displayMetrics.density).toInt()
+            binding.ringtonesTopBar.updatePadding(
+                top = systemBars.top + extraTop,
+                bottom = (8 * resources.displayMetrics.density).toInt()
+            )
             binding.rvRingtonesList.updatePadding(bottom = systemBars.bottom + 80)
             insets
         }
+        ViewCompat.requestApplyInsets(binding.ringtonesRoot)
 
         ThemeManager.applyThemeToActivity(this)
 
