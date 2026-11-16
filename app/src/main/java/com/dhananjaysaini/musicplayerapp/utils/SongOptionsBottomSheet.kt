@@ -5,9 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.databinding.BottomSheetSongOptionsBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.SongMenuConfig
+import com.dhananjaysaini.musicplayerapp.model.formatDuration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class SongOptionsBottomSheet(
@@ -28,11 +33,40 @@ class SongOptionsBottomSheet(
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.let { sheet ->
+            sheet.setBackgroundResource(android.R.color.transparent)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvSongTitle.text = song.title
+        // Apply active theme to bottom sheet background
+        ThemeManager.applyThemeToBottomSheet(requireContext(), binding.root)
 
+        // Header info
+        binding.tvSongTitle.text = song.title
+        binding.tvSongSubtitle.text = "${song.artist} • ${song.album}"
+        binding.tvSongDuration.text = formatDuration(song.duration)
+
+        Glide.with(this)
+            .load(song.artUri)
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable.ic_neon_music_note)
+                    .error(R.drawable.ic_neon_music_note)
+                    .override(150, 150)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            )
+            .into(binding.ivSongArt)
+
+        binding.btnClose.setOnClickListener {
+            dismiss()
+        }
+
+        // Action visibility based on config
         binding.btnPlay.visibility = if (config.play) View.VISIBLE else View.GONE
         binding.btnPlayNext.visibility = if (config.playNext) View.VISIBLE else View.GONE
         binding.btnAddToQueue.visibility = if (config.addToQueue) View.VISIBLE else View.GONE
@@ -82,9 +116,17 @@ class SongOptionsBottomSheet(
             dismiss()
         }
 
+        binding.btnEdit.setOnClickListener {
+            val fm = parentFragmentManager
+            dismissAllowingStateLoss()
+            EditSongBottomSheet.newInstance(song).show(fm, "edit_song")
+        }
+
         binding.btnDeleteSong.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                 SongMenuManager.handleDelete(requireActivity(), song)
+                SongMenuManager.handleDelete(requireActivity(), song)
+            } else {
+                SongMenuManager.handleDelete(requireActivity(), song)
             }
             dismiss()
         }

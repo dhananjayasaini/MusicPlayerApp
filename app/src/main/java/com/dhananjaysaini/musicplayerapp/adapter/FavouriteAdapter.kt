@@ -22,7 +22,6 @@ class FavouriteAdapter(
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-
         val song = musicList[position]
 
         holder.title.text = song.title
@@ -34,10 +33,7 @@ class FavouriteAdapter(
             .apply(RequestOptions().placeholder(R.drawable.ic_neon_music_note).centerCrop())
             .into(holder.image)
 
-        holder.root.setOnClickListener {
-            onItemClick?.invoke(musicList, position)
-        }
-
+        bindPlayingState(holder, song)
         bindClick(holder, position)
     }
 }

@@ -3,6 +3,7 @@ package com.dhananjaysaini.musicplayerapp.repository
 import android.content.Context
 import android.provider.MediaStore
 import com.dhananjaysaini.musicplayerapp.model.Music
+import com.dhananjaysaini.musicplayerapp.utils.EditSongManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,9 +44,9 @@ class MusicRepository(private val context: Context) {
 
             while (cursor.moveToNext()) {
                 val id = cursor.getString(idColumn)
-                val title = cursor.getString(titleColumn) ?: "Unknown"
-                val album = cursor.getString(albumColumn) ?: "Unknown"
-                val artist = cursor.getString(artistColumn) ?: "Unknown"
+                val rawTitle = cursor.getString(titleColumn) ?: "Unknown"
+                val rawAlbum = cursor.getString(albumColumn) ?: "Unknown"
+                val rawArtist = cursor.getString(artistColumn) ?: "Unknown"
                 val duration = cursor.getLong(durationColumn)
                 val path = cursor.getString(pathColumn) ?: ""
                 val albumId = cursor.getLong(albumIdColumn)
@@ -54,6 +55,11 @@ class MusicRepository(private val context: Context) {
                 val dateAddedMillis = dateAddedSeconds * 1000
 
                 val artUri = "content://media/external/audio/albumart/$albumId"
+
+                val edited = EditSongManager.getEditedInfo(context, id)
+                val title = edited?.title ?: rawTitle
+                val artist = edited?.artist ?: rawArtist
+                val album = edited?.album ?: rawAlbum
 
                 if (path.isNotEmpty()) {
                     audioList.add(

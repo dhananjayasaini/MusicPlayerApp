@@ -37,6 +37,7 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
         )
 
         artistSongsAdapter = ArtistSongsAdapter(requireContext(), songs)
+        artistSongsAdapter.attachLifecycle(viewLifecycleOwner)
 
         val recycler = binding.artistSongsRecycler
 
@@ -97,5 +98,13 @@ class ArtistSongsFragment : Fragment(R.layout.fragment_artist_songs) {
         artistSongsAdapter.updateList(ArrayList(songs))
 
         binding.artistSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        artistSongsAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 }

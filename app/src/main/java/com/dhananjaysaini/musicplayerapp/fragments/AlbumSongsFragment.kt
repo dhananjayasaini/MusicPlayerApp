@@ -46,6 +46,7 @@ class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
         ThemeManager.applyThemeToActivity(requireActivity())
 
         albumSongsAdapter = AlbumSongsAdapter(requireContext(), songs)
+        albumSongsAdapter.attachLifecycle(viewLifecycleOwner)
 
         val recycler = binding.albumSongsRecycler
 
@@ -110,5 +111,9 @@ class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
     override fun onResume() {
         super.onResume()
         ThemeManager.applyThemeToActivity(requireActivity())
+        albumSongsAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 }

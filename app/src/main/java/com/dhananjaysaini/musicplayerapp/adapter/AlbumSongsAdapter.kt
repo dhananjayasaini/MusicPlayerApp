@@ -22,7 +22,6 @@ class AlbumSongsAdapter(
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-
         val song = musicList[position]
 
         holder.title.text = song.title
@@ -34,8 +33,7 @@ class AlbumSongsAdapter(
             .apply(RequestOptions().placeholder(R.drawable.ic_neon_music_note).centerCrop())
             .into(holder.image)
 
-        // 🔥 SAME click logic as all other adapters
+        bindPlayingState(holder, song)
         bindClick(holder, position)
     }
 }
-

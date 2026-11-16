@@ -43,6 +43,7 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
         favouriteVM = ViewModelProvider(requireActivity()).get(FavouriteViewModel::class.java)
 
         playlistSongsAdapter = PlaylistSongsAdapter(requireContext(), songs)
+        playlistSongsAdapter.attachLifecycle(viewLifecycleOwner)
 
         binding.playlistSongsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.playlistSongsRecycler.adapter = playlistSongsAdapter
@@ -225,6 +226,14 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                 binding.playlistTitle.text = playlist.name
             }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playlistSongsAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 
 }

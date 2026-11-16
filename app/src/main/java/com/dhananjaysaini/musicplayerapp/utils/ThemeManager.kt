@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -277,5 +280,88 @@ object ThemeManager {
                 }
             }
         }
+    }
+
+    fun applyThemeToBottomSheet(context: Context, targetView: View) {
+        val theme = getCurrentTheme(context)
+        val isDark = theme.isDark
+        val radius = 28f * context.resources.displayMetrics.density
+
+        // Apply smooth rounded top corners clipping
+        targetView.clipToOutline = true
+        targetView.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                outline.setRoundRect(0, 0, view.width, (view.height + radius).toInt(), radius)
+            }
+        }
+
+        when (theme.type) {
+            ThemeType.CUSTOM -> {
+                if (theme.customImageUri != null) {
+                    val uri = Uri.parse(theme.customImageUri)
+                    Glide.with(context)
+                        .load(uri)
+                        .centerCrop()
+                        .into(object : CustomTarget<Drawable>() {
+                            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                                val scrimColor = if (isDark) Color.parseColor("#99080612") else Color.parseColor("#CCFFFFFF")
+                                val scrim = ColorDrawable(scrimColor)
+                                val layered = LayerDrawable(arrayOf(resource, scrim))
+                                targetView.background = layered
+                            }
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+                } else {
+                    applyGradientToBottomSheet(targetView, theme, radius)
+                }
+            }
+            ThemeType.IMAGE -> {
+                if (theme.drawableRes != 0) {
+                    try {
+                        val baseDrawable = ContextCompat.getDrawable(context, theme.drawableRes)
+                        if (baseDrawable != null) {
+                            val scrimColor = if (isDark) Color.parseColor("#8C080612") else Color.parseColor("#D9FFFFFF")
+                            val scrim = ColorDrawable(scrimColor)
+                            val layered = LayerDrawable(arrayOf(baseDrawable, scrim))
+                            targetView.background = layered
+                        } else {
+                            applyGradientToBottomSheet(targetView, theme, radius)
+                        }
+                    } catch (_: Exception) {
+                        applyGradientToBottomSheet(targetView, theme, radius)
+                    }
+                } else {
+                    applyGradientToBottomSheet(targetView, theme, radius)
+                }
+            }
+            ThemeType.GRADIENT -> {
+                applyGradientToBottomSheet(targetView, theme, radius)
+            }
+        }
+    }
+
+    private fun applyGradientToBottomSheet(targetView: View, theme: AppTheme, radius: Float) {
+        val colors = if (theme.startColor != 0 && theme.endColor != 0) {
+            if (theme.centerColor != 0) {
+                intArrayOf(theme.startColor, theme.centerColor, theme.endColor)
+            } else {
+                intArrayOf(theme.startColor, theme.endColor)
+            }
+        } else {
+            intArrayOf(Color.parseColor("#1E1735"), Color.parseColor("#161127"), Color.parseColor("#0F0C1E"))
+        }
+
+        val gradient = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            colors
+        ).apply {
+            cornerRadii = floatArrayOf(
+                radius, radius,
+                radius, radius,
+                0f, 0f,
+                0f, 0f
+            )
+        }
+        targetView.background = gradient
     }
 }

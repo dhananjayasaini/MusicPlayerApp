@@ -90,6 +90,7 @@ open class AllSongsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         allSongsAdapter = AllSongsAdapter(requireContext(), ArrayList())
+        allSongsAdapter.attachLifecycle(viewLifecycleOwner)
 
         binding.musicRV.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -133,6 +134,10 @@ open class AllSongsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         ThemeManager.applyThemeToActivity(requireActivity())
+        allSongsAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 
 }

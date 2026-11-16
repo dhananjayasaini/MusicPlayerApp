@@ -67,6 +67,7 @@ class SearchFragment : Fragment() {
 
     private fun setupRecyclerView() {
         searchAdapter = AllSongsAdapter(requireContext(), arrayListOf())
+        searchAdapter.attachLifecycle(viewLifecycleOwner)
         binding.searchRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = searchAdapter
@@ -171,6 +172,14 @@ class SearchFragment : Fragment() {
 
         requireContext().sendBroadcast(Intent("SHOW_MINI_PLAYER"))
         startActivity(Intent(requireContext(), PlayerActivity::class.java))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 
     override fun onDestroyView() {

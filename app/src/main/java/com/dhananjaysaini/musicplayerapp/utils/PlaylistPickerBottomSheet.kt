@@ -29,6 +29,13 @@ class PlaylistPickerBottomSheet(
 
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.let { sheet ->
+            sheet.setBackgroundResource(android.R.color.transparent)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +43,7 @@ class PlaylistPickerBottomSheet(
     ): View {
 
         binding = BottomSheetPlaylistPickerBinding.inflate(inflater, container, false)
+        ThemeManager.applyThemeToBottomSheet(requireContext(), binding.root)
 
         setupRecycler()
         observePlaylists()

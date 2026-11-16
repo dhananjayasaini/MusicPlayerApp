@@ -23,7 +23,6 @@ class AllSongsAdapter(
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-
         val song = musicList[position]
 
         holder.title.text = song.title
@@ -41,10 +40,11 @@ class AllSongsAdapter(
             )
             .into(holder.image)
 
+        bindPlayingState(holder, song)
         bindClick(holder, position)
     }
 
-    override fun updateList( list: ArrayList<Music>) {
+    override fun updateList(list: ArrayList<Music>) {
         musicList = list
         notifyDataSetChanged()
     }

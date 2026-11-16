@@ -45,6 +45,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
 
     private fun setupRecyclerView() {
         favAdapter = FavouriteAdapter(requireContext(), favouriteSongs)
+        favAdapter.attachLifecycle(viewLifecycleOwner)
 
         binding.favRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -152,5 +153,9 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
     override fun onResume() {
         super.onResume()
         ThemeManager.applyThemeToActivity(requireActivity())
+        favAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 }

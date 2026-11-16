@@ -272,6 +272,15 @@
     <string name="toast_theme_applied">Theme applied successfully!</string>
     <string name="toast_song_deleted">Song deleted</string>
     <string name="toast_unable_to_delete">Unable to delete</string>
+    <string name="toast_song_updated">Song updated</string>
+    <string name="toast_unable_to_edit">Unable to update song</string>
+    <string name="edit_song_dialog_title">Edit Song Info</string>
+    <string name="edit_song_title_label">Title</string>
+    <string name="edit_song_artist_label">Artist</string>
+    <string name="edit_song_album_label">Album</string>
+    <string name="edit_song_save">Save Changes</string>
+    <string name="edit_song_cancel">Cancel</string>
+    <string name="toast_song_title_required">Title cannot be empty</string>
     <string name="toast_no_email_app">No email app found!</string>
     <string name="toast_audio_session_unavailable">Audio Session not available!</string>
     <string name="toast_renamed_success">Renamed successfully</string>

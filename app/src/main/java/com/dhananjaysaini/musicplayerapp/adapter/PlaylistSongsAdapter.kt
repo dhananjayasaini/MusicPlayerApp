@@ -10,16 +10,22 @@ import com.dhananjaysaini.musicplayerapp.databinding.MusicViewBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
 
-class PlaylistSongsAdapter(context: Context,
-                           list: ArrayList<Music>) : BaseMusicAdapter(context, list) {
+class PlaylistSongsAdapter(
+    context: Context,
+    list: ArrayList<Music>
+) : BaseMusicAdapter(context, list) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-        return MyHolder(MusicViewBinding.inflate(LayoutInflater.from(context),
-            parent, false))
+        return MyHolder(
+            MusicViewBinding.inflate(
+                LayoutInflater.from(context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-
         val song = musicList[position]
 
         holder.title.text = song.title
@@ -31,6 +37,7 @@ class PlaylistSongsAdapter(context: Context,
             .apply(RequestOptions().placeholder(R.drawable.ic_neon_music_note).centerCrop())
             .into(holder.image)
 
+        bindPlayingState(holder, song)
         bindClick(holder, position)
     }
 }

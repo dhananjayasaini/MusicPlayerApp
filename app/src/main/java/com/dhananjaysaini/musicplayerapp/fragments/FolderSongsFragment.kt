@@ -41,6 +41,7 @@ class FolderSongsFragment : Fragment(R.layout.fragment_folder_songs) {
         )
 
         folderSongsAdapter = FolderSongsAdapter(requireContext(), songs)
+        folderSongsAdapter.attachLifecycle(viewLifecycleOwner)
 
         binding.folderSongsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.folderSongsRecycler.adapter = folderSongsAdapter
@@ -99,6 +100,14 @@ class FolderSongsFragment : Fragment(R.layout.fragment_folder_songs) {
         folderSongsAdapter.updateList(ArrayList(songs))
 
         binding.folderSongCount.text = LocaleHelper.getSongCountString(requireContext(), songs.size)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        folderSongsAdapter.updatePlayingState(
+            MusicService.song?.id,
+            MusicService.mediaPlayer?.isPlaying == true
+        )
     }
 
 }
