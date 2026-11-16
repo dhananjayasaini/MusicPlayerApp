@@ -14,15 +14,17 @@ data class RingtoneModel(
     val tag: String,
     val file: File,
     val durationMs: Long,
-    val isFromDevice: Boolean = false
+    val isFromDevice: Boolean = false,
+    val contentUriString: String? = null
 )
 
 class RingtoneAdapter(
-    private var items: MutableList<RingtoneModel>,
+    items: List<RingtoneModel>,
     private val onPreviewClick: (RingtoneModel, Int) -> Unit,
     private val onSetClick: (RingtoneModel) -> Unit
 ) : RecyclerView.Adapter<RingtoneAdapter.RingtoneViewHolder>() {
 
+    private val items = ArrayList(items)
     var playingPosition: Int = -1
     var isPlaying: Boolean = false
 

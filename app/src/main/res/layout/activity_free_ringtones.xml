@@ -145,6 +145,33 @@
         android:paddingEnd="16dp"
         android:paddingBottom="20dp" />
 
+    <!-- Empty State View -->
+    <LinearLayout
+        android:id="@+id/layoutEmptyRingtones"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_ringtone"
+            app:tint="#60FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvEmptyRingtonesMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/no_songs_found"
+            android:textColor="#A08EBC"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <!-- Bottom Mini Preview Bar (visible when a tone is previewing) -->
     <LinearLayout
         android:id="@+id/layoutBottomPreview"

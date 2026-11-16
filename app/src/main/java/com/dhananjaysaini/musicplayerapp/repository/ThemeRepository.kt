@@ -27,10 +27,11 @@ object ThemeRepository {
         AppTheme("color_5", "Espresso Mocha", ThemeType.GRADIENT, "Color",
             drawableRes = R.drawable.gradient_theme_5, swatchRes = R.drawable.swatch_theme_5,
             startColor = Color.parseColor("#1A1008"), centerColor = Color.parseColor("#2E1B0E"), endColor = Color.parseColor("#5C381E"), isPro = true),
-
+/*
         AppTheme("color_6", "Blush Pearl", ThemeType.GRADIENT, "Color",
             drawableRes = R.drawable.gradient_theme_6, swatchRes = R.drawable.swatch_theme_6,
             startColor = Color.parseColor("#FFF0F5"), centerColor = Color.parseColor("#FADADD"), endColor = Color.parseColor("#F2C4CE"), isDark = false),
+*/
 
         AppTheme("color_7", "Slate Graphite", ThemeType.GRADIENT, "Color",
             drawableRes = R.drawable.gradient_theme_7, swatchRes = R.drawable.swatch_theme_7,

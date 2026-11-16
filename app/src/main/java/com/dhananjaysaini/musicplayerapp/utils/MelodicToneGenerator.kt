@@ -45,14 +45,26 @@ object MelodicToneGenerator {
 
         for (preset in PRESETS) {
             val file = File(dir, "${preset.id}.wav")
-            if (!file.exists() || file.length() < 1000) {
-                generateWavFile(file, preset)
-            }
-            if (file.exists()) {
-                resultFiles.add(file)
+            try {
+                if (!file.exists() || file.length() < 1000) {
+                    generateSinglePreset(file, preset)
+                }
+                if (file.exists()) {
+                    resultFiles.add(file)
+                }
+            } catch (e: Exception) {
+                // If one fails, continue generating remaining presets
             }
         }
         return resultFiles
+    }
+
+    fun generateSinglePreset(file: File, preset: MelodicPreset) {
+        val parent = file.parentFile
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs()
+        }
+        generateWavFile(file, preset)
     }
 
     private fun generateWavFile(file: File, preset: MelodicPreset) {
@@ -68,15 +80,17 @@ object MelodicToneGenerator {
         for (repeat in 0 until 2) {
             for (freq in preset.notes) {
                 val noteSamples = (noteDurationSec * sampleRate).toInt()
+                val twoPiFreqOverSr = 2.0 * Math.PI * freq / sampleRate
+                val invNoteSamples = 1.0 / noteSamples
                 for (s in 0 until noteSamples) {
-                    val t = s.toDouble() / sampleRate
+                    val phase = twoPiFreqOverSr * s
                     // Harmonic overtone synthesis + soft envelope
-                    val fundamental = sin(2.0 * Math.PI * freq * t)
-                    val overtone = sin(2.0 * Math.PI * freq * 2.0 * t) * 0.35
-                    val subHarmonic = sin(2.0 * Math.PI * (freq / 2.0) * t) * 0.15
+                    val fundamental = sin(phase)
+                    val overtone = sin(phase * 2.0) * 0.35
+                    val subHarmonic = sin(phase * 0.5) * 0.15
 
                     // ADSR envelope: fast attack, smooth decay
-                    val progress = s.toDouble() / noteSamples
+                    val progress = s * invNoteSamples
                     val attack = (progress * 20.0).coerceAtMost(1.0)
                     val decay = (1.0 - progress).coerceIn(0.0, 1.0)
                     val envelope = attack * (decay * decay)

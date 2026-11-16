@@ -43,7 +43,8 @@ object RingtoneHelper {
         context: Context,
         file: File,
         title: String,
-        type: Int
+        type: Int,
+        sourceUri: Uri? = null
     ): Boolean {
         if (!canModifySettings(context)) {
             Log.e(TAG, "Cannot modify system settings, permission missing")
@@ -51,7 +52,7 @@ object RingtoneHelper {
         }
 
         try {
-            val contentUri = insertAudioToMediaStore(context, file, title, type)
+            val contentUri = insertAudioToMediaStore(context, file, title, type, sourceUri)
             if (contentUri != null) {
                 RingtoneManager.setActualDefaultRingtoneUri(context, type, contentUri)
                 vibrateSuccess(context)
@@ -74,11 +75,13 @@ object RingtoneHelper {
         context: Context,
         file: File,
         title: String,
-        type: Int
+        type: Int,
+        sourceUri: Uri? = null
     ): Uri? {
         val resolver = context.contentResolver
 
-        val mimeType = when (file.extension.lowercase()) {
+        val ext = if (file.extension.isNotEmpty()) file.extension.lowercase() else "mp3"
+        val mimeType = when (ext) {
             "wav" -> "audio/wav"
             "mp3" -> "audio/mpeg"
             "m4a" -> "audio/mp4"
@@ -94,7 +97,7 @@ object RingtoneHelper {
 
         val values = ContentValues().apply {
             put(MediaStore.Audio.Media.TITLE, title)
-            put(MediaStore.Audio.Media.DISPLAY_NAME, "${title}_${System.currentTimeMillis()}.${file.extension}")
+            put(MediaStore.Audio.Media.DISPLAY_NAME, "${title}_${System.currentTimeMillis()}.${ext}")
             put(MediaStore.Audio.Media.MIME_TYPE, mimeType)
             put(MediaStore.Audio.Media.IS_RINGTONE, if (type == RingtoneManager.TYPE_RINGTONE) 1 else 0)
             put(MediaStore.Audio.Media.IS_NOTIFICATION, if (type == RingtoneManager.TYPE_NOTIFICATION) 1 else 0)
@@ -110,7 +113,14 @@ object RingtoneHelper {
 
         try {
             resolver.openOutputStream(uri)?.use { out ->
-                FileInputStream(file).use { input ->
+                val inputStream = if (sourceUri != null) {
+                    try { resolver.openInputStream(sourceUri) } catch (_: Exception) { null }
+                } else null
+                val finalStream = inputStream ?: if (file.exists()) FileInputStream(file) else null
+                if (finalStream == null) {
+                    throw IllegalStateException("Cannot open audio source for reading")
+                }
+                finalStream.use { input ->
                     input.copyTo(out)
                 }
             }

@@ -39,25 +39,33 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="3dp">
 
             <TextView
                 android:id="@+id/tvRingtoneTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_ad_badge"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingStart="6dp"
                 android:paddingTop="2dp"
                 android:paddingEnd="6dp"
                 android:paddingBottom="2dp"
+                android:singleLine="true"
                 android:text="Electronic"
                 android:textColor="#00F5FF"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvRingtoneDuration"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
                 android:id="@+id/tvRingtoneDuration"
@@ -66,8 +74,12 @@
                 android:layout_marginStart="8dp"
                 android:text="00:15"
                 android:textColor="#9E8EB8"
-                android:textSize="11sp" />
-        </LinearLayout>
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@+id/tvRingtoneTag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
     <!-- Set as Ringtone Button -->
