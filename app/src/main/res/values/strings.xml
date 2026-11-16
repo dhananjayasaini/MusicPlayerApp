@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Music Player</string>
     <string name="shuffle_btn">Shuffle</string>
+    <string name="title_playlist">Playlist</string>
     <string name="playlist_btn">Playlist</string>
     <string name="Favourites_btn">Favourites</string>
     <string name="total_songs">Total Songs :</string>
@@ -43,6 +44,30 @@
     <string name="widget_tap_to_play">Tap to open Music Player</string>
     <string name="widget_pin_dialog_title">Add Home Screen Widget</string>
     <string name="widget_pin_dialog_msg">To add the Music Player widget to your home screen:\n\n1. Long-press any empty space on your Home Screen.\n2. Tap \'Widgets\'.\n3. Scroll or search for \'Music Player\'.\n4. Touch and hold the widget, then drag it where you want!</string>
+    <string name="widgets_title">Widgets</string>
+    <string name="widgets_banner_tip">Choose a widget you like and add it to your home screen.</string>
+    <string name="widget_btn_add">ADD</string>
+    <string name="widget_add_to_home">Add to Home screen</string>
+    <string name="widget_bottom_sheet_hint">Touch and hold the widget or tap \'Add\' to place it on your home screen.</string>
+    <string name="widget_btn_cancel">Cancel</string>
+    <string name="widget_added_toast">Widget added to home screen</string>
+    <string name="widget_pin_requested">Widget pin requested</string>
+    <string name="widget_name_mini">Mini</string>
+    <string name="widget_name_standard">Standard</string>
+    <string name="widget_name_card">Card</string>
+    <string name="widget_name_practical">Practical</string>
+    <string name="widget_name_stylish">Stylish</string>
+    <string name="widget_name_classic">Classic</string>
+    <string name="widget_name_lite">Lite</string>
+    <string name="widget_name_vinyl">Vinyl</string>
+    <string name="widget_name_simple">Simple</string>
+    <string name="widget_name_circular">Circular</string>
+    <string name="widget_size_2x2">Size: 2*2</string>
+    <string name="widget_size_4x2">Size: 4*2</string>
+    <string name="widget_size_3x2">Size: 3*2</string>
+    <string name="widget_size_4x4">Size: 4*4</string>
+    <string name="widget_size_4x1">Size: 4*1</string>
+    <string name="widget_size_2x1">Size: 2*1</string>
 
 
     <!-- Localized & Navigation Strings -->

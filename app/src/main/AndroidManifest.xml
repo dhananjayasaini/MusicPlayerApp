@@ -48,6 +48,9 @@
             android:name=".activities.SkinThemeActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.WidgetsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ThemePreviewActivity"
             android:exported="false" />
         <activity
@@ -109,6 +112,167 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/music_widget_info" />
+        </receiver>
+
+        <!-- 10 Unique Widget Styles -->
+        <receiver
+            android:name=".widget.MiniWidgetProvider"
+            android:label="@string/widget_name_mini"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_mini" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.StandardWidgetProvider"
+            android:label="@string/widget_name_standard"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_standard" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.CardWidgetProvider"
+            android:label="@string/widget_name_card"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_card" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.PracticalWidgetProvider"
+            android:label="@string/widget_name_practical"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_practical" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.StylishWidgetProvider"
+            android:label="@string/widget_name_stylish"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_stylish" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.ClassicWidgetProvider"
+            android:label="@string/widget_name_classic"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_classic" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.LiteWidgetProvider"
+            android:label="@string/widget_name_lite"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_lite" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.VinylWidgetProvider"
+            android:label="@string/widget_name_vinyl"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_vinyl" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.SimpleWidgetProvider"
+            android:label="@string/widget_name_simple"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_simple" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.CircularWidgetProvider"
+            android:label="@string/widget_name_circular"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PLAY_PAUSE" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_PREV" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_NEXT" />
+                <action android:name="com.dhananjaysaini.musicplayerapp.widget.ACTION_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_circular" />
         </receiver>
     </application>
 

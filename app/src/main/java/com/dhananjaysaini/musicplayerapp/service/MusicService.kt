@@ -931,6 +931,8 @@ class MusicService : Service() {
                 .putString("title", song.title)
                 .putString("artist", song.artist)
                 .putString("artUri", song.artUri)
+                .putString("path", song.path)
+                .putString("songId", song.id)
                 .putBoolean("isPlaying", isPlaying)
                 .apply()
             MusicAppWidgetProvider.updateAllWidgets(this)

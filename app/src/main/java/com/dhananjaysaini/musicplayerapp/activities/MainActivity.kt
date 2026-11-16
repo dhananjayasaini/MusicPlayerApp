@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity() {
         // 6. Widgets
         customDrawer.navItemWidgets.setOnClickListener {
             drawer.closeDrawers()
-            pinMusicWidget()
+            startActivity(Intent(this, WidgetsActivity::class.java))
         }
 
         // 7. Remove ads
