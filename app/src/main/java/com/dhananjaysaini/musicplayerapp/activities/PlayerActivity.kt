@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -316,15 +317,18 @@ open class PlayerActivity : AppCompatActivity() {
         }
 
         binding.favouriteBtnPA.setOnClickListener {
-            playerViewModel.toggleFavourite()
-
             val song = MusicService.playlist
                 .getOrNull(MusicService.position)
                 ?: return@setOnClickListener
 
-            // SAME playerViewModel jo Fragment use kar raha hai
+            val isNowFav = playerViewModel.toggleFavourite()
+
             ViewModelProvider(this)[FavouriteViewModel::class.java]
-                .toggle(song.id)
+                .setFavourite(song.id, isNowFav)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                MusicService.musicService?.updateNotification(MusicService.mediaPlayer?.isPlaying == true)
+            }
         }
 
         binding.repeatBtnPA.setOnClickListener {
@@ -404,6 +408,7 @@ open class PlayerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        playerViewModel.updateUiState()
 
         val settingsPrefs = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         if (settingsPrefs.getBoolean("keep_screen_on", false)) {

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -26,8 +27,11 @@ import com.dhananjaysaini.musicplayerapp.activities.PlayerActivity
 import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.model.Music
+import com.dhananjaysaini.musicplayerapp.model.FavouriteEntity
 import com.dhananjaysaini.musicplayerapp.repository.PlayHistoryRepository
 import androidx.lifecycle.MutableLiveData
+import android.os.SystemClock
+import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,13 +95,6 @@ class MusicService : Service() {
                     putExtra("artist", playlist.getOrNull(position)?.artist)
                     putExtra("artUri", playlist.getOrNull(position)?.artUri)
                 })
-
-                // Periodic notification waveform update (every ~1000ms while playing)
-                val now = System.currentTimeMillis()
-                if (now - lastNotifProgressUpdateTime >= 1000L && mediaPlayer?.isPlaying == true) {
-                    lastNotifProgressUpdateTime = now
-                    updateNotification(true)
-                }
             } catch (e: Exception) { /* ignore*/
             }
             // schedule next update only if still playing
@@ -121,6 +118,7 @@ class MusicService : Service() {
         super.onCreate()
 
         musicService = this
+        FavouriteManager.init(applicationContext)
 
         createNotificationChannel()
         initMediaSession()
@@ -181,6 +179,12 @@ class MusicService : Service() {
                         }
                         startService(intent)
                     }
+
+                    override fun onCustomAction(action: String?, extras: Bundle?) {
+                        if (action == Constants.ACTION_FAVORITE) {
+                            toggleFavoriteCurrentSong()
+                        }
+                    }
                 })
                 isActive = true
             }
@@ -199,6 +203,13 @@ class MusicService : Service() {
         val session = mediaSession ?: return
         try {
             val state = if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+            val isFav = song != null && FavouriteManager.isFavourite(song)
+            val favAction = PlaybackStateCompat.CustomAction.Builder(
+                Constants.ACTION_FAVORITE,
+                "Favorite",
+                if (isFav) R.drawable.ic_notif_heart_filled else R.drawable.ic_notif_heart_empty
+            ).build()
+
             val playbackState = PlaybackStateCompat.Builder()
                 .setActions(
                     PlaybackStateCompat.ACTION_PLAY or
@@ -209,7 +220,8 @@ class MusicService : Service() {
                     PlaybackStateCompat.ACTION_SEEK_TO or
                     PlaybackStateCompat.ACTION_STOP
                 )
-                .setState(state, currentMs, 1.0f)
+                .addCustomAction(favAction)
+                .setState(state, currentMs, if (isPlaying) 1.0f else 0.0f, SystemClock.elapsedRealtime())
                 .build()
             session.setPlaybackState(playbackState)
 
@@ -219,8 +231,13 @@ class MusicService : Service() {
                     .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.artist)
                     .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, song.album)
                     .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationMs)
+                    .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, song.title)
+                    .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, song.artist)
+                    .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, song.album)
                 if (artwork != null) {
                     metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, artwork)
+                    metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, artwork)
+                    metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, artwork)
                 }
                 session.setMetadata(metadataBuilder.build())
             }
@@ -422,6 +439,10 @@ class MusicService : Service() {
                 buildNotification(mediaPlayer?.isPlaying == true)
             }
 
+            Constants.ACTION_FAVORITE -> {
+                toggleFavoriteCurrentSong()
+            }
+
             Constants.ACTION_PLAY_BOTTOM_SHEET -> {
 
                 val index = intent.getIntExtra(Constants.EXTRA_INDEX, position)
@@ -595,7 +616,13 @@ class MusicService : Service() {
                 Constants.CHANNEL_ID,
                 "Music Player",
                 NotificationManager.IMPORTANCE_LOW
-            ).apply { description = "Channel for music playback" }
+            ).apply {
+                description = "Channel for music playback"
+                setShowBadge(false)
+                setSound(null, null)
+                enableLights(false)
+                enableVibration(false)
+            }
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                 .createNotificationChannel(channel)
         }
@@ -606,9 +633,9 @@ class MusicService : Service() {
         val currentSong = playlist.getOrNull(position)
         val titleText = currentSong?.title ?: getString(R.string.app_name)
         val artistText = currentSong?.artist ?: "Unknown Artist"
+        val albumText = currentSong?.album ?: ""
         val currentMs = mediaPlayer?.currentPosition ?: 0
         val durationMs = (mediaPlayer?.duration ?: currentSong?.duration?.toInt() ?: 0).coerceAtLeast(1)
-        val progressFraction = (currentMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
 
         val playerIntent = Intent(this, PlayerActivity::class.java).apply {
             putExtra("class", "Notification")
@@ -622,32 +649,40 @@ class MusicService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Explicit Service PendingIntents for Notification Buttons
+        // Actions:
+        // 0: Favorite
+        val isFav = currentSong != null && FavouriteManager.isFavourite(currentSong)
+        val favIcon = if (isFav) R.drawable.ic_notif_heart_filled else R.drawable.ic_notif_heart_empty
+        val favPI = PendingIntent.getService(
+            this, 207,
+            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_FAVORITE },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // 1: Previous
         val prevPI = PendingIntent.getService(
             this, 201,
             Intent(this, MusicService::class.java).apply { action = Constants.ACTION_PREVIOUS },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+        // 2: Play/Pause
+        val playPauseIcon = if (isPlaying) R.drawable.ic_notif_pause else R.drawable.ic_notif_play
+        val playPauseTitle = if (isPlaying) "Pause" else "Play"
         val playPausePI = PendingIntent.getService(
             this, 202,
             Intent(this, MusicService::class.java).apply { action = Constants.ACTION_TOGGLE_PLAY },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+        // 3: Next
         val nextPI = PendingIntent.getService(
             this, 203,
             Intent(this, MusicService::class.java).apply { action = Constants.ACTION_NEXT },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val rewindPI = PendingIntent.getService(
-            this, 204,
-            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_REWIND_10 },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val forwardPI = PendingIntent.getService(
-            this, 205,
-            Intent(this, MusicService::class.java).apply { action = Constants.ACTION_FORWARD_10 },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
+        // 4: Close
         val closePI = PendingIntent.getService(
             this, 206,
             Intent(this, MusicService::class.java).apply { action = Constants.ACTION_CLOSE_NOTIFICATION },
@@ -656,115 +691,80 @@ class MusicService : Service() {
 
         val artworkBitmap = getNotificationArtwork(currentSong?.artUri)
 
-        // Dynamic Waveform
-        val waveformBitmap = NotificationWaveformHelper.generateWaveformBitmap(
-            width = 340,
-            height = 36,
-            progressFraction = progressFraction
-        )
-
-        val playPauseIcon = if (isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play
-
-        // 1. Collapsed View
-        val smallViews = RemoteViews(packageName, R.layout.layout_notification_small).apply {
-            setTextViewText(R.id.notif_small_title, titleText)
-            setTextViewText(R.id.notif_small_artist, artistText)
-            setImageViewResource(R.id.notif_small_play_pause, playPauseIcon)
-            if (artworkBitmap != null) {
-                setImageViewBitmap(R.id.notif_small_art, artworkBitmap)
-            } else {
-                setImageViewResource(R.id.notif_small_art, R.drawable.music_player_icon_splash_screen)
-            }
-            setOnClickPendingIntent(R.id.notif_small_prev, prevPI)
-            setOnClickPendingIntent(R.id.notif_small_play_pause, playPausePI)
-            setOnClickPendingIntent(R.id.notif_small_next, nextPI)
-            setOnClickPendingIntent(R.id.notif_small_root, contentPI)
-            setOnClickPendingIntent(R.id.notif_small_art, contentPI)
+        // Sync with MediaSession before building notification
+        mediaSession?.let {
+            it.setSessionActivity(contentPI)
+            updateMediaSessionState(isPlaying, currentMs.toLong(), durationMs.toLong(), currentSong, artworkBitmap)
         }
 
-        // 2. Expanded View
-        val bigViews = RemoteViews(packageName, R.layout.layout_notification_big).apply {
-            setTextViewText(R.id.notif_big_title, titleText)
-            setTextViewText(R.id.notif_big_artist, artistText)
-            setTextViewText(R.id.notif_time_current, formatDuration(currentMs.toLong()))
-            setTextViewText(R.id.notif_time_total, formatDuration(durationMs.toLong()))
-            setImageViewResource(R.id.notif_big_play_pause, playPauseIcon)
-            setImageViewBitmap(R.id.notif_waveform, waveformBitmap)
-            if (artworkBitmap != null) {
-                setImageViewBitmap(R.id.notif_big_art, artworkBitmap)
-            } else {
-                setImageViewResource(R.id.notif_big_art, R.drawable.music_player_icon_splash_screen)
-            }
-            setOnClickPendingIntent(R.id.notif_big_prev, prevPI)
-            setOnClickPendingIntent(R.id.notif_big_play_pause, playPausePI)
-            setOnClickPendingIntent(R.id.notif_big_next, nextPI)
-            setOnClickPendingIntent(R.id.notif_btn_rewind, rewindPI)
-            setOnClickPendingIntent(R.id.notif_btn_forward, forwardPI)
-            setOnClickPendingIntent(R.id.notif_big_close, closePI)
-            setOnClickPendingIntent(R.id.notif_big_art, contentPI)
-            setOnClickPendingIntent(R.id.notif_waveform, contentPI)
-            setOnClickPendingIntent(R.id.notif_big_root, contentPI)
-        }
+        val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
+            .setMediaSession(mediaSession?.sessionToken)
+            .setShowActionsInCompactView(1, 2, 3) // Compact / Normal view: Previous, Play/Pause, Next
+            .setShowCancelButton(true)
+            .setCancelButtonIntent(closePI)
 
         val builder = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
             .setSmallIcon(R.drawable.music_player_icon_splash_screen)
             .setContentTitle(titleText)
             .setContentText(artistText)
+            .apply {
+                if (albumText.isNotBlank()) {
+                    setSubText(albumText)
+                }
+            }
             .setLargeIcon(artworkBitmap)
-            .setCustomContentView(smallViews)
-            .setCustomBigContentView(bigViews)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(contentPI)
+            .setDeleteIntent(closePI)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOnlyAlertOnce(true)
             .setOngoing(isPlaying)
-
-        // Sync with MediaSession
-        mediaSession?.let {
-            updateMediaSessionState(isPlaying, currentMs.toLong(), durationMs.toLong(), currentSong, artworkBitmap)
-        }
+            // Actions added in order:
+            // 0: Favorite
+            .addAction(favIcon, "Favorite", favPI)
+            // 1: Previous (Compact View)
+            .addAction(R.drawable.ic_notif_prev, "Previous", prevPI)
+            // 2: Play/Pause (Compact View)
+            .addAction(playPauseIcon, playPauseTitle, playPausePI)
+            // 3: Next (Compact View)
+            .addAction(R.drawable.ic_notif_next, "Next", nextPI)
+            // 4: Close
+            .addAction(R.drawable.ic_notif_close, "Close", closePI)
+            .setStyle(mediaStyle)
 
         return builder.build()
     }
 
     private fun getNotificationArtwork(uriString: String?): Bitmap? {
-        if (uriString.isNullOrEmpty() || uriString == "null") {
-            return decodeSampledBitmapFromResource(resources, R.drawable.music_player_icon_splash_screen, 150, 150)?.let {
-                getRoundedBitmap(it, 20f)
+        if (!uriString.isNullOrEmpty() && uriString != "null") {
+            try {
+                val uri = Uri.parse(uriString)
+                val inputStream = contentResolver.openInputStream(uri)
+                if (inputStream != null) {
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    inputStream.close()
+                    if (bitmap != null) {
+                        return bitmap
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("MusicService", "Error loading artwork: ${e.message}")
             }
         }
         return try {
-            val uri = Uri.parse(uriString)
-            val inputStream = contentResolver.openInputStream(uri) ?: return null
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeStream(inputStream, null, options)
-            inputStream.close()
-
-            val targetSize = 150
-            var inSampleSize = 1
-            while (options.outWidth / (inSampleSize * 2) >= targetSize &&
-                options.outHeight / (inSampleSize * 2) >= targetSize
-            ) {
-                inSampleSize *= 2
-            }
-
-            val decodeOptions = BitmapFactory.Options().apply {
-                this.inSampleSize = inSampleSize
-                inPreferredConfig = Bitmap.Config.ARGB_8888
-            }
-            val stream2 = contentResolver.openInputStream(uri) ?: return null
-            val raw = BitmapFactory.decodeStream(stream2, null, decodeOptions)
-            stream2.close()
-
-            raw?.let {
-                val scaled = Bitmap.createScaledBitmap(it, targetSize, targetSize, true)
-                getRoundedBitmap(scaled, 20f)
+            val drawable = ContextCompat.getDrawable(this, R.drawable.ic_neon_music_note)
+            if (drawable != null) {
+                val size = 512
+                val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, size, size)
+                drawable.draw(canvas)
+                bitmap
+            } else {
+                BitmapFactory.decodeResource(resources, R.drawable.music_player_icon_splash_screen)
             }
         } catch (e: Exception) {
-            decodeSampledBitmapFromResource(resources, R.drawable.music_player_icon_splash_screen, 150, 150)?.let {
-                getRoundedBitmap(it, 20f)
-            }
+            null
         }
     }
 
@@ -798,9 +798,33 @@ class MusicService : Service() {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    private fun updateNotification(isPlaying: Boolean) {
+    fun updateNotification(isPlaying: Boolean) {
         val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         nm.notify(Constants.NOTIFICATION_ID, buildNotification(isPlaying))
+    }
+
+    private fun toggleFavoriteCurrentSong() {
+        val currentSong = playlist.getOrNull(position) ?: song ?: return
+        FavouriteManager.init(applicationContext)
+        val isNowFav = FavouriteManager.toggleFavourite(currentSong)
+
+        // Immediately update notification & UI so heart toggles instantly with zero latency
+        updateNotification(mediaPlayer?.isPlaying == true)
+        broadcastUiUpdateAll()
+
+        // Sync with Room database on background thread so FavouriteFragment updates
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val dao = MusicDatabase.getDatabase(applicationContext).FavouriteDao()
+                if (isNowFav) {
+                    dao.addFavourite(FavouriteEntity(currentSong.id))
+                } else {
+                    dao.removeFavourite(FavouriteEntity(currentSong.id))
+                }
+            } catch (e: Exception) {
+                Log.e("MusicService", "Error syncing favorite with database: ${e.message}")
+            }
+        }
     }
 
 

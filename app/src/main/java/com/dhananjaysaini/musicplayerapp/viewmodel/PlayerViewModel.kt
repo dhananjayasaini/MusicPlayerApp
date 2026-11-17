@@ -46,10 +46,11 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun toggleFavourite() {
-        val currentSong = currentSong() ?: return
-        repo.toggleFavourite(currentSong)
+    fun toggleFavourite(): Boolean {
+        val currentSong = currentSong() ?: return false
+        val isNowFav = repo.toggleFavourite(currentSong)
         updateUiState()
+        return isNowFav
     }
 
     fun toggleRepeat() {

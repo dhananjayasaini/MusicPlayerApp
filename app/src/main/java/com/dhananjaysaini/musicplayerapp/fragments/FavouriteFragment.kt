@@ -113,6 +113,13 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
     private fun observeFavorites() {
         favouriteViewModel.favouriteIds.observe(viewLifecycleOwner) { favIds ->
             currentFavIds = favIds ?: emptyList()
+            if (currentAllSongs.isEmpty()) {
+                val fallback = mainViewModel.musicListLiveData.value?.takeIf { it.isNotEmpty() }
+                    ?: MusicService.allSongs
+                if (fallback.isNotEmpty()) {
+                    currentAllSongs = fallback
+                }
+            }
             rebuildFavorites()
         }
 
@@ -123,23 +130,34 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
     }
 
     private fun rebuildFavorites() {
-        if (currentFavIds.isEmpty() || currentAllSongs.isEmpty()) {
+        val allSongs = if (currentAllSongs.isNotEmpty()) {
+            currentAllSongs
+        } else {
+            mainViewModel.musicListLiveData.value?.takeIf { it.isNotEmpty() } ?: MusicService.allSongs
+        }
+        if (currentAllSongs.isEmpty() && allSongs.isNotEmpty()) {
+            currentAllSongs = allSongs
+        }
+
+        if (currentFavIds.isEmpty() || allSongs.isEmpty()) {
             favouriteSongs.clear()
             favAdapter.updateList(arrayListOf())
-            binding.tvFavSongCount.text = LocaleHelper.getSongCountString(requireContext(), 0)
+            val countStr = try { LocaleHelper.getSongCountString(requireContext(), 0) } catch (_: Exception) { "0 Songs" }
+            binding.tvFavSongCount.text = countStr
             binding.layoutEmptyFav.visibility = View.VISIBLE
             binding.favRecyclerView.visibility = View.GONE
             return
         }
 
         val favIdSet = currentFavIds.toSet()
-        val filtered = currentAllSongs.filter { it.id in favIdSet }
+        val filtered = allSongs.filter { it.id in favIdSet }
 
         favouriteSongs.clear()
         favouriteSongs.addAll(filtered)
         favAdapter.updateList(ArrayList(favouriteSongs))
 
-        binding.tvFavSongCount.text = LocaleHelper.getSongCountString(requireContext(), filtered.size)
+        val countStr = try { LocaleHelper.getSongCountString(requireContext(), filtered.size) } catch (_: Exception) { "${filtered.size} Songs" }
+        binding.tvFavSongCount.text = countStr
 
         if (filtered.isEmpty()) {
             binding.layoutEmptyFav.visibility = View.VISIBLE
@@ -157,5 +175,13 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
             MusicService.song?.id,
             MusicService.mediaPlayer?.isPlaying == true
         )
+        if (currentAllSongs.isEmpty()) {
+            val fallback = mainViewModel.musicListLiveData.value?.takeIf { it.isNotEmpty() }
+                ?: MusicService.allSongs
+            if (fallback.isNotEmpty()) {
+                currentAllSongs = fallback
+            }
+        }
+        rebuildFavorites()
     }
 }

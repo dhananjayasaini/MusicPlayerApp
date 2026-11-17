@@ -68,6 +68,9 @@ object SongMenuManager {
             dao.addFavourite(FavouriteEntity(song.id))
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, context.getString(R.string.added_to_favourite_msg), Toast.LENGTH_SHORT).show()
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    MusicService.musicService?.updateNotification(MusicService.mediaPlayer?.isPlaying == true)
+                }
             }
         }
     }
@@ -88,6 +91,9 @@ object SongMenuManager {
             dao.removeFavourite(FavouriteEntity(song.id))
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, context.getString(R.string.removed_from_favourite_msg), Toast.LENGTH_SHORT).show()
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    MusicService.musicService?.updateNotification(MusicService.mediaPlayer?.isPlaying == true)
+                }
             }
         }
     }

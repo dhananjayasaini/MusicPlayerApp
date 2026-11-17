@@ -34,6 +34,16 @@ class FavouriteViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun setFavourite(songId: String, isFav: Boolean) {
+        viewModelScope.launch {
+            if (isFav) {
+                dao.addFavourite(FavouriteEntity(songId))
+            } else {
+                dao.removeFavourite(FavouriteEntity(songId))
+            }
+        }
+    }
+
 //    suspend fun isFavourite(songId: String): Boolean {
 //        return repo.isFavourite(songId)
 //    }
