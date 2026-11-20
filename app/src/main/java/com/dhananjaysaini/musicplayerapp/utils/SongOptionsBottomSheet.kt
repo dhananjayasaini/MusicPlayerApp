@@ -24,6 +24,9 @@ class SongOptionsBottomSheet(
     private var _binding: BottomSheetSongOptionsBinding? = null
     private val binding get() = _binding!!
 
+    var onRemoveFromPlaylist: ((Music) -> Unit)? = null
+    var onSongHidden: ((Music) -> Unit)? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,7 +76,11 @@ class SongOptionsBottomSheet(
         binding.btnAddFav.visibility = if (config.addToFav) View.VISIBLE else View.GONE
         binding.btnRemoveFav.visibility = if (config.removeFromFav) View.VISIBLE else View.GONE
         binding.btnAddPlaylist.visibility = if (config.addToPlaylist) View.VISIBLE else View.GONE
+        binding.btnRemovePlaylist.visibility = if (config.removeFromPlaylist) View.VISIBLE else View.GONE
+        binding.btnSetRingtone.visibility = if (config.setAsRingtone) View.VISIBLE else View.GONE
+        binding.btnGoToAlbum.visibility = if (config.goToAlbum) View.VISIBLE else View.GONE
         binding.btnEdit.visibility = if (config.edit) View.VISIBLE else View.GONE
+        binding.btnHideSong.visibility = if (config.hideSong) View.VISIBLE else View.GONE
         binding.btnDeleteSong.visibility = if (config.delete) View.VISIBLE else View.GONE
         binding.btnShare.visibility = if (config.share) View.VISIBLE else View.GONE
 
@@ -112,14 +119,35 @@ class SongOptionsBottomSheet(
         }
 
         binding.btnRemovePlaylist.setOnClickListener {
-            SongMenuManager.handleRemoveFromPlaylist(requireContext(), song)
+            if (onRemoveFromPlaylist != null) {
+                onRemoveFromPlaylist?.invoke(song)
+            } else {
+                SongMenuManager.handleRemoveFromPlaylist(requireContext(), song)
+            }
             dismiss()
+        }
+
+        binding.btnSetRingtone.setOnClickListener {
+            dismiss()
+            SongMenuManager.handleSetAsRingtone(requireActivity(), song)
+        }
+
+        binding.btnGoToAlbum.setOnClickListener {
+            dismiss()
+            SongMenuManager.handleGoToAlbum(requireContext(), song)
         }
 
         binding.btnEdit.setOnClickListener {
             val fm = parentFragmentManager
             dismissAllowingStateLoss()
             EditSongBottomSheet.newInstance(song).show(fm, "edit_song")
+        }
+
+        binding.btnHideSong.setOnClickListener {
+            dismiss()
+            SongMenuManager.handleHideSong(requireActivity(), song) {
+                onSongHidden?.invoke(song)
+            }
         }
 
         binding.btnDeleteSong.setOnClickListener {

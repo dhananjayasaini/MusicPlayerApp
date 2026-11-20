@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.model.MusicArtist
+import com.dhananjaysaini.musicplayerapp.utils.AlbumCoverManager
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 
 class AlbumAdapter(
@@ -17,13 +18,14 @@ class AlbumAdapter(
 ) : RecyclerView.Adapter<AlbumAdapter.Holder>() {
 
     var onItemClick: ((MusicArtist) -> Unit)? = null
+    var onMenuClick: ((MusicArtist, View) -> Unit)? = null
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.albumName)
         val subName: TextView = view.findViewById(R.id.itemSubName)
         val count: TextView = view.findViewById(R.id.albumCount)
         val albumImage: ImageView = itemView.findViewById(R.id.albumImage)
-
+        val menuIcon: View = itemView.findViewById(R.id.itemMenu)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -36,13 +38,13 @@ class AlbumAdapter(
         val album = list[position]
 
         holder.name.text = album.name
-        holder.subName.text = album.name
-
-
+        holder.subName.text = album.artistName ?: album.name
         holder.count.text = LocaleHelper.getSongCountString(holder.itemView.context, album.songCount)
 
+        val customCover = AlbumCoverManager.getCustomCover(holder.itemView.context, album.name)
+        val coverToLoad = customCover ?: album.artUri
         Glide.with(holder.itemView.context)
-            .load(album.artUri)
+            .load(coverToLoad)
             .apply(RequestOptions().placeholder(R.drawable.ic_neon_album).centerCrop())
             .into(holder.albumImage)
 
@@ -50,6 +52,9 @@ class AlbumAdapter(
             onItemClick?.invoke(album)
         }
 
+        holder.menuIcon.setOnClickListener {
+            onMenuClick?.invoke(album, it)
+        }
     }
 
     override fun getItemCount() = list.size
@@ -60,4 +65,3 @@ class AlbumAdapter(
         notifyDataSetChanged()
     }
 }
-

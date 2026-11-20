@@ -72,8 +72,12 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
                 share = true
             )
 
-            SongOptionsBottomSheet(song, pos, config)
-                .show(parentFragmentManager, "fav_song_menu")
+            val sheet = SongOptionsBottomSheet(song, pos, config)
+            sheet.onSongHidden = { s ->
+                favouriteSongs.removeAll { it.id == s.id }
+                favAdapter.updateList(ArrayList(favouriteSongs))
+            }
+            sheet.show(parentFragmentManager, "fav_song_menu")
         }
     }
 

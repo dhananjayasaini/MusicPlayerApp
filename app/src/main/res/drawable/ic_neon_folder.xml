@@ -4,19 +4,41 @@
     android:height="48dp"
     android:viewportWidth="48"
     android:viewportHeight="48">
-    <!-- Folder Base Glow -->
+
+    <!-- Ambient Outer Glow Halo -->
     <path
-        android:pathData="M6,12 C6,9.8 7.8,8 10,8 L18,8 C19.5,8 20.8,8.8 21.6,10 L24,13 L38,13 C40.2,13 42,14.8 42,17 L42,36 C42,38.2 40.2,40 38,40 L10,40 C7.8,40 6,38.2 6,36 Z"
-        android:strokeWidth="2.5"
+        android:pathData="M4.5,11.4 C4.5,9.5 6.0,8.0 7.9,8.0 L18.3,8.0 C19.4,8.0 20.5,8.6 21.1,9.5 L24.0,13.4 C24.6,14.3 25.7,14.9 26.9,14.9 L40.1,14.9 C42.0,14.9 43.5,16.4 43.5,18.3 L43.5,36.6 C43.5,38.5 42.0,40.0 40.1,40.0 L7.9,40.0 C6.0,40.0 4.5,38.5 4.5,36.6 Z"
+        android:strokeWidth="4.5"
+        android:strokeAlpha="0.22"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="4.5"
+                android:startY="8.0"
+                android:endX="43.5"
+                android:endY="40.0"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Main Classic Folder Back Body -->
+    <path
+        android:pathData="M4.5,11.4 C4.5,9.5 6.0,8.0 7.9,8.0 L18.3,8.0 C19.4,8.0 20.5,8.6 21.1,9.5 L24.0,13.4 C24.6,14.3 25.7,14.9 26.9,14.9 L40.1,14.9 C42.0,14.9 43.5,16.4 43.5,18.3 L43.5,36.6 C43.5,38.5 42.0,40.0 40.1,40.0 L7.9,40.0 C6.0,40.0 4.5,38.5 4.5,36.6 Z"
+        android:strokeWidth="2.4"
         android:strokeLineJoin="round"
         android:strokeLineCap="round">
         <aapt:attr name="android:strokeColor">
             <gradient
                 android:type="linear"
-                android:startX="6"
-                android:startY="8"
-                android:endX="42"
-                android:endY="40"
+                android:startX="4.5"
+                android:startY="8.0"
+                android:endX="43.5"
+                android:endY="40.0"
                 android:startColor="#00F5FF"
                 android:centerColor="#B026FF"
                 android:endColor="#FF007F" />
@@ -24,37 +46,58 @@
         <aapt:attr name="android:fillColor">
             <gradient
                 android:type="linear"
-                android:startX="6"
-                android:startY="8"
-                android:endX="42"
-                android:endY="40"
-                android:startColor="#180B2B"
-                android:endColor="#2D0D4E" />
+                android:startX="4.5"
+                android:startY="8.0"
+                android:endX="43.5"
+                android:endY="40.0"
+                android:startColor="#1A0B2E"
+                android:endColor="#0C0416" />
         </aapt:attr>
     </path>
-    <!-- Center Music Wave inside folder -->
+
+    <!-- Top Tab Neon Highlight Arc -->
     <path
-        android:pathData="M16,28 L20,24 L24,30 L28,22 L32,28"
-        android:strokeWidth="2.2"
+        android:pathData="M7.9,8.0 L18.3,8.0 C19.4,8.0 20.4,8.6 21.0,9.5 L23.5,13.0"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.85"
         android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- Front Pocket / Flap with Classic Tab Cutout -->
+    <path
+        android:pathData="M4.5,21.5 C4.5,20.1 5.6,19.0 7.0,19.0 L18.5,19.0 C19.7,19.0 20.8,19.7 21.5,20.8 L23.5,23.5 C24.2,24.5 25.3,25.2 26.5,25.2 L41.0,25.2 C42.4,25.2 43.5,26.3 43.5,27.7 L43.5,36.6 C43.5,38.5 42.0,40.0 40.1,40.0 L7.9,40.0 C6.0,40.0 4.5,38.5 4.5,36.6 Z"
+        android:strokeWidth="2.2"
         android:strokeLineJoin="round"
-        android:fillColor="#00000000">
+        android:strokeLineCap="round">
         <aapt:attr name="android:strokeColor">
             <gradient
                 android:type="linear"
-                android:startX="16"
-                android:startY="26"
-                android:endX="32"
-                android:endY="26"
+                android:startX="4.5"
+                android:startY="19.0"
+                android:endX="43.5"
+                android:endY="40.0"
                 android:startColor="#00F5FF"
-                android:endColor="#00FFA3" />
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="4.5"
+                android:startY="19.0"
+                android:endX="43.5"
+                android:endY="40.0"
+                android:startColor="#250E44"
+                android:endColor="#130524" />
         </aapt:attr>
     </path>
-    <!-- Top Flap Neon Accent -->
+
+    <!-- Front Flap Top Neon Rim Accent -->
     <path
-        android:pathData="M10,13 L23,13"
-        android:strokeWidth="1.5"
-        android:strokeLineCap="round"
+        android:pathData="M7.0,19.0 L18.5,19.0 C19.7,19.0 20.8,19.7 21.5,20.8 L23.5,23.5"
+        android:strokeWidth="1.8"
         android:strokeColor="#00F5FF"
+        android:strokeLineCap="round"
         android:fillColor="#00000000" />
 </vector>

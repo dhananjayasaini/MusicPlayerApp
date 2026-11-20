@@ -23,6 +23,10 @@ import com.dhananjaysaini.musicplayerapp.utils.LanguageBottomSheetDialog
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
+import com.dhananjaysaini.musicplayerapp.utils.HiddenSongManager
+import com.dhananjaysaini.musicplayerapp.utils.HiddenMusicBottomSheet
+import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class SettingsFragment : Fragment() {
 
@@ -320,23 +324,7 @@ class SettingsFragment : Fragment() {
     // -------------------------------------------------------------------------
 
     private fun showHiddenMusicDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Hidden Music 👁️")
-            .setMessage(
-                "You can hide audio files that you don't want to show in your music library.\n\n" +
-                        "• To hide a song: Long press any track in the list and select 'Hide Music'.\n" +
-                        "• Currently hidden songs: 0 tracks\n\n" +
-                        "Would you like to rescan and restore all hidden songs?"
-            )
-            .setPositiveButton("Unhide All") { _, _ ->
-                Toast.makeText(
-                    requireContext(),
-                    "All hidden songs restored to library!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            .setNegativeButton("Close", null)
-            .show()
+        HiddenMusicBottomSheet().show(parentFragmentManager, "HiddenMusicBottomSheet")
     }
 
     private fun showMusicTransferDialog() {

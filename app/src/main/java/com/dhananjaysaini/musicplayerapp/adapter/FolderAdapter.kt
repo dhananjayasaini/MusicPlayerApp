@@ -14,10 +14,12 @@ class FolderAdapter(
 ) : RecyclerView.Adapter<FolderAdapter.Holder>() {
 
     var onItemClick: ((SongFolder) -> Unit)? = null
+    var onMenuClick: ((SongFolder, View) -> Unit)? = null
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.folderName)
         val count: TextView = view.findViewById(R.id.folderCount)
+        val menuIcon: View = view.findViewById(R.id.playlistMenuIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -35,6 +37,10 @@ class FolderAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(folder)
+        }
+
+        holder.menuIcon.setOnClickListener {
+            onMenuClick?.invoke(folder, it)
         }
     }
 

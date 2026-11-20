@@ -148,18 +148,18 @@ open class PlayerActivity : AppCompatActivity() {
             binding.waveformSeekBarPA.max = state.durationMs
 
             binding.playPauseBtnPA.setImageResource(
-                if (state.isPlaying) R.drawable.ic_pause
-                else R.drawable.ic_play
+                if (state.isPlaying) R.drawable.ic_neon_player_pause
+                else R.drawable.ic_neon_player_play
             )
 
             binding.favouriteBtnPA.setImageResource(
-                if (state.isFavourite) R.drawable.favourite_filled_icon
-                else R.drawable.favourite_empty_icon
+                if (state.isFavourite) R.drawable.ic_neon_player_fav_filled
+                else R.drawable.ic_neon_player_fav_empty
             )
 
             binding.repeatBtnPA.setImageResource(
-                if (state.isRepeat) R.drawable.repeat_one_icon
-                else R.drawable.repeat_icon
+                if (state.isRepeat) R.drawable.ic_neon_player_repeat_one
+                else R.drawable.ic_neon_player_repeat
             )
         }
     }
@@ -281,20 +281,19 @@ open class PlayerActivity : AppCompatActivity() {
         binding.waveformSeekBarPA.playedColor = vibrant
         binding.waveformSeekBarPA.unplayedColor = ColorUtils.setAlphaComponent(vibrant, 65)
 
-        // Dynamic Control Tinting
-        val tint = ColorStateList.valueOf(vibrant)
-        binding.playPauseBtnPA.imageTintList = tint
-        binding.prevBtnPA.imageTintList = tint
-        binding.nextBtnPA.imageTintList = tint
-        binding.favouriteBtnPA.imageTintList = tint
-        binding.repeatBtnPA.imageTintList = tint
-        binding.btnEqualizer.imageTintList = tint
-        binding.btnSleepTimer.imageTintList = tint
-        binding.shareBtnPA.imageTintList = tint
-        binding.backBtnPA.imageTintList = tint
-        binding.themeBtnPA.imageTintList = tint
-        binding.btnRewind10.imageTintList = ColorStateList.valueOf(Color.WHITE)
-        binding.btnForward10.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        // Keep native multi-color neon gradients on all player screen icons
+        binding.playPauseBtnPA.imageTintList = null
+        binding.prevBtnPA.imageTintList = null
+        binding.nextBtnPA.imageTintList = null
+        binding.favouriteBtnPA.imageTintList = null
+        binding.repeatBtnPA.imageTintList = null
+        binding.btnEqualizer.imageTintList = null
+        binding.btnSleepTimer.imageTintList = null
+        binding.shareBtnPA.imageTintList = null
+        binding.backBtnPA.imageTintList = null
+        binding.themeBtnPA.imageTintList = null
+        binding.btnRewind10.imageTintList = null
+        binding.btnForward10.imageTintList = null
 
         binding.songNamePA.setTextColor(Color.WHITE)
         binding.songAlbumPA.setTextColor(ColorUtils.blendARGB(vibrant, Color.WHITE, 0.45f))
@@ -439,12 +438,12 @@ open class PlayerActivity : AppCompatActivity() {
                         binding.txtTimerStatus.visibility = View.VISIBLE
                         binding.txtTimerStatus.text = formatTime(currentRemainingTime)
                     } else {
-                        binding.playPauseBtnPA.setImageResource(R.drawable.ic_play)
+                        binding.playPauseBtnPA.setImageResource(R.drawable.ic_neon_player_play)
                         binding.txtTimerStatus.visibility = View.GONE
                         binding.txtTimerStatus.text = getString(R.string.timer_off)
                     }
                 } else if (intent?.action == Constants.ACTION_MUSIC_STOPPED_BY_TIMER) {
-                    binding.playPauseBtnPA.setImageResource(R.drawable.ic_play)
+                    binding.playPauseBtnPA.setImageResource(R.drawable.ic_neon_player_play)
 
                 }
             }
@@ -464,13 +463,24 @@ open class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.waveformSeekBarPA.releaseVisualizer()
-        equalizerManager.release()
+        if (::binding.isInitialized) {
+            binding.waveformSeekBarPA.releaseVisualizer()
+        }
+        if (::equalizerManager.isInitialized) {
+            equalizerManager.release()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        timerReceiver?.let { unregisterReceiver(it) }
+        timerReceiver?.let {
+            try {
+                unregisterReceiver(it)
+            } catch (_: Exception) {
+                // Receiver already unregistered or never registered
+            }
+        }
+        timerReceiver = null
     }
 
     private fun formatTime(millis: Long): String {

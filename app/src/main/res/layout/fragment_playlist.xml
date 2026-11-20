@@ -8,20 +8,27 @@
     tools:context=".fragments.PlaylistFragment">
 
     <!-- Top Header: "4 Playlists" with "+" and "..." -->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/top_layer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingStart="16dp"
+        android:paddingTop="6dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="6dp">
 
         <TextView
             android:id="@+id/totalPlaylist"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:includeFontPadding="true"
+            android:maxLines="1"
             android:text="4 Playlists"
             android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
@@ -30,8 +37,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -50,7 +55,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_neon_dots" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
@@ -142,7 +147,7 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_neon_music_note" />
+                        android:src="@drawable/ic_neon_recent_add" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -258,8 +263,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_fire"
-                        app:tint="@android:color/white" />
+                        android:src="@drawable/ic_neon_fire" />
                 </FrameLayout>
 
                 <LinearLayout

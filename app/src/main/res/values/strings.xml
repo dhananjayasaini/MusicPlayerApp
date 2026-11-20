@@ -151,6 +151,18 @@
     <string name="action_remove_from_favourite">Remove from favourite</string>
     <string name="action_add_to_playlist">Add to playlist</string>
     <string name="action_remove_from_playlist">Remove from playlist</string>
+    <string name="action_set_as_ringtone">Set as ringtone</string>
+    <string name="action_go_to_album">Go to album</string>
+    <string name="action_hide_song">Hide song</string>
+    <string name="hide_song_dialog_title">Hide Song?</string>
+    <string name="hide_song_dialog_msg">Are you sure you want to hide \"%1$s\" from your library? You can restore it in Settings > Hidden Music.</string>
+    <string name="toast_song_hidden">Song hidden from library</string>
+    <string name="action_hide_folder">Hide folder</string>
+    <string name="hide_folder_dialog_title">Hide Folder?</string>
+    <string name="hide_folder_dialog_msg">Are you sure you want to hide \"%1$s\" and its tracks from your library? You can restore it in Settings > Hidden Music.</string>
+    <string name="toast_folder_hidden">Folder hidden from library</string>
+    <string name="toast_folder_unhidden">Folder restored to library</string>
+    <string name="no_album_found">Album information unavailable</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_share">Share</string>
@@ -241,6 +253,11 @@
     <string name="playlist_created_msg">Playlist Created</string>
     <string name="added_to_favourite_msg">Added to favourite</string>
     <string name="removed_from_favourite_msg">Removed from favourite</string>
+    <string name="removed_from_playlist_msg">Removed from playlist</string>
+    <string name="playlist_empty_toast">Playlist is empty</string>
+    <string name="songs_added_to_queue">Added to queue</string>
+    <string name="songs_added_play_next">Will play next</string>
+    <string name="songs_added_to_playlist">%1$d songs added to %2$s</string>
     <string name="share_audio_title">Share Audio</string>
     <string name="unable_to_share_audio">Unable to share audio</string>
     <string name="play_song_first_eq">Play a song first to open the Equalizer!</string>
@@ -331,4 +348,10 @@
     <string name="reverb_plate">Plate</string>
     <string name="send_feedback_title">Send Feedback</string>
     <string name="feedback_body_prefix">Write your feedback here...</string>
+    <string name="action_edit_tags">Edit tags</string>
+    <string name="action_change_album_cover">Change album cover</string>
+    <string name="toast_album_cover_updated">Album cover updated</string>
+    <string name="toast_tags_saved">Tags updated successfully</string>
+    <string name="dialog_edit_tags_title">Edit Album Tags</string>
+    <string name="dialog_edit_artist_tags_title">Edit Artist Tags</string>
 </resources>

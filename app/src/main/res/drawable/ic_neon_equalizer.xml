@@ -1,45 +1,81 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <!-- Bar 1 (Left) -->
+
+    <!-- Bar 1 (Left - Electric Cyan) -->
     <path
         android:pathData="M6,4 L6,20"
-        android:strokeWidth="1.8"
+        android:strokeWidth="3.6"
+        android:strokeAlpha="0.30"
         android:strokeLineCap="round"
-        android:strokeColor="#3300F5FF" />
+        android:strokeColor="#00F5FF" />
     <path
-        android:pathData="M6,14m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+        android:pathData="M6,4 L6,20"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+    <path
+        android:pathData="M6,4.5 L6,19.5"
+        android:strokeWidth="0.65"
+        android:strokeAlpha="0.80"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+    <path
+        android:pathData="M6,14m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0"
         android:fillColor="#00F5FF" />
     <path
-        android:pathData="M6,14m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:pathData="M6,14m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
         android:fillColor="#FFFFFF" />
 
-    <!-- Bar 2 (Center) -->
+    <!-- Bar 2 (Center - Neon Mint Green) -->
     <path
         android:pathData="M12,4 L12,20"
-        android:strokeWidth="1.8"
+        android:strokeWidth="3.6"
+        android:strokeAlpha="0.30"
         android:strokeLineCap="round"
-        android:strokeColor="#3300FFA3" />
+        android:strokeColor="#00FFA3" />
     <path
-        android:pathData="M12,8m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+        android:pathData="M12,4 L12,20"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeColor="#00FFA3" />
+    <path
+        android:pathData="M12,4.5 L12,19.5"
+        android:strokeWidth="0.65"
+        android:strokeAlpha="0.80"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+    <path
+        android:pathData="M12,8m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0"
         android:fillColor="#00FFA3" />
     <path
-        android:pathData="M12,8m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:pathData="M12,8m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
         android:fillColor="#FFFFFF" />
 
-    <!-- Bar 3 (Right) -->
+    <!-- Bar 3 (Right - Hot Pink) -->
     <path
         android:pathData="M18,4 L18,20"
-        android:strokeWidth="1.8"
+        android:strokeWidth="3.6"
+        android:strokeAlpha="0.30"
         android:strokeLineCap="round"
-        android:strokeColor="#33FF007F" />
+        android:strokeColor="#FF007F" />
     <path
-        android:pathData="M18,16m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+        android:pathData="M18,4 L18,20"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF007F" />
+    <path
+        android:pathData="M18,4.5 L18,19.5"
+        android:strokeWidth="0.65"
+        android:strokeAlpha="0.80"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+    <path
+        android:pathData="M18,16m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0"
         android:fillColor="#FF007F" />
     <path
-        android:pathData="M18,16m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:pathData="M18,16m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
         android:fillColor="#FFFFFF" />
 </vector>

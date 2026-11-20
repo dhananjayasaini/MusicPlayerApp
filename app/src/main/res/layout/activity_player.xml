@@ -19,14 +19,15 @@
 
         <ImageButton
             android:id="@+id/backBtnPA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:background="@android:color/transparent"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back_btn"
-            android:src="@drawable/back_icon"
-            app:tint="@color/bright_yellow" />
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_neon_back" />
 
         <TextView
             android:layout_width="0dp"
@@ -43,24 +44,27 @@
 
         <ImageButton
             android:id="@+id/favouriteBtnPA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:background="@android:color/transparent"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/Favourites_btn"
-            android:src="@drawable/favourite_empty_icon"
-            app:tint="@color/bright_yellow" />
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_neon_player_fav_empty" />
 
         <ImageButton
             android:id="@+id/themeBtnPA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/Favourites_btn"
-            android:src="@drawable/ic_theme" />
+            android:layout_marginStart="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/setting_theme"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_neon_theme" />
 
         <include
             android:id="@+id/voice_control_pa"
@@ -144,20 +148,22 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/repeat_btn"
-                android:src="@drawable/repeat_icon"
-                app:tint="@color/bright_yellow" />
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_repeat" />
 
             <ImageButton
                 android:id="@+id/btnEqualizer"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/equalizer_btn"
-                android:src="@drawable/equalizer_icon"
-                app:tint="@color/bright_yellow" />
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_equalizer" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -170,10 +176,11 @@
                     android:id="@+id/btnSleepTimer"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@android:color/transparent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/timer_btn"
-                    android:src="@drawable/timer_icon"
-                    app:tint="@color/bright_yellow" />
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_neon_timer" />
 
                 <TextView
                     android:id="@+id/txtTimerStatus"
@@ -182,7 +189,7 @@
                     android:layout_marginTop="-4dp"
                     android:gravity="center"
                     android:text="00:00"
-                    android:textColor="@color/black"
+                    android:textColor="#00F5FF"
                     android:textSize="9sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -194,10 +201,11 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/share_btn"
-                android:src="@drawable/share_icon"
-                app:tint="@color/bright_yellow" />
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_share" />
 
         </LinearLayout>
 
@@ -211,13 +219,13 @@
 
             <ImageButton
                 android:id="@+id/btnRewind10"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Rewind 10 seconds"
-                android:padding="5dp"
-                android:src="@drawable/ic_replay_10"
-                app:tint="#FFFFFF" />
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_replay_10" />
 
             <com.dhananjaysaini.musicplayerapp.utils.WaveformSeekBar
                 android:id="@+id/waveformSeekBarPA"
@@ -229,13 +237,13 @@
 
             <ImageButton
                 android:id="@+id/btnForward10"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Forward 10 seconds"
-                android:padding="5dp"
-                android:src="@drawable/ic_forward_10"
-                app:tint="#FFFFFF" />
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_forward_10" />
 
             <!-- Hidden for backwards-compatibility -->
             <TextView
@@ -260,35 +268,34 @@
 
             <ImageButton
                 android:id="@+id/prevBtnPA"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@android:color/transparent"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Previous"
                 android:padding="8dp"
-                android:src="@drawable/previous_icon"
-                app:tint="@color/bright_yellow" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_prev" />
 
             <ImageButton
                 android:id="@+id/playPauseBtnPA"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:layout_marginHorizontal="24dp"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play/Pause"
-                android:padding="12dp"
+                android:padding="4dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_play"
-                app:tint="@color/bright_yellow" />
+                android:src="@drawable/ic_neon_player_play" />
 
             <ImageButton
                 android:id="@+id/nextBtnPA"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@android:color/transparent"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Next"
                 android:padding="8dp"
-                android:src="@drawable/next_icon"
-                app:tint="@color/bright_yellow" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_neon_player_next" />
 
         </LinearLayout>
 

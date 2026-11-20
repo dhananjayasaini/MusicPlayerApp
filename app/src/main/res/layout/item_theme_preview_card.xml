@@ -64,7 +64,7 @@
                         android:id="@+id/mockThemeBtn"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_theme" />
+                        android:src="@drawable/ic_neon_theme" />
 
                     <ImageView
                         android:id="@+id/mockSearchBtn"
@@ -1182,15 +1182,16 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_centerVertical="true"
-                        app:cardCornerRadius="18dp"
+                        app:cardCornerRadius="5dp"
                         app:cardElevation="0dp"
                         app:strokeWidth="0dp">
 
-                        <ImageView
+                        <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/mockMiniArt"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/curved"
                             android:src="@drawable/mock_mini_art" />
                     </com.google.android.material.card.MaterialCardView>
 

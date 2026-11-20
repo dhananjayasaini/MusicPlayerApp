@@ -65,8 +65,13 @@ open class AllSongsFragment : Fragment() {
                 share = true
             )
 
-            SongOptionsBottomSheet(song, pos, config)
-                .show(parentFragmentManager, "song_menu")
+            val sheet = SongOptionsBottomSheet(song, pos, config)
+            sheet.onSongHidden = { s ->
+                val current = mainViewModel.musicListLiveData.value ?: arrayListOf()
+                current.removeAll { it.id == s.id }
+                mainViewModel.musicListLiveData.value = current
+            }
+            sheet.show(parentFragmentManager, "song_menu")
         }
     }
 

@@ -79,7 +79,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun currentSong(): Music? {
-        return MusicService.playlist.getOrNull(MusicService.position)
+        return MusicService.song ?: MusicService.playlist.getOrNull(MusicService.position)
     }
 
     private fun startSeekBarUpdates() {

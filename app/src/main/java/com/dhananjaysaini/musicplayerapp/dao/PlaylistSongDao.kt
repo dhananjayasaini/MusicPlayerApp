@@ -20,6 +20,9 @@ interface PlaylistSongDao {
     @Query("SELECT songId FROM playlist_songs WHERE playlistId=:playlistId")
     fun getSongIds(playlistId: Int): LiveData<List<String>>
 
+    @Query("SELECT songId FROM playlist_songs WHERE playlistId=:playlistId")
+    suspend fun getSongIdsList(playlistId: Int): List<String>
+
     @Query("SELECT * FROM playlists WHERE songId = :playlistId LIMIT 1")
     fun getPlaylistById(playlistId: Int): LiveData<PlaylistEntity>
 

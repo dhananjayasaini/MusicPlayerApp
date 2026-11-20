@@ -13,6 +13,8 @@ import com.dhananjaysaini.musicplayerapp.activities.ArtistSongsActivity
 import com.dhananjaysaini.musicplayerapp.adapter.ArtistAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentArtistBinding
 import com.dhananjaysaini.musicplayerapp.model.MusicArtist
+import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.ArtistOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
@@ -21,13 +23,12 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
 
     private lateinit var binding: FragmentArtistBinding
     private lateinit var artistAdapter: ArtistAdapter
-    private lateinit var mainViewModel:MainViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentArtistBinding.bind(view)
-
 
         artistAdapter = ArtistAdapter(mutableListOf())
 
@@ -37,10 +38,9 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = artistAdapter
 
-        Log.d("artist1", "artistAdapter " +recycler.adapter)
+        Log.d("artist1", "artistAdapter " + recycler.adapter)
 
         artistAdapter.onItemClick = { artist ->
-
             startActivity(
                 Intent(requireContext(), ArtistSongsActivity::class.java).apply {
                     putExtra("artistName", artist.name)
@@ -48,13 +48,37 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
             )
         }
 
-        mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { songs ->
+        artistAdapter.onMenuClick = { artist, _ ->
+            val unknownArtist = getString(R.string.unknown_artist)
+            val artistSongs = MusicService.allSongs.filter {
+                (it.artist ?: unknownArtist) == artist.name
+            }
+            val sheet = ArtistOptionsBottomSheet.newInstance(
+                artistName = artist.name,
+                albumCount = artist.albumCount,
+                artUri = artist.artUri,
+                songs = artistSongs
+            )
+            sheet.onArtistUpdated = {
+                // MainViewModel updates will automatically refresh the list via LiveData
+            }
+            sheet.show(parentFragmentManager, "artist_options_${artist.name}")
+        }
 
+        mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { songs ->
             val unknownArtist = getString(R.string.unknown_artist)
             val artists = songs
                 .groupBy { it.artist ?: unknownArtist }
                 .map { (name, list) ->
-                    MusicArtist(name, list.size, list.firstOrNull()?.artUri)
+                    val albums = list.mapNotNull { it.album }.filter { it.isNotBlank() }.distinct()
+                    val albumCount = if (albums.isEmpty()) 1 else albums.size
+                    MusicArtist(
+                        name = name,
+                        songCount = list.size,
+                        artUri = list.firstOrNull()?.artUri,
+                        artistName = name,
+                        albumCount = albumCount
+                    )
                 }
                 .sortedBy { it.name.lowercase() }
 
@@ -68,5 +92,4 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
         super.onResume()
         ThemeManager.applyThemeToActivity(requireActivity())
     }
-
 }

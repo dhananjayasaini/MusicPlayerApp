@@ -11,20 +11,18 @@ import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.model.PlaylistEntity
 
 class PlaylistAdapter(
-    private val list: ArrayList<PlaylistEntity>
+    private val list: ArrayList<PlaylistEntity>,
+    private val showMenu: Boolean = true
 ) : RecyclerView.Adapter<PlaylistAdapter.Holder>() {
 
     var onItemClick: ((PlaylistEntity) -> Unit)? = null
     var onDeleteClick: ((PlaylistEntity) -> Unit)? = null
     var onRenameClick: ((PlaylistEntity) -> Unit)? = null
-
-
+    var onMenuClick: ((PlaylistEntity) -> Unit)? = null
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val playlistName: TextView = view.findViewById(R.id.playlistName)
-//        val playlistSongCount: TextView = view.findViewById(R.id.playlistSongCount)
-        val playlistMenuIcon:ImageView = view.findViewById(R.id.playlistMenuIcon)
-
+        val playlistMenuIcon: ImageView = view.findViewById(R.id.playlistMenuIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -42,39 +40,31 @@ class PlaylistAdapter(
             onItemClick?.invoke(playlist)
         }
 
-//        holder.playlistSongCount.text =
-//            when (playlist.songCount) {
-//                0 -> "No songs"
-//                1 -> "1 song"
-//                else -> "${playlist.songCount} songs"
-//            }
+        holder.playlistMenuIcon.visibility = if (showMenu) View.VISIBLE else View.GONE
 
         holder.playlistMenuIcon.setOnClickListener { view ->
+            if (onMenuClick != null) {
+                onMenuClick?.invoke(playlist)
+            } else {
+                val popup = PopupMenu(view.context, view)
+                popup.menu.add(0, 1, 0, view.context.getString(R.string.rename_playlist))
+                popup.menu.add(0, 2, 1, view.context.getString(R.string.delete_playlist_title))
 
-            val popup = PopupMenu(view.context, view)
-
-            popup.menu.add(0, 1, 0, view.context.getString(R.string.rename_playlist))
-            popup.menu.add(0, 2, 1, view.context.getString(R.string.delete_playlist_title))
-
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-
-                    1 -> {
-                        onRenameClick?.invoke(playlist)
-                        true
+                popup.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        1 -> {
+                            onRenameClick?.invoke(playlist)
+                            true
+                        }
+                        2 -> {
+                            onDeleteClick?.invoke(playlist)
+                            true
+                        }
+                        else -> false
                     }
-
-                    2 -> {
-                        onDeleteClick?.invoke(playlist)
-                        true
-                    }
-
-                    else -> false
                 }
+                popup.show()
             }
-
-            popup.show()
-
         }
     }
 
@@ -85,5 +75,4 @@ class PlaylistAdapter(
         list.addAll(newList)
         notifyDataSetChanged()
     }
-
 }

@@ -47,6 +47,7 @@ import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.DeleteManager
 import com.dhananjaysaini.musicplayerapp.utils.EditSongManager
+import com.dhananjaysaini.musicplayerapp.utils.HiddenSongManager
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.FavouriteManager
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity() {
         FavouriteManager.init(applicationContext)
         PlaylistManager.init(applicationContext)
         EditSongManager.init(applicationContext)
+        HiddenSongManager.init(applicationContext)
 
         CoroutineScope(Dispatchers.IO).launch {
             val dao = MusicDatabase.getDatabase(applicationContext).FavouriteDao()

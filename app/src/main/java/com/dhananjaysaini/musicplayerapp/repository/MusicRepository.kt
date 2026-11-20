@@ -4,13 +4,13 @@ import android.content.Context
 import android.provider.MediaStore
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.utils.EditSongManager
+import com.dhananjaysaini.musicplayerapp.utils.HiddenSongManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MusicRepository(private val context: Context) {
 
-    suspend fun fetchAllSongs(): ArrayList<Music> = withContext(Dispatchers.IO) {
-
+    suspend fun fetchAllSongsRaw(): ArrayList<Music> = withContext(Dispatchers.IO) {
         val audioList = ArrayList<Music>()
 
         val projection = arrayOf(
@@ -69,5 +69,16 @@ class MusicRepository(private val context: Context) {
             }
         }
         audioList
+    }
+
+    suspend fun fetchAllSongs(): ArrayList<Music> = withContext(Dispatchers.IO) {
+        val raw = fetchAllSongsRaw()
+        val filtered = ArrayList<Music>()
+        for (song in raw) {
+            if (!HiddenSongManager.isSongHidden(song.id, song.path)) {
+                filtered.add(song)
+            }
+        }
+        filtered
     }
 }

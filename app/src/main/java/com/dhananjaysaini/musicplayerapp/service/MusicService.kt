@@ -63,6 +63,77 @@ class MusicService : Service() {
         var song: Music? = null
         val currentSongLiveData = MutableLiveData<Music?>()
         val isPlayingLiveData = MutableLiveData<Boolean>()
+
+        /**
+         * Inserts one or more songs right after the currently playing song without
+         * shifting MusicService.position away from the currently playing track.
+         */
+        fun addSongsToPlayNext(songsToAdd: List<Music>) {
+            if (playlist.isEmpty() || songsToAdd.isEmpty()) return
+
+            val currentSongId = song?.id ?: playlist.getOrNull(position)?.id
+            val toInsert = songsToAdd.distinctBy { it.id }.filter { it.id != currentSongId }
+            if (toInsert.isEmpty()) return
+
+            val insertIds = toInsert.map { it.id }.toSet()
+            var removedBeforeCurrent = 0
+            val iterator = playlist.listIterator()
+            var idx = 0
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.id in insertIds) {
+                    iterator.remove()
+                    if (idx < position) removedBeforeCurrent++
+                }
+                idx++
+            }
+
+            if (playlist.isNotEmpty()) {
+                position = (position - removedBeforeCurrent).coerceIn(0, playlist.size - 1)
+                if (currentSongId != null && playlist.getOrNull(position)?.id != currentSongId) {
+                    val synced = playlist.indexOfFirst { it.id == currentSongId }
+                    if (synced != -1) position = synced
+                }
+            } else {
+                position = 0
+            }
+
+            val insertPos = (position + 1).coerceIn(0, playlist.size)
+            playlist.addAll(insertPos, toInsert)
+        }
+
+        /**
+         * Removes all occurrences of [songId] from the active playlist while keeping
+         * MusicService.position pointing to the currently playing track (if it wasn't removed).
+         */
+        fun removeSongFromPlaylistPreservingPosition(songId: String) {
+            if (playlist.isEmpty()) return
+
+            val currentSongId = song?.id ?: playlist.getOrNull(position)?.id
+            var removedBeforeCurrent = 0
+            val iterator = playlist.listIterator()
+            var idx = 0
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.id == songId) {
+                    iterator.remove()
+                    if (idx < position) removedBeforeCurrent++
+                }
+                idx++
+            }
+
+            if (playlist.isEmpty()) {
+                position = 0
+            } else if (currentSongId != songId) {
+                position = (position - removedBeforeCurrent).coerceIn(0, playlist.size - 1)
+                if (currentSongId != null && playlist.getOrNull(position)?.id != currentSongId) {
+                    val synced = playlist.indexOfFirst { it.id == currentSongId }
+                    if (synced != -1) position = synced
+                }
+            } else {
+                position = (position - removedBeforeCurrent).coerceIn(0, playlist.size - 1)
+            }
+        }
     }
 
     private lateinit var receiver: BroadcastReceiver
@@ -85,15 +156,16 @@ class MusicService : Service() {
                 val duration = mediaPlayer?.duration ?: 0
 
                 // Broadcast current position regularly
+                val activeSong = song ?: playlist.getOrNull(position)
                 sendBroadcast(Intent("UPDATE_UI").apply {
                     setPackage(packageName)
                     putExtra("Index", position)
                     putExtra("isPlaying", mediaPlayer?.isPlaying == true)
                     putExtra("currentMs", currentPosition)
                     putExtra("durationMs", duration)
-                    putExtra("title", playlist.getOrNull(position)?.title)
-                    putExtra("artist", playlist.getOrNull(position)?.artist)
-                    putExtra("artUri", playlist.getOrNull(position)?.artUri)
+                    putExtra("title", activeSong?.title)
+                    putExtra("artist", activeSong?.artist)
+                    putExtra("artUri", activeSong?.artUri)
                 })
             } catch (e: Exception) { /* ignore*/
             }
@@ -249,24 +321,12 @@ class MusicService : Service() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-//        if (!isServiceStarted) {
-//            startForeground(Constants.NOTIFICATION_ID, buildNotification(false))
-//            isServiceStarted = true
-//        }
-
-        song = Music(
-            path = "",
-            title = "",
-            album = "",
-            duration = 0L,
-            artUri = null.toString(),
-            artist = "",
-            id = "",
-            date = 0L
-        )
-
         if (playlist.isEmpty()) {
             return START_NOT_STICKY
+        }
+
+        if (song == null && position in playlist.indices) {
+            song = playlist[position]
         }
 
 
@@ -276,7 +336,7 @@ class MusicService : Service() {
                     mediaPlayer?.pause()
                     notifyUIAndUpdateNotification()
                 } else {
-                    if (song == null || song?.path.isNullOrEmpty()) {
+                    if (mediaPlayer == null || song == null || song?.path.isNullOrEmpty()) {
                         playAt(position, startForegroundNow = false)
                     } else {
                         try {
@@ -1056,11 +1116,30 @@ class MusicService : Service() {
 
         if (playlist.isEmpty()) return
 
-        playlist.removeAll { it.id == song.id }
+        val currentSongId = MusicService.song?.id ?: playlist.getOrNull(position)?.id
 
-        val nextIndex = (position + 1).coerceAtMost(playlist.size)
-
-        playlist.add(nextIndex, song)
+        if (song.id == currentSongId) {
+            // Keep the currently playing track anchored at `position`, remove any other duplicates,
+            // and insert one copy right after `position` so it plays next.
+            var removedBeforeCurrent = 0
+            val iterator = playlist.listIterator()
+            var idx = 0
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (idx != position && item.id == song.id) {
+                    iterator.remove()
+                    if (idx < position) removedBeforeCurrent++
+                }
+                idx++
+            }
+            if (playlist.isNotEmpty()) {
+                position = (position - removedBeforeCurrent).coerceIn(0, playlist.size - 1)
+            }
+            val nextIndex = (position + 1).coerceIn(0, playlist.size)
+            playlist.add(nextIndex, song)
+        } else {
+            addSongsToPlayNext(listOf(song))
+        }
 
         Toast.makeText(this, "it will play next", Toast.LENGTH_SHORT).show()
     }

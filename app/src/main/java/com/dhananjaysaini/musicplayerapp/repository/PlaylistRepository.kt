@@ -32,6 +32,10 @@ class PlaylistRepository(
         return playlistSongDao.getSongIds(playlistId)
     }
 
+    suspend fun getSongIdsList(playlistId: Int): List<String> {
+        return playlistSongDao.getSongIdsList(playlistId)
+    }
+
     fun getPlaylistById(playlistId: Int): LiveData<PlaylistEntity> {
         return playlistDao.getPlaylistById(playlistId)
     }

@@ -91,8 +91,12 @@ class SearchFragment : Fragment() {
                 addToPlaylist = true,
                 share = true
             )
-            SongOptionsBottomSheet(song, pos, config)
-                .show(parentFragmentManager, "search_song_menu")
+            val sheet = SongOptionsBottomSheet(song, pos, config)
+            sheet.onSongHidden = { s ->
+                filteredSongs.removeAll { it.id == s.id }
+                searchAdapter.updateList(ArrayList(filteredSongs))
+            }
+            sheet.show(parentFragmentManager, "search_song_menu")
         }
     }
 

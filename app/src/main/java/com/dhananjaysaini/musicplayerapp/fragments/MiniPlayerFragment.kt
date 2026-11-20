@@ -170,7 +170,7 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
     private val updateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (_binding == null) return
-            val currentSong = MusicService.playlist.getOrNull(MusicService.position)
+            val currentSong = MusicService.song ?: MusicService.playlist.getOrNull(MusicService.position)
             val isPlaying = intent?.getBooleanExtra("isPlaying", MusicService.mediaPlayer?.isPlaying == true)
                 ?: (MusicService.mediaPlayer?.isPlaying == true)
 
@@ -223,7 +223,7 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
 
     private fun updateMiniPlayerFromService() {
         if (_binding == null) return
-        val currentSong = MusicService.playlist.getOrNull(MusicService.position)
+        val currentSong = MusicService.song ?: MusicService.playlist.getOrNull(MusicService.position)
         val isPlaying = MusicService.mediaPlayer?.isPlaying == true
         if (currentSong != null) {
             updateMiniPlayerView(currentSong, isPlaying)

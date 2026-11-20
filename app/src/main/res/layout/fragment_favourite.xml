@@ -27,13 +27,19 @@
                 app:cardCornerRadius="28dp"
                 app:cardElevation="6dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="#1A2B4C">
+                app:cardBackgroundColor="@android:color/transparent">
 
-                <ImageView
-                    android:layout_width="84dp"
-                    android:layout_height="84dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_neon_favourite" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_preset_fav">
+
+                    <ImageView
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_neon_favourite" />
+                </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Title: My favourite -->
@@ -126,8 +132,6 @@
                     app:cornerRadius="24dp"
                     app:strokeWidth="1.5dp"
                     app:strokeColor="@color/btn_action_stroke_selector"
-                    app:backgroundTint="@color/btn_action_bg_selector"
-                    app:elevation="2dp" />
                     app:backgroundTint="@color/btn_action_bg_selector"
                     app:elevation="2dp" />
             </LinearLayout>

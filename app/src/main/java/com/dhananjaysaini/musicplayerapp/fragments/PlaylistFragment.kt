@@ -5,22 +5,27 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.activities.PlaylistSongsActivity
 import com.dhananjaysaini.musicplayerapp.adapter.PlaylistAdapter
 import com.dhananjaysaini.musicplayerapp.database.MusicDatabase
 import com.dhananjaysaini.musicplayerapp.databinding.FragmentPlaylistBinding
+import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.PlaylistEntity
+import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.CreatePlaylistDialog
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
+import com.dhananjaysaini.musicplayerapp.utils.PlaylistFolderOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
@@ -29,6 +34,9 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
     private lateinit var playlistViewModel: PlaylistViewModel
     private lateinit var favouriteViewModel: FavouriteViewModel
     private lateinit var mainViewModel: MainViewModel
+
+    private val recentPlayedSongs = ArrayList<Music>()
+    private val topTracksSongs = ArrayList<Music>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +49,7 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
         val db = MusicDatabase.getDatabase(requireContext())
 
-        playlistAdapter = PlaylistAdapter(arrayListOf())
+        playlistAdapter = PlaylistAdapter(arrayListOf(), showMenu = true)
 
         binding.playlistRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.playlistRecycler.adapter = playlistAdapter
@@ -68,12 +76,24 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
 
         // Preset 3: Recently Played count
         db.playHistoryDao().getRecentlyPlayed().observe(viewLifecycleOwner) { history ->
-            binding.tvRecentPlayedCount.text = LocaleHelper.getSongCountString(requireContext(), history.size)
+            val all = MusicService.allSongs.ifEmpty { mainViewModel.musicListLiveData.value ?: emptyList() }
+            val map = all.associateBy { it.id }
+            recentPlayedSongs.clear()
+            history.forEach { item ->
+                map[item.songId]?.let { recentPlayedSongs.add(it) }
+            }
+            binding.tvRecentPlayedCount.text = LocaleHelper.getSongCountString(requireContext(), recentPlayedSongs.size)
         }
 
         // Preset 4: Top Tracks count
         db.playHistoryDao().getTopPlayed().observe(viewLifecycleOwner) { history ->
-            binding.tvTopTracksCount.text = LocaleHelper.getSongCountString(requireContext(), history.size)
+            val all = MusicService.allSongs.ifEmpty { mainViewModel.musicListLiveData.value ?: emptyList() }
+            val map = all.associateBy { it.id }
+            topTracksSongs.clear()
+            history.forEach { item ->
+                map[item.songId]?.let { topTracksSongs.add(it) }
+            }
+            binding.tvTopTracksCount.text = LocaleHelper.getSongCountString(requireContext(), topTracksSongs.size)
         }
 
         // Click: Preset Rows
@@ -122,122 +142,159 @@ class PlaylistFragment : Fragment(R.layout.fragment_playlist) {
             Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
-        // Clicks: 3 dots menus
+        // Clicks: 3 dots menus for folder presets
         binding.btnPlaylistMoreTop.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnMenuFav.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
+            val songs = getFavouriteSongs()
+            val sheet = PlaylistFolderOptionsBottomSheet.newInstance(
+                title = getString(R.string.my_favourite),
+                iconRes = R.drawable.ic_neon_favourite,
+                bgDrawableRes = R.drawable.bg_preset_fav,
+                songs = songs,
+                isCustomPlaylist = false
+            )
+            sheet.show(parentFragmentManager, "folder_fav")
         }
 
         binding.btnMenuRecentAdded.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
+            val songs = getRecentAddedSongs()
+            val sheet = PlaylistFolderOptionsBottomSheet.newInstance(
+                title = getString(R.string.recently_added),
+                iconRes = R.drawable.ic_neon_recent_add,
+                bgDrawableRes = R.drawable.bg_preset_recent_add,
+                songs = songs,
+                isCustomPlaylist = false
+            )
+            sheet.show(parentFragmentManager, "folder_recent_add")
         }
 
         binding.btnMenuRecentPlayed.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
+            val sheet = PlaylistFolderOptionsBottomSheet.newInstance(
+                title = getString(R.string.recently_played),
+                iconRes = R.drawable.ic_neon_timer,
+                bgDrawableRes = R.drawable.bg_preset_recent_play,
+                songs = recentPlayedSongs,
+                isCustomPlaylist = false
+            )
+            sheet.show(parentFragmentManager, "folder_recent_play")
         }
 
         binding.btnMenuTopTracks.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.toast_coming_soon), Toast.LENGTH_SHORT).show()
+            val sheet = PlaylistFolderOptionsBottomSheet.newInstance(
+                title = getString(R.string.my_top_tracks),
+                iconRes = R.drawable.ic_neon_fire,
+                bgDrawableRes = R.drawable.bg_preset_top,
+                songs = topTracksSongs,
+                isCustomPlaylist = false
+            )
+            sheet.show(parentFragmentManager, "folder_top_tracks")
+        }
+
+        playlistAdapter.onMenuClick = { playlist ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                val songIds = playlistViewModel.getSongIdsList(playlist.songId)
+                val all = MusicService.allSongs.ifEmpty { mainViewModel.musicListLiveData.value ?: emptyList() }
+                val pSongs = all.filter { it.id in songIds }
+                val sheet = PlaylistFolderOptionsBottomSheet.newInstance(
+                    title = playlist.name,
+                    iconRes = R.drawable.ic_neon_playlist_card,
+                    bgDrawableRes = R.drawable.bg_dialog_playlist_icon,
+                    songs = pSongs,
+                    isCustomPlaylist = true
+                )
+                sheet.onRenameClick = {
+                    showRenameDialog(playlist)
+                }
+                sheet.onDeleteClick = {
+                    deletePlaylist(playlist)
+                }
+                sheet.show(parentFragmentManager, "folder_custom_${playlist.songId}")
+            }
         }
 
         playlistAdapter.onRenameClick = { playlist ->
             showRenameDialog(playlist)
         }
 
+        playlistAdapter.onDeleteClick = { playlist ->
+            deletePlaylist(playlist)
+        }
+
         openPlaylistSongs()
-        deletePlaylist()
+    }
+
+    private fun getFavouriteSongs(): List<Music> {
+        val ids = favouriteViewModel.favouriteIds.value ?: emptyList()
+        val all = MusicService.allSongs.ifEmpty { mainViewModel.musicListLiveData.value ?: emptyList() }
+        return all.filter { it.id in ids }
+    }
+
+    private fun getRecentAddedSongs(): List<Music> {
+        val all = MusicService.allSongs.ifEmpty { mainViewModel.musicListLiveData.value ?: emptyList() }
+        return all.sortedByDescending { it.date }
     }
 
     private fun openPlaylistSongs() {
-
         playlistAdapter.onItemClick = { playlist ->
             val intent = Intent(requireContext(), PlaylistSongsActivity::class.java)
             intent.putExtra("playlistId", playlist.songId)
             intent.putExtra("playlistName", playlist.name)
-
             startActivity(intent)
         }
     }
 
     private fun showCreateDialog() {
-        val editText = EditText(requireContext()).apply {
-            hint = getString(R.string.playlist_name_hint)
+        val existingNames = playlistViewModel.playlists.value?.map { it.name } ?: emptyList()
+        CreatePlaylistDialog.show(
+            context = requireContext(),
+            titleRes = R.string.create_playlist,
+            positiveBtnRes = R.string.btn_create,
+            existingNames = existingNames
+        ) { name ->
+            playlistViewModel.createPlaylist(name)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.playlist_created_msg),
+                Toast.LENGTH_SHORT
+            ).show()
         }
+    }
 
+    private fun deletePlaylist(playlist: PlaylistEntity) {
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.create_playlist)
-            .setView(editText)
-            .setPositiveButton(R.string.btn_create) { _, _ ->
-                val name = editText.text.toString().trim()
-                if (name.isNotEmpty()) {
-                    playlistViewModel.createPlaylist(name)
-                }
+            .setTitle(R.string.delete_playlist_title)
+            .setMessage(getString(R.string.delete_playlist_prompt, playlist.name))
+            .setPositiveButton(R.string.btn_delete) { _, _ ->
+                playlistViewModel.deletePlaylist(playlist.songId)
             }
             .setNegativeButton(R.string.btn_cancel, null)
             .show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            .setTextColor(Color.BLACK)
+            ?.setTextColor(Color.parseColor("#FF5252"))
 
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(Color.BLACK)
-    }
-
-    private fun deletePlaylist(){
-        playlistAdapter.onDeleteClick = { playlist ->
-
-            val dialog = MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.delete_playlist_title)
-                .setMessage(getString(R.string.delete_playlist_prompt, playlist.name))
-                .setPositiveButton(R.string.btn_delete) { _, _ ->
-                    playlistViewModel.deletePlaylist(playlist.songId)
-                }
-                .setNegativeButton(R.string.btn_cancel, null)
-                .show()
-
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(Color.BLACK)
-
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                .setTextColor(Color.BLACK)
-        }
+            ?.setTextColor(Color.WHITE)
     }
 
     private fun showRenameDialog(playlist: PlaylistEntity) {
-
-        val editText = EditText(requireContext()).apply {
-            setText(playlist.name)
-            setSelection(text.length)
-        }
-
-       val dialog =  MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.rename_playlist)
-            .setView(editText)
-            .setPositiveButton(R.string.btn_rename) { _, _ ->
-
-                val editName = editText.text.toString().trim()
-
-                if (editName.isNotEmpty() && editName != playlist.name) {
-                    playlistViewModel.renamePlaylist(
-                        playlist.songId,
-                        editName
-                    )
-                }
+        val existingNames = playlistViewModel.playlists.value?.map { it.name } ?: emptyList()
+        CreatePlaylistDialog.show(
+            context = requireContext(),
+            titleRes = R.string.rename_playlist,
+            initialName = playlist.name,
+            positiveBtnRes = R.string.btn_rename,
+            existingNames = existingNames
+        ) { editName ->
+            if (editName != playlist.name) {
+                playlistViewModel.renamePlaylist(
+                    playlist.songId,
+                    editName
+                )
             }
-            .setNegativeButton(R.string.btn_cancel, null)
-            .show()
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            .setTextColor(Color.BLACK)
-
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(Color.BLACK)
+        }
     }
-
-
 }
-
-

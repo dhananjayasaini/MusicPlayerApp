@@ -44,6 +44,10 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         return playlistRepo.getPlaylistSongIds(playlistId)
     }
 
+    suspend fun getSongIdsList(playlistId: Int): List<String> {
+        return playlistRepo.getSongIdsList(playlistId)
+    }
+
     fun addSongToPlaylist(playlistId: Int, songId: String) {
         viewModelScope.launch {
             playlistRepo.addSongToPlaylist(playlistId, songId)

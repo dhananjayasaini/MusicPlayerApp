@@ -144,4 +144,47 @@ object SongMenuManager {
             Toast.makeText(context, context.getString(R.string.unable_to_share_audio), Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun handleSetAsRingtone(activity: Activity, song: Music) {
+        RingtoneHelper.showSetRingtoneDialog(activity, song)
+    }
+
+    fun handleGoToAlbum(context: Context, song: Music) {
+        val album = song.album?.trim()
+        if (album.isNullOrEmpty() || album.equals("unknown", ignoreCase = true) || album.equals("<unknown>", ignoreCase = true)) {
+            Toast.makeText(context, context.getString(R.string.no_album_found), Toast.LENGTH_SHORT).show()
+            return
+        }
+        val intent = Intent(context, com.dhananjaysaini.musicplayerapp.activities.AlbumSongsActivity::class.java).apply {
+            putExtra("albumName", album)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
+
+    fun handleHideSong(activity: Activity, song: Music, onSongHidden: (() -> Unit)? = null) {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(activity)
+            .setTitle(R.string.hide_song_dialog_title)
+            .setMessage(activity.getString(R.string.hide_song_dialog_msg, song.title))
+            .setPositiveButton(R.string.action_hide_song) { _, _ ->
+                HiddenSongManager.hideSong(activity, song.id)
+                MusicService.allSongs = MusicService.allSongs.filter { it.id != song.id }
+                MusicService.removeSongFromPlaylistPreservingPosition(song.id)
+                if (MusicService.song?.id == song.id) {
+                    if (MusicService.playlist.isNotEmpty()) {
+                        val nextIndex = MusicService.position.coerceAtMost(MusicService.playlist.size - 1)
+                        MusicService.musicService?.playAt(nextIndex, true)
+                    } else {
+                        val pauseIntent = Intent(activity, MusicService::class.java).apply {
+                            action = Constants.ACTION_PAUSE
+                        }
+                        activity.startService(pauseIntent)
+                    }
+                }
+                Toast.makeText(activity, activity.getString(R.string.toast_song_hidden), Toast.LENGTH_SHORT).show()
+                onSongHidden?.invoke()
+            }
+            .setNegativeButton(R.string.btn_cancel, null)
+            .show()
+    }
 }

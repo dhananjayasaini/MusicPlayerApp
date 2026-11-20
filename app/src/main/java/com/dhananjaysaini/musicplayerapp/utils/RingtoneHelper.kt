@@ -39,6 +39,60 @@ object RingtoneHelper {
         }
     }
 
+    fun showSetRingtoneDialog(activity: Activity, song: com.dhananjaysaini.musicplayerapp.model.Music) {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(activity)
+        val dialogBinding = com.dhananjaysaini.musicplayerapp.databinding.LayoutSetRingtoneDialogBinding.inflate(
+            android.view.LayoutInflater.from(activity)
+        )
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.findViewById<android.view.View>(com.google.android.material.R.id.design_bottom_sheet)?.let { sheet ->
+            sheet.setBackgroundResource(android.R.color.transparent)
+        }
+        ThemeManager.applyThemeToBottomSheet(activity, dialogBinding.root)
+
+        dialogBinding.tvDialogRingtoneTitle.text = song.title
+
+        fun applyTone(type: Int) {
+            dialog.dismiss()
+            if (!canModifySettings(activity)) {
+                androidx.appcompat.app.AlertDialog.Builder(activity)
+                    .setTitle(R.string.permission_required_title)
+                    .setMessage(R.string.permission_ringtone_msg)
+                    .setPositiveButton(R.string.btn_allow) { _, _ ->
+                        openSettingsPermission(activity)
+                    }
+                    .setNegativeButton(R.string.btn_cancel, null)
+                    .show()
+                return
+            }
+            val file = File(song.path)
+            val sourceUri = try {
+                song.id.toLongOrNull()?.let {
+                    android.content.ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        it
+                    )
+                }
+            } catch (_: Exception) { null }
+
+            applyRingtone(activity, file, song.title, type, sourceUri)
+        }
+
+        dialogBinding.optPhoneRingtone.setOnClickListener {
+            applyTone(RingtoneManager.TYPE_RINGTONE)
+        }
+
+        dialogBinding.optNotificationTone.setOnClickListener {
+            applyTone(RingtoneManager.TYPE_NOTIFICATION)
+        }
+
+        dialogBinding.optAlarmTone.setOnClickListener {
+            applyTone(RingtoneManager.TYPE_ALARM)
+        }
+
+        dialog.show()
+    }
+
     fun applyRingtone(
         context: Context,
         file: File,

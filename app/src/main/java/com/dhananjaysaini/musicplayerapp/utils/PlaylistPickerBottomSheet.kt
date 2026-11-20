@@ -1,33 +1,57 @@
 package com.dhananjaysaini.musicplayerapp.utils
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import com.dhananjaysaini.musicplayerapp.R
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.PlaylistAdapter
 import com.dhananjaysaini.musicplayerapp.databinding.BottomSheetPlaylistPickerBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+class PlaylistPickerBottomSheet : BottomSheetDialogFragment {
 
-class PlaylistPickerBottomSheet(
-    private val song: Music
-) : BottomSheetDialogFragment() {
-
+    private var songs: ArrayList<Music> = arrayListOf()
     private lateinit var binding: BottomSheetPlaylistPickerBinding
     private lateinit var playListAdapter: PlaylistAdapter
 
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
+
+    constructor() : super()
+
+    constructor(song: Music) : super() {
+        this.songs = arrayListOf(song)
+    }
+
+    constructor(songs: List<Music>) : super() {
+        this.songs = ArrayList(songs)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val state = savedInstanceState ?: arguments
+        if (state != null) {
+            val list = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                state.getSerializable("songs", ArrayList::class.java) as? ArrayList<Music>
+            } else {
+                @Suppress("DEPRECATION")
+                state.getSerializable("songs") as? ArrayList<Music>
+            }
+            if (list != null) {
+                songs = list
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("songs", songs)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -41,7 +65,6 @@ class PlaylistPickerBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = BottomSheetPlaylistPickerBinding.inflate(inflater, container, false)
         ThemeManager.applyThemeToBottomSheet(requireContext(), binding.root)
 
@@ -56,24 +79,25 @@ class PlaylistPickerBottomSheet(
     }
 
     private fun setupRecycler() {
+        playListAdapter = PlaylistAdapter(arrayListOf(), showMenu = false)
 
-        playListAdapter = PlaylistAdapter(arrayListOf())
-
-        binding.playlistRecycler.layoutManager =
-            LinearLayoutManager(requireContext())
-
+        binding.playlistRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.playlistRecycler.adapter = playListAdapter
 
         playListAdapter.onItemClick = { playlist ->
+            songs.forEach { song ->
+                playlistViewModel.addSongToPlaylist(
+                    playlist.songId,
+                    song.id
+                )
+            }
 
-            playlistViewModel.addSongToPlaylist(
-                playlist.songId,
-                song.id
-            )
-
-            Toast.makeText(requireContext(), getString(R.string.toast_added_to_playlist, playlist.name),
-                Toast.LENGTH_SHORT
-            ).show()
+            val msg = if (songs.size > 1) {
+                getString(R.string.songs_added_to_playlist, songs.size, playlist.name)
+            } else {
+                getString(R.string.toast_added_to_playlist, playlist.name)
+            }
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 
             dismiss()
         }
@@ -83,62 +107,25 @@ class PlaylistPickerBottomSheet(
     }
 
     private fun observePlaylists() {
-
         playlistViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
-
             playListAdapter.update(playlists)
-
         }
     }
 
-    @SuppressLint("SuspiciousIndentation")
     private fun showCreatePlaylistDialog() {
-
-        val editText = EditText(requireContext())
-        editText.hint = getString(R.string.playlist_name_hint)
-
-         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.create_playlist)
-            .setView(editText)
-            .setPositiveButton(R.string.btn_create, null)
-            .setNegativeButton(R.string.btn_cancel, null)
-            .create()
-
-            dialog.show()
-
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            .setTextColor(Color.BLACK)
-
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            .setTextColor(Color.BLACK)
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-
-            val name = editText.text.toString().trim()
-
-            if (name.isEmpty()) {
-                editText.error = getString(R.string.error_enter_playlist_name)
-                return@setOnClickListener
-            }
-
-            val exists = playlistViewModel.playlists.value
-                ?.any { it.name.equals(name, true) }
-
-            if (exists == true) {
-                editText.error = getString(R.string.error_playlist_exists)
-                return@setOnClickListener
-            }
-
+        val existingNames = playlistViewModel.playlists.value?.map { it.name } ?: emptyList()
+        CreatePlaylistDialog.show(
+            context = requireContext(),
+            titleRes = R.string.create_playlist,
+            positiveBtnRes = R.string.btn_create,
+            existingNames = existingNames
+        ) { name ->
             playlistViewModel.createPlaylist(name)
-
             Toast.makeText(
                 requireContext(),
                 getString(R.string.playlist_created_msg),
                 Toast.LENGTH_SHORT
             ).show()
-
-            dialog.dismiss()
         }
     }
 }
