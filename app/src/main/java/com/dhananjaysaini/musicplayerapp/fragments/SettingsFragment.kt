@@ -429,11 +429,12 @@ class SettingsFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Privacy Policy 🔒")
             .setMessage(
-                "MusicAir respects your privacy:\n\n" +
+                "Music Player respects your privacy:\n\n" +
                         "1. Local Storage Only: We only access your device's audio files to organize and play your music.\n\n" +
-                        "2. Zero Telemetry / Tracking: We do not sell or upload your personal listening history, tracks, or metadata.\n\n" +
-                        "3. Audio Recording: Voice recorder stores your recordings strictly in your device's private storage.\n\n" +
-                        "4. System Permissions: Audio permissions are strictly utilized for foreground playback and equalizer effects."
+                        "2. Voice & Microphone (RECORD_AUDIO): The Voice Recorder feature accesses your microphone solely upon your explicit request. Audio recordings are stored strictly locally on your device and are never uploaded, collected, or shared with any third party.\n\n" +
+                        "3. Modify System Settings (WRITE_SETTINGS): System settings permission is requested solely when you explicitly choose to set a song or tone as your phone ringtone, notification, or alarm.\n\n" +
+                        "4. Zero Tracking / Telemetry: We do not collect, sell, or transmit your personal listening history, audio files, or metadata.\n\n" +
+                        "5. Foreground Service: Foreground service is used strictly for continuous music playback with standard media controls and notifications."
             )
             .setPositiveButton("I Understand", null)
             .show()

@@ -1,7 +1,9 @@
 package com.dhananjaysaini.musicplayerapp.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,6 +47,22 @@ class SearchFragment : Fragment() {
             if (!spokenText.isNullOrBlank()) {
                 binding.etSearch.setText(spokenText)
                 binding.etSearch.setSelection(spokenText.length)
+            }
+        }
+    }
+
+    private val requestAudioPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            launchVoiceSearchIntent()
+        } else {
+            context?.let { ctx ->
+                Toast.makeText(
+                    ctx,
+                    getString(R.string.mic_permission_required),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -152,6 +171,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun startVoiceSearch() {
+        val context = requireContext()
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            launchVoiceSearchIntent()
+        } else {
+            requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
+    private fun launchVoiceSearchIntent() {
         try {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -159,11 +191,29 @@ class SearchFragment : Fragment() {
             }
             voiceSearchLauncher.launch(intent)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), getString(R.string.toast_voice_search_unavailable), Toast.LENGTH_SHORT).show()
+            context?.let { ctx ->
+                Toast.makeText(ctx, getString(R.string.toast_voice_search_unavailable), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun playSong(list: ArrayList<Music>, position: Int) {
+        val mainActivity = activity as? com.dhananjaysaini.musicplayerapp.activities.MainActivity
+        if (mainActivity != null) {
+            mainActivity.playAudioTrack(list, position)
+            return
+        }
+        val act = activity ?: return
+        if (!com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.isPermissionGranted(act)) {
+            com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.checkAndRequestOnAudioClick(act) {
+                executeDirectPlay(list, position)
+            }
+            return
+        }
+        executeDirectPlay(list, position)
+    }
+
+    private fun executeDirectPlay(list: ArrayList<Music>, position: Int) {
         MusicService.playlist = ArrayList(list)
         MusicService.position = position
 

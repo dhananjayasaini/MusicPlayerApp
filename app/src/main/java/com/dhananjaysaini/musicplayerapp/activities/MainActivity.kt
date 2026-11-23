@@ -21,6 +21,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -37,6 +38,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import com.dhananjaysaini.musicplayerapp.R
 import com.dhananjaysaini.musicplayerapp.adapter.ViewPagerAdapter
+import com.dhananjaysaini.musicplayerapp.constants.Constants
 import com.dhananjaysaini.musicplayerapp.databinding.ActivityMainBinding
 import com.dhananjaysaini.musicplayerapp.fragments.MiniPlayerFragment
 import com.dhananjaysaini.musicplayerapp.repository.ThemeRepository
@@ -58,7 +60,6 @@ import com.dhananjaysaini.musicplayerapp.activities.VoiceRecorderActivity
 import com.dhananjaysaini.musicplayerapp.activities.FreeRingtonesActivity
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
-import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.CoroutineScope
@@ -71,8 +72,62 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var toolbar: Toolbar
-    private lateinit var voiceControl: VoiceControlManager
     private val mainViewModel: MainViewModel by viewModels()
+
+    private var pendingPlayList: ArrayList<Music>? = null
+    private var pendingPlayPosition: Int = 0
+    private var pendingOpenPlayer: Boolean = true
+
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { _ ->
+        val list = pendingPlayList
+        val pos = pendingPlayPosition
+        val openPlayer = pendingOpenPlayer
+        pendingPlayList = null
+        if (list != null) {
+            executePlaySong(list, pos, openPlayer)
+        }
+    }
+
+    fun playAudioTrack(list: ArrayList<Music>, position: Int, openPlayer: Boolean = true) {
+        if (!com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.isPermissionGranted(this)) {
+            pendingPlayList = list
+            pendingPlayPosition = position
+            pendingOpenPlayer = openPlayer
+            com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.checkAndRequestOnAudioClick(
+                activity = this,
+                onRequestSystemPermission = {
+                    requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                },
+                onProceed = {
+                    executePlaySong(list, position, openPlayer)
+                }
+            )
+            return
+        }
+        executePlaySong(list, position, openPlayer)
+    }
+
+    fun executePlaySong(list: ArrayList<Music>, position: Int, openPlayer: Boolean = true) {
+        MusicService.playlist = ArrayList(list)
+        MusicService.position = position
+
+        startService(
+            Intent(this, MusicService::class.java).apply {
+                action = Constants.ACTION_PLAY_AT
+                putExtra("songPosition", position)
+            }
+        )
+
+        sendBroadcast(
+            Intent("SHOW_MINI_PLAYER").setPackage(packageName)
+        )
+
+        if (openPlayer) {
+            startActivity(Intent(this, PlayerActivity::class.java))
+        }
+    }
 
     companion object {
         var musicListMA = ArrayList<Music>()
@@ -137,7 +192,6 @@ class MainActivity : AppCompatActivity() {
         setupMiniPlayer()
         observeViewModel()
         requestPermission()
-//        voiceControllerMa()
         mainSongsVM()
 
         onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
@@ -215,6 +269,7 @@ class MainActivity : AppCompatActivity() {
 
         val filter = IntentFilter().apply {
             addAction("SHOW_MINI_PLAYER")
+            addAction("HIDE_MINI_PLAYER")
             addAction("UPDATE_UI")
         }
         ContextCompat.registerReceiver(
@@ -235,7 +290,21 @@ class MainActivity : AppCompatActivity() {
 
     private val showMiniReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            binding.miniPlayerContainer.visibility = View.VISIBLE
+            when (intent?.action) {
+                "SHOW_MINI_PLAYER" -> {
+                    binding.miniPlayerContainer.visibility = View.VISIBLE
+                }
+                "HIDE_MINI_PLAYER" -> {
+                    binding.miniPlayerContainer.visibility = View.GONE
+                }
+                "UPDATE_UI" -> {
+                    if (MusicService.song != null && MusicService.mediaPlayer != null) {
+                        binding.miniPlayerContainer.visibility = View.VISIBLE
+                    } else {
+                        binding.miniPlayerContainer.visibility = View.GONE
+                    }
+                }
+            }
         }
     }
 
@@ -359,7 +428,6 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermission() {
         if (hasStoragePermission()) {
             mainViewModel.loadMusic(this)
-            requestNotificationPermission()
         } else {
             val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Manifest.permission.READ_MEDIA_AUDIO
@@ -378,18 +446,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (!hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    NOTIFICATION_PERMISSION_CODE
-                )
-            }
-        }
-    }
-
     private fun hasPermission(perm: String) =
         ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED
 
@@ -403,30 +459,17 @@ class MainActivity : AppCompatActivity() {
             STORAGE_PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mainViewModel.loadMusic(this)
-                    requestNotificationPermission()
                 }
             }
-            NOTIFICATION_PERMISSION_CODE -> {
-                // Notifications allowed or denied; playback works regardless
+            com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val serviceIntent = Intent(this, com.dhananjaysaini.musicplayerapp.service.MusicService::class.java).apply {
+                        action = com.dhananjaysaini.musicplayerapp.constants.Constants.ACTION_REFRESH_NOTIFICATION
+                    }
+                    startService(serviceIntent)
+                }
             }
         }
-    }
-
-    private fun checkAudioPermission() {
-        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 101)
-        }
-    }
-
-    // -------------------- Voice --------------------
-
-    private fun voiceControllerMa() {
-        voiceControl = VoiceControlManager(this)
-//        binding.voiceControlMa.btnMic.setOnClickListener {
-//            voiceControl.startListening()
-//        }
     }
 
     private fun toast(msg: String) {
@@ -525,8 +568,10 @@ class MainActivity : AppCompatActivity() {
         lastRecordedNightMode = expectedMode
         ThemeManager.applyThemeToActivity(this)
         updateToolbarColors()
-        if (MusicService.mediaPlayer != null || MusicService.playlist.isNotEmpty()) {
+        if (MusicService.song != null && MusicService.mediaPlayer != null) {
             binding.miniPlayerContainer.visibility = View.VISIBLE
+        } else {
+            binding.miniPlayerContainer.visibility = View.GONE
         }
     }
 

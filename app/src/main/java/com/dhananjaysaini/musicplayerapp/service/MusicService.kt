@@ -478,9 +478,16 @@ class MusicService : Service() {
             }
 
             Constants.ACTION_CLOSE_NOTIFICATION -> {
-                if (mediaPlayer?.isPlaying == true) {
-                    mediaPlayer?.pause()
-                }
+                try {
+                    if (mediaPlayer?.isPlaying == true) {
+                        mediaPlayer?.stop()
+                    }
+                    mediaPlayer?.release()
+                    mediaPlayer = null
+                } catch (_: Exception) {}
+                song = null
+                currentSongLiveData.postValue(null)
+                isPlayingLiveData.postValue(false)
                 stopProgressUpdates()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
@@ -491,7 +498,13 @@ class MusicService : Service() {
                 val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 nm.cancel(Constants.NOTIFICATION_ID)
                 isServiceStarted = false
-                broadcastUiUpdateAll()
+                sendBroadcast(Intent("HIDE_MINI_PLAYER").setPackage(packageName))
+                try {
+                    val prefs = getSharedPreferences("widget_playback_state", Context.MODE_PRIVATE)
+                    prefs.edit().putBoolean("isPlaying", false).apply()
+                    MusicAppWidgetProvider.updateAllWidgets(this)
+                } catch (_: Exception) {}
+                stopSelf()
             }
 
             // Optional: refresh notification state externally
@@ -565,6 +578,47 @@ class MusicService : Service() {
         VolumeBoosterManager.release()
         mediaPlayer?.release()
         mediaPlayer = null
+        song = null
+        currentSongLiveData.postValue(null)
+        isPlayingLiveData.postValue(false)
+        isServiceStarted = false
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        try {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.stop()
+            }
+            mediaPlayer?.release()
+            mediaPlayer = null
+        } catch (_: Exception) {}
+
+        song = null
+        currentSongLiveData.postValue(null)
+        isPlayingLiveData.postValue(false)
+        isServiceStarted = false
+        stopProgressUpdates()
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+            } else {
+                @Suppress("DEPRECATION")
+                stopForeground(true)
+            }
+            val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            nm.cancel(Constants.NOTIFICATION_ID)
+        } catch (_: Exception) {}
+
+        try {
+            val prefs = getSharedPreferences("widget_playback_state", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("isPlaying", false).apply()
+            MusicAppWidgetProvider.updateAllWidgets(this)
+        } catch (_: Exception) {}
+
+        sendBroadcast(Intent("HIDE_MINI_PLAYER").setPackage(packageName))
+        stopSelf()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

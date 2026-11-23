@@ -38,8 +38,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val songs = loadMusicUseCase()
                 musicListLiveData.postValue(songs)
 
-                MusicService.playlist = ArrayList(songs)
                 MusicService.allSongs = songs
+                if (MusicService.playlist.isEmpty()) {
+                    MusicService.playlist = ArrayList(songs)
+                }
 
             } catch (e: Exception) {
                 error.postValue(e.message.toString())

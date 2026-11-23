@@ -367,7 +367,10 @@
     <string name="timer_off">Timer: Off</string>
     <string name="btn_set_arrow">Set ➔</string>
     <string name="btn_allow">Allow</string>
+    <string name="btn_later">Not Now</string>
     <string name="btn_got_it">Got it</string>
+    <string name="bg_playback_perm_title">Background Playback Permission 🎵</string>
+    <string name="bg_playback_perm_msg">To keep playing music seamlessly when your screen is off or while using other apps, Music Player needs permission to run in the background and show playback controls.</string>
     <string name="permission_required_title">Permission Required</string>
     <string name="permission_ringtone_msg">To set a ringtone, notification sound, or alarm tone, Music Player needs permission to modify system audio settings.</string>
     <string name="mic_permission_required">Microphone permission is required to record voice</string>
@@ -387,4 +390,6 @@
     <string name="toast_tags_saved">Tags updated successfully</string>
     <string name="dialog_edit_tags_title">Edit Album Tags</string>
     <string name="dialog_edit_artist_tags_title">Edit Artist Tags</string>
+    <string name="splash_tagline">Feel The Beat</string>
+    <string name="splash_footer">Your Ultimate Sound Experience</string>
 </resources>

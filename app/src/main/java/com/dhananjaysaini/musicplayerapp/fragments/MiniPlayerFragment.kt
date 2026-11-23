@@ -170,13 +170,13 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
     private val updateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (_binding == null) return
-            val currentSong = MusicService.song ?: MusicService.playlist.getOrNull(MusicService.position)
+            val currentSong = MusicService.song ?: return
             val isPlaying = intent?.getBooleanExtra("isPlaying", MusicService.mediaPlayer?.isPlaying == true)
                 ?: (MusicService.mediaPlayer?.isPlaying == true)
 
-            val title = intent?.getStringExtra("title") ?: currentSong?.title
-            val artist = intent?.getStringExtra("artist") ?: currentSong?.artist
-            val artUri = intent?.getStringExtra("artUri") ?: currentSong?.artUri
+            val title = intent?.getStringExtra("title") ?: currentSong.title
+            val artist = intent?.getStringExtra("artist") ?: currentSong.artist
+            val artUri = intent?.getStringExtra("artUri") ?: currentSong.artUri
 
             if (!title.isNullOrEmpty()) {
                 binding.miniTitle.text = title
@@ -223,14 +223,10 @@ class MiniPlayerFragment : Fragment(R.layout.fragment_mini_player) {
 
     private fun updateMiniPlayerFromService() {
         if (_binding == null) return
-        val currentSong = MusicService.song ?: MusicService.playlist.getOrNull(MusicService.position)
+        val currentSong = MusicService.song
         val isPlaying = MusicService.mediaPlayer?.isPlaying == true
         if (currentSong != null) {
             updateMiniPlayerView(currentSong, isPlaying)
-        } else {
-            binding.miniPlayPause.setImageResource(
-                if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
-            )
         }
     }
 

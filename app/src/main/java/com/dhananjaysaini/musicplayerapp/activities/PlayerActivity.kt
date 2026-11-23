@@ -39,12 +39,12 @@ import com.dhananjaysaini.musicplayerapp.databinding.ActivityPlayerBinding
 import com.dhananjaysaini.musicplayerapp.model.Music
 import com.dhananjaysaini.musicplayerapp.model.formatDuration
 import com.dhananjaysaini.musicplayerapp.service.MusicService
+import com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper
 import com.dhananjaysaini.musicplayerapp.utils.EqualizerManager
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.SleepTimerBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.utils.ThemeSelectionBottomSheet
-import com.dhananjaysaini.musicplayerapp.utils.VoiceControlManager
 import com.dhananjaysaini.musicplayerapp.utils.WaveformSeekBar
 import com.dhananjaysaini.musicplayerapp.viewmodel.FavouriteViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.PlayerViewModel
@@ -64,7 +64,6 @@ open class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private val playerViewModel: PlayerViewModel by viewModels()
-    private lateinit var voiceControl: VoiceControlManager
     private lateinit var musicService: MusicService
     private lateinit var equalizerManager: EqualizerManager
 
@@ -110,9 +109,7 @@ open class PlayerActivity : AppCompatActivity() {
 
         observeViewModel()
         setupClicks()
-        checkAudioPermission()
         setToEqualizer()
-        voiceControllerPa()
         sleepTimerBottomSheet()
 
         binding.shareBtnPA.setOnClickListener {
@@ -120,6 +117,8 @@ open class PlayerActivity : AppCompatActivity() {
         }
 
         sendBroadcast(Intent("REQUEST_UI_UPDATE"))
+
+        BackgroundPlaybackPermissionHelper.checkAndRequestOnFirstAudioPlay(this)
     }
 
     private fun observeViewModel() {
@@ -373,21 +372,6 @@ open class PlayerActivity : AppCompatActivity() {
         binding.backBtnPA.setOnClickListener { finish() }
     }
 
-    private fun voiceControllerPa() {
-        voiceControl = VoiceControlManager(this)
-        binding.voiceControlPa.btnMic.setOnClickListener {
-            voiceControl.startListening()
-        }
-    }
-
-    private fun checkAudioPermission() {
-        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), 101)
-        }
-    }
-
     private fun setToEqualizer() {
         equalizerManager = EqualizerManager(this)
 
@@ -525,6 +509,22 @@ open class PlayerActivity : AppCompatActivity() {
         catch (e: Exception) {
             Toast.makeText(this, getString(R.string.toast_error_sharing), Toast.LENGTH_SHORT).show()
             e.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == BackgroundPlaybackPermissionHelper.NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val serviceIntent = Intent(this, MusicService::class.java).apply {
+                    action = Constants.ACTION_REFRESH_NOTIFICATION
+                }
+                startService(serviceIntent)
+            }
         }
     }
 

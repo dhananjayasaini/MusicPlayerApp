@@ -182,9 +182,8 @@ class VoiceRecorderActivity : AppCompatActivity() {
     private fun startRecording() {
         stopPlayback(keepOpen = true)
 
-        val dir = getRecordingsDir()
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        currentRecordingFile = File(dir, "REC_$timeStamp.m4a")
+        val tempDir = File(cacheDir, "recordings_temp").apply { if (!exists()) mkdirs() }
+        currentRecordingFile = File(tempDir, "temp_recording_${System.currentTimeMillis()}.m4a")
 
         try {
             mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -206,6 +205,10 @@ class VoiceRecorderActivity : AppCompatActivity() {
             currentState = RecordState.RECORDING
             recordStartTime = System.currentTimeMillis()
             recordElapsedTime = 0L
+
+            // Ensure no active recording or temp item is in the saved recordings list
+            recordings.removeAll { it.file.name.startsWith("temp_") || it.file.absolutePath == currentRecordingFile?.absolutePath }
+            adapter.updateList(recordings)
 
             binding.btnMainRecord.setBackgroundResource(R.drawable.bg_record_btn_active)
             binding.btnMainRecord.setImageResource(R.drawable.ic_widget_pause)
@@ -268,7 +271,9 @@ class VoiceRecorderActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadSavedRecordings()
+        if (currentState == RecordState.IDLE) {
+            loadSavedRecordings()
+        }
     }
 
     private fun stopAndSaveRecording() {
@@ -279,20 +284,27 @@ class VoiceRecorderActivity : AppCompatActivity() {
         } catch (e: Exception) {
             android.util.Log.e("VoiceRecorder", "stopAndSaveRecording error: ${e.message}")
         }
-
         mediaRecorder = null
-        currentRecordingFile?.let { savedFile ->
-            if (savedFile.exists() && savedFile.length() > 0L) {
-                try {
-                    android.media.MediaScannerConnection.scanFile(
-                        this,
-                        arrayOf(savedFile.absolutePath),
-                        arrayOf("audio/mp4", "audio/m4a"),
-                        null
-                    )
-                } catch (_: Exception) {}
+
+        val tempFile = currentRecordingFile
+        if (tempFile != null && tempFile.exists() && tempFile.length() > 0L) {
+            val dir = getRecordingsDir()
+            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val savedFile = File(dir, "REC_$timeStamp.m4a")
+            try {
+                tempFile.copyTo(savedFile, overwrite = true)
+                tempFile.delete()
+                android.media.MediaScannerConnection.scanFile(
+                    this,
+                    arrayOf(savedFile.absolutePath),
+                    arrayOf("audio/mp4", "audio/m4a"),
+                    null
+                )
+            } catch (e: Exception) {
+                android.util.Log.e("VoiceRecorder", "save copy error: ${e.message}")
             }
         }
+        currentRecordingFile = null
         resetRecordingState()
         Toast.makeText(this, getString(R.string.recording_saved), Toast.LENGTH_SHORT).show()
         loadSavedRecordings()
@@ -315,9 +327,13 @@ class VoiceRecorderActivity : AppCompatActivity() {
             mediaRecorder?.release()
         } catch (_: Exception) {}
         mediaRecorder = null
-        currentRecordingFile?.delete()
+        try {
+            currentRecordingFile?.delete()
+        } catch (_: Exception) {}
+        currentRecordingFile = null
         resetRecordingState()
         Toast.makeText(this, getString(R.string.recording_discarded), Toast.LENGTH_SHORT).show()
+        loadSavedRecordings()
     }
 
     private fun resetRecordingState() {
@@ -338,12 +354,23 @@ class VoiceRecorderActivity : AppCompatActivity() {
     }
 
     private fun loadSavedRecordings() {
+        if (currentState != RecordState.IDLE) return
         val dir = getRecordingsDir()
+        // Clean up any stale temp files if any ended up in recordings dir
+        dir.listFiles { file -> file.isFile && file.name.startsWith("temp_") }?.forEach {
+            try { it.delete() } catch (_: Exception) {}
+        }
+        val currentPath = currentRecordingFile?.absolutePath
         val files = dir.listFiles { file ->
-            file.isFile && file.length() > 0L && (file.extension.equals("m4a", true) ||
-                    file.extension.equals("mp3", true) ||
-                    file.extension.equals("wav", true) ||
-                    file.extension.equals("aac", true))
+            file.isFile &&
+            file.length() > 0L &&
+            !file.name.startsWith(".") &&
+            !file.name.startsWith("temp_") &&
+            file.absolutePath != currentPath &&
+            (file.extension.equals("m4a", true) ||
+             file.extension.equals("mp3", true) ||
+             file.extension.equals("wav", true) ||
+             file.extension.equals("aac", true))
         }?.sortedByDescending { it.lastModified() } ?: emptyList()
 
         recordings.clear()
@@ -585,6 +612,14 @@ class VoiceRecorderActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (currentState == RecordState.RECORDING) {
+            pauseRecording()
+        }
+        stopPlayback()
     }
 
     override fun onDestroy() {

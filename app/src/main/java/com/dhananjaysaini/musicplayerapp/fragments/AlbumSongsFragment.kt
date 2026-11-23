@@ -261,6 +261,22 @@ class AlbumSongsFragment : Fragment(R.layout.fragment_album_songs) {
     }
 
     private fun playSong(list: ArrayList<Music>, position: Int) {
+        val mainActivity = activity as? com.dhananjaysaini.musicplayerapp.activities.MainActivity
+        if (mainActivity != null) {
+            mainActivity.playAudioTrack(list, position)
+            return
+        }
+        val act = activity ?: return
+        if (!com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.isPermissionGranted(act)) {
+            com.dhananjaysaini.musicplayerapp.utils.BackgroundPlaybackPermissionHelper.checkAndRequestOnAudioClick(act) {
+                executeDirectPlay(list, position)
+            }
+            return
+        }
+        executeDirectPlay(list, position)
+    }
+
+    private fun executeDirectPlay(list: ArrayList<Music>, position: Int) {
         MusicService.playlist = ArrayList(list)
         MusicService.position = position
 
