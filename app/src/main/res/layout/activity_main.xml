@@ -46,7 +46,8 @@
                     android:text="@string/btn_recap"
                     android:textColor="@android:color/white"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 

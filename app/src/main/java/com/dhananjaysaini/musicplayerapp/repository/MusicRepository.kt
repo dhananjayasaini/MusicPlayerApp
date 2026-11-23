@@ -60,10 +60,11 @@ class MusicRepository(private val context: Context) {
                 val title = edited?.title ?: rawTitle
                 val artist = edited?.artist ?: rawArtist
                 val album = edited?.album ?: rawAlbum
+                val genre = edited?.genre
 
                 if (path.isNotEmpty()) {
                     audioList.add(
-                        Music(id, title, album, artist, duration, path, artUri, dateAddedMillis)
+                        Music(id, title, album, artist, duration, path, artUri, dateAddedMillis, genre)
                     )
                 }
             }

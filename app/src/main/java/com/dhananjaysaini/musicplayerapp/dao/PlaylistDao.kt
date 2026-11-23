@@ -12,10 +12,13 @@ import com.dhananjaysaini.musicplayerapp.model.PlaylistWithCount
 interface PlaylistDao {
 
     @Insert
-    suspend fun insertPlaylist(playlist: PlaylistEntity)
+    suspend fun insertPlaylist(playlist: PlaylistEntity): Long
 
     @Query("SELECT * FROM playlists ORDER BY createdAt DESC")
     fun getAllPlaylists(): LiveData<List<PlaylistEntity>>
+
+    @Query("SELECT * FROM playlists ORDER BY createdAt DESC")
+    suspend fun getAllPlaylistsList(): List<PlaylistEntity>
 
     @Query("DELETE FROM playlists WHERE songId = :playlistId")
     suspend fun deletePlaylist(playlistId: Int)

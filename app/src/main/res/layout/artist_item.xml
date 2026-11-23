@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_artist_avatar"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+            android:src="@drawable/bg_artist_avatar_circle"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circle" />
 
         <TextView
             android:id="@+id/tvArtistInitial"
@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:visibility="gone"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circle" />
     </FrameLayout>
 
     <!-- Name and Subtitle in packed vertical chain centered with avatar -->

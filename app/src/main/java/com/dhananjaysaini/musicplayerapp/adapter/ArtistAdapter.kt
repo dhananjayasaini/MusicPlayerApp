@@ -63,6 +63,7 @@ class ArtistAdapter(
             holder.artistImage.visibility = View.VISIBLE
             Glide.with(holder.itemView.context)
                 .load(artist.artUri)
+                .apply(com.bumptech.glide.request.RequestOptions().circleCrop())
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,

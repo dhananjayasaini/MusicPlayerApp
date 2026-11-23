@@ -44,11 +44,13 @@ class HomeFragment : Fragment() {
         binding.homeViewPager.offscreenPageLimit = 2
 
         val titles = listOf(
+            getString(R.string.tab_for_you),
             getString(R.string.tab_songs),
             getString(R.string.tab_playlists),
             getString(R.string.tab_folders),
             getString(R.string.tab_albums),
-            getString(R.string.tab_artists)
+            getString(R.string.tab_artists),
+            getString(R.string.tab_genres)
         )
 
         TabLayoutMediator(binding.homeTabLayout, binding.homeViewPager) { tab, position ->
@@ -152,16 +154,18 @@ class HomeFragment : Fragment() {
     }
 
     private inner class HomePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-        override fun getItemCount(): Int = 5
+        override fun getItemCount(): Int = 7
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> AllSongsFragment()
-                1 -> PlaylistFragment()
-                2 -> FolderFragment()
-                3 -> AlbumFragment()
-                4 -> ArtistFragment()
-                else -> AllSongsFragment()
+                0 -> ForYouFragment()
+                1 -> AllSongsFragment()
+                2 -> PlaylistFragment()
+                3 -> FolderFragment()
+                4 -> AlbumFragment()
+                5 -> ArtistFragment()
+                6 -> GenreFragment()
+                else -> ForYouFragment()
             }
         }
     }

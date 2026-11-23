@@ -16,9 +16,15 @@ interface PlayHistoryDao {
     @Query("SELECT * FROM play_history ORDER BY lastPlayed DESC LIMIT 20")
     fun getRecentlyPlayed(): LiveData<List<PlayHistoryEntity>>
 
-    @Query("SELECT * FROM play_history ORDER BY playCount DESC LIMIT 20")
+    @Query("SELECT * FROM play_history ORDER BY playCount DESC, lastPlayed DESC LIMIT 20")
     fun getTopPlayed(): LiveData<List<PlayHistoryEntity>>
 
-    @Query("SELECT * FROM play_history WHERE songId = :id LIMIT 20")
+    @Query("SELECT * FROM play_history ORDER BY lastPlayed DESC LIMIT 20")
+    suspend fun getRecentlyPlayedSync(): List<PlayHistoryEntity>
+
+    @Query("SELECT * FROM play_history ORDER BY playCount DESC, lastPlayed DESC LIMIT 20")
+    suspend fun getTopPlayedSync(): List<PlayHistoryEntity>
+
+    @Query("SELECT * FROM play_history WHERE songId = :id LIMIT 1")
     suspend fun getSong(id: String): PlayHistoryEntity?
 }

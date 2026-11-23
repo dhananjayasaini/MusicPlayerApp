@@ -45,6 +45,12 @@
             android:name=".activities.AlbumSongsActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.MixDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.GenreSongsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SkinThemeActivity"
             android:exported="false" />
         <activity

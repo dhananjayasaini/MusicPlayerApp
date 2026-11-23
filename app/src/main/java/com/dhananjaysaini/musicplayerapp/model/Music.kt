@@ -12,7 +12,8 @@ data class Music(
     val duration: Long,
     val path: String,
     val artUri: String,
-    val date: Long
+    val date: Long,
+    val genre: String? = null
 ) : Serializable
 
 @SuppressLint("DefaultLocale")
