@@ -72,6 +72,9 @@
             android:name=".activities.VoiceRecorderActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FreeRingtonesActivity"
             android:exported="false" />
 

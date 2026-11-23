@@ -140,6 +140,18 @@ class MainActivity : AppCompatActivity() {
 //        voiceControllerMa()
         mainSongsVM()
 
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerBtn.isDrawerOpen(androidx.core.view.GravityCompat.START)) {
+                    binding.drawerBtn.closeDrawer(androidx.core.view.GravityCompat.START)
+                } else if (binding.bottomNavigation.selectedItemId != R.id.nav_home) {
+                    binding.bottomNavigation.selectedItemId = R.id.nav_home
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private var lastRecordedNightMode: Int? = null
@@ -170,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                     binding.viewPager.setCurrentItem(1, false)
                     true
                 }
-                R.id.nav_search -> {
+                R.id.nav_recorder -> {
                     binding.viewPager.setCurrentItem(2, false)
                     true
                 }
@@ -243,7 +255,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_search -> {
-                binding.bottomNavigation.selectedItemId = R.id.nav_search
+                startActivity(Intent(this, SearchActivity::class.java))
                 return true
             }
             R.id.action_settings -> {
@@ -329,7 +341,7 @@ class MainActivity : AppCompatActivity() {
         // 9. Voice recorder [AD]
         customDrawer.navItemVoiceRecorder.setOnClickListener {
             drawer.closeDrawers()
-            startActivity(Intent(this, VoiceRecorderActivity::class.java))
+            binding.bottomNavigation.selectedItemId = R.id.nav_recorder
         }
 
         // 10. Free ringtones [AD]

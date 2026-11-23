@@ -11,9 +11,9 @@
         android:title="@string/nav_favourite" />
 
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/ic_nav_search"
-        android:title="@string/nav_search" />
+        android:id="@+id/nav_recorder"
+        android:icon="@drawable/ic_nav_recorder"
+        android:title="@string/nav_recorder" />
 
     <item
         android:id="@+id/nav_settings"
