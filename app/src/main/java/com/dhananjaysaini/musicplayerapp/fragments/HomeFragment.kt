@@ -36,10 +36,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupTabsAndViewPager()
+        setupTabsAndViewPager(savedInstanceState)
     }
 
-    private fun setupTabsAndViewPager() {
+    private fun setupTabsAndViewPager(savedInstanceState: Bundle?) {
         binding.homeViewPager.adapter = HomePagerAdapter(this)
         binding.homeViewPager.offscreenPageLimit = 2
 
@@ -72,8 +72,15 @@ class HomeFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
+        if (savedInstanceState == null) {
+            binding.homeViewPager.setCurrentItem(1, false)
+        }
+
         // Style initial selected tab (Songs)
         binding.homeTabLayout.post {
+            if (savedInstanceState == null) {
+                binding.homeTabLayout.getTabAt(1)?.select()
+            }
             refreshThemeTabs()
         }
 

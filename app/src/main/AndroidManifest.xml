@@ -99,6 +99,11 @@
         </activity>
 
         <activity
+            android:name=".activities.PermissionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MusicPlayerApp.Splash" />
+
+        <activity
             android:name=".activities.PlayerActivity"
             android:exported="false" />
         <activity

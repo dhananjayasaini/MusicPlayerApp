@@ -568,6 +568,9 @@ class MainActivity : AppCompatActivity() {
         lastRecordedNightMode = expectedMode
         ThemeManager.applyThemeToActivity(this)
         updateToolbarColors()
+        if (hasStoragePermission()) {
+            mainViewModel.loadMusic(this)
+        }
         if (MusicService.song != null && MusicService.mediaPlayer != null) {
             binding.miniPlayerContainer.visibility = View.VISIBLE
         } else {

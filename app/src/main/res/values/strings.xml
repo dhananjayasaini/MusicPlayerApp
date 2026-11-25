@@ -392,4 +392,16 @@
     <string name="dialog_edit_artist_tags_title">Edit Artist Tags</string>
     <string name="splash_tagline">Feel The Beat</string>
     <string name="splash_footer">Your Ultimate Sound Experience</string>
+    <string name="media_permission_required_desc">Music Player requires access to your audio files to discover and play songs on your device.</string>
+    <string name="btn_grant_permission">Grant Permission</string>
+    <string name="permission_screen_title">Media Access</string>
+    <string name="permission_screen_subtitle">Music Player needs permission to access audio files to find, load and play songs on your device.</string>
+    <string name="permission_feature_1_title">All Audio Files</string>
+    <string name="permission_feature_1_desc">Play all MP3, FLAC, WAV, AAC offline audio</string>
+    <string name="permission_feature_2_title">Smart Music Library</string>
+    <string name="permission_feature_2_desc">Organize by songs, albums, artists &amp; folders</string>
+    <string name="permission_feature_3_title">Playlists &amp; Tones</string>
+    <string name="permission_feature_3_desc">Create playlists and custom ringtones</string>
+    <string name="btn_allow_access">Allow Access</string>
+    <string name="btn_open_settings">Open Settings</string>
 </resources>
