@@ -95,6 +95,23 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
                 playSong(ArrayList(favouriteSongs), 0)
             }
         }
+
+        binding.btnAddSongsFav.setOnClickListener {
+            val excludedIds = favouriteSongs.map { it.id }
+            val addSheet = com.dhananjaysaini.musicplayerapp.utils.AddSongsBottomSheet.newInstance(excludedIds)
+            addSheet.onSongsSelected = { selectedSongs ->
+                for (song in selectedSongs) {
+                    com.dhananjaysaini.musicplayerapp.utils.FavouriteManager.addFavourite(song)
+                    favouriteViewModel.setFavourite(song.id, true)
+                }
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    getString(R.string.songs_added_success, selectedSongs.size),
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
+            addSheet.show(parentFragmentManager, "AddSongsBottomSheet")
+        }
     }
 
     private fun playSong(list: ArrayList<Music>, position: Int) {

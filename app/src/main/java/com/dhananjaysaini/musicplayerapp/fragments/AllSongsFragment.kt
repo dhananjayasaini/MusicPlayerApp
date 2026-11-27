@@ -89,8 +89,26 @@ open class AllSongsFragment : Fragment() {
         binding.btnPlayAll.setOnClickListener {
             val list = mainViewModel.musicListLiveData.value
             if (!list.isNullOrEmpty()) {
-                playSong(ArrayList(list), 0)
+                val sorted = com.dhananjaysaini.musicplayerapp.utils.SongSortManager.sortSongs(list, requireContext())
+                playSong(ArrayList(sorted), 0)
             }
+        }
+
+        binding.btnSortSongs.setOnClickListener {
+            val sortSheet = com.dhananjaysaini.musicplayerapp.utils.SortSongsBottomSheet()
+            sortSheet.onSortApplied = {
+                val currentList = mainViewModel.musicListLiveData.value ?: emptyList()
+                val sorted = com.dhananjaysaini.musicplayerapp.utils.SongSortManager.sortSongs(currentList, requireContext())
+                allSongsAdapter.updateList(ArrayList(sorted))
+            }
+            sortSheet.show(parentFragmentManager, "SortSongsBottomSheet")
+        }
+
+        binding.btnSelectSongs.setOnClickListener {
+            val currentList = mainViewModel.musicListLiveData.value ?: emptyList()
+            val sorted = com.dhananjaysaini.musicplayerapp.utils.SongSortManager.sortSongs(currentList, requireContext())
+            val selectSheet = com.dhananjaysaini.musicplayerapp.utils.SelectSongsBottomSheet.newInstance(ArrayList(sorted))
+            selectSheet.show(parentFragmentManager, "SelectSongsBottomSheet")
         }
     }
 
@@ -112,9 +130,10 @@ open class AllSongsFragment : Fragment() {
 
     private fun observeSongs() {
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { list ->
-            allSongsAdapter.updateList(ArrayList(list))
+            val sorted = com.dhananjaysaini.musicplayerapp.utils.SongSortManager.sortSongs(list, requireContext())
+            allSongsAdapter.updateList(ArrayList(sorted))
 
-            binding.totalSongsTv.text = LocaleHelper.getSongCountString(requireContext(), list.size)
+            binding.totalSongsTv.text = LocaleHelper.getSongCountString(requireContext(), sorted.size)
         }
     }
 

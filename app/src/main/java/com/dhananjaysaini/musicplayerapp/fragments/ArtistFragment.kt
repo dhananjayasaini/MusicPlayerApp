@@ -16,6 +16,9 @@ import com.dhananjaysaini.musicplayerapp.model.MusicArtist
 import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.ArtistOptionsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
+import com.dhananjaysaini.musicplayerapp.utils.SelectSongsBottomSheet
+import com.dhananjaysaini.musicplayerapp.utils.SongSortManager
+import com.dhananjaysaini.musicplayerapp.utils.SortSongsBottomSheet
 import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 
@@ -24,6 +27,7 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
     private lateinit var binding: FragmentArtistBinding
     private lateinit var artistAdapter: ArtistAdapter
     private lateinit var mainViewModel: MainViewModel
+    private var rawArtists: List<MusicArtist> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,9 +69,11 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
             sheet.show(parentFragmentManager, "artist_options_${artist.name}")
         }
 
+        setupActionButtons()
+
         mainViewModel.musicListLiveData.observe(viewLifecycleOwner) { songs ->
             val unknownArtist = getString(R.string.unknown_artist)
-            val artists = songs
+            rawArtists = songs
                 .groupBy { it.artist ?: unknownArtist }
                 .map { (name, list) ->
                     val albums = list.mapNotNull { it.album }.filter { it.isNotBlank() }.distinct()
@@ -80,11 +86,47 @@ class ArtistFragment : Fragment(R.layout.fragment_artist) {
                         albumCount = albumCount
                     )
                 }
-                .sortedBy { it.name.lowercase() }
 
-            artistAdapter.updateList(artists)
+            val sorted = applyArtistSort(rawArtists)
+            artistAdapter.updateList(sorted)
 
-            binding.totalArtist.text = LocaleHelper.getArtistCountString(requireContext(), artists.size)
+            binding.totalArtist.text = LocaleHelper.getArtistCountString(requireContext(), sorted.size)
+        }
+    }
+
+    private fun applyArtistSort(artists: List<MusicArtist>): List<MusicArtist> {
+        val type = SongSortManager.getSortType(requireContext())
+        val order = SongSortManager.getSortOrder(requireContext())
+        val sorted = when (type) {
+            SongSortManager.SortType.ALBUM_NAME -> artists.sortedBy { it.albumCount }
+            SongSortManager.SortType.SIZE, SongSortManager.SortType.PLAY_COUNT -> artists.sortedBy { it.songCount }
+            SongSortManager.SortType.RANDOM -> artists.shuffled()
+            else -> artists.sortedBy { it.name.lowercase() }
+        }
+        return if (type == SongSortManager.SortType.RANDOM) {
+            sorted
+        } else if (order == SongSortManager.SortOrder.DESCENDING) {
+            sorted.reversed()
+        } else {
+            sorted
+        }
+    }
+
+    private fun setupActionButtons() {
+        binding.btnSortArtists.setOnClickListener {
+            val sortSheet = SortSongsBottomSheet()
+            sortSheet.onSortApplied = {
+                val sorted = applyArtistSort(rawArtists)
+                artistAdapter.updateList(sorted)
+            }
+            sortSheet.show(parentFragmentManager, "SortSongsBottomSheet")
+        }
+
+        binding.btnSelectSongs.setOnClickListener {
+            val allSongs = mainViewModel.musicListLiveData.value ?: MusicService.allSongs
+            val sorted = SongSortManager.sortSongs(allSongs, requireContext())
+            val selectSheet = SelectSongsBottomSheet.newInstance(ArrayList(sorted))
+            selectSheet.show(parentFragmentManager, "SelectSongsBottomSheet")
         }
     }
 

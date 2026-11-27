@@ -47,4 +47,42 @@ object DeleteManager {
             Toast.makeText(activity, activity.getString(R.string.toast_unable_to_delete), Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun deleteSongs(activity: Activity, songs: List<Music>) {
+        if (songs.isEmpty()) return
+        val uris = songs.mapNotNull {
+            try {
+                ContentUris.withAppendedId(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    it.id.toLong()
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val intentSender = MediaStore.createDeleteRequest(
+                    activity.contentResolver,
+                    uris
+                ).intentSender
+
+                activity.startIntentSenderForResult(
+                    intentSender,
+                    DELETE_REQUEST_CODE,
+                    null,
+                    0,
+                    0,
+                    0
+                )
+            } else {
+                for (uri in uris) {
+                    activity.contentResolver.delete(uri, null, null)
+                }
+            }
+        } catch (e: Exception) {
+            Toast.makeText(activity, activity.getString(R.string.toast_unable_to_delete), Toast.LENGTH_SHORT).show()
+        }
+    }
 }

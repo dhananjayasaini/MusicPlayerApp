@@ -27,4 +27,7 @@ interface PlayHistoryDao {
 
     @Query("SELECT * FROM play_history WHERE songId = :id LIMIT 1")
     suspend fun getSong(id: String): PlayHistoryEntity?
+
+    @Query("SELECT * FROM play_history")
+    suspend fun getAllHistorySync(): List<PlayHistoryEntity>
 }

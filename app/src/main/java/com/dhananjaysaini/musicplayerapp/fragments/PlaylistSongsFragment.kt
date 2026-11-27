@@ -139,6 +139,10 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             requireActivity().finish()
         }
 
+        binding.btnAddSongs.setOnClickListener {
+            openAddSongsSheet()
+        }
+
         setupSearch()
 
         // Top-right 3 dots on playlist detail screen
@@ -166,6 +170,11 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
                 songs = songs,
                 isCustomPlaylist = isCustom
             )
+            if (isCustom || playlistType == "favourite") {
+                sheet.onAddSongsClick = {
+                    openAddSongsSheet()
+                }
+            }
             if (isCustom) {
                 sheet.onRenameClick = {
                     val existingNames = playlistVM.playlists.value?.map { it.name } ?: emptyList()
@@ -391,7 +400,42 @@ class PlaylistSongsFragment : Fragment(R.layout.fragment_playlist_songs) {
             applySearchFilter(currentSearchQuery)
         } else {
             playlistSongsAdapter.updateList(ArrayList(songs))
+            if (songs.isEmpty()) {
+                binding.layoutEmptyPlaylist.visibility = View.VISIBLE
+                binding.playlistSongsRecycler.visibility = View.GONE
+                binding.playlistSongCount.visibility = View.GONE
+                binding.rowPlaylistActions.visibility = View.GONE
+            } else {
+                binding.layoutEmptyPlaylist.visibility = View.GONE
+                binding.playlistSongsRecycler.visibility = View.VISIBLE
+                binding.playlistSongCount.visibility = View.VISIBLE
+                binding.rowPlaylistActions.visibility = View.VISIBLE
+            }
         }
+    }
+
+    private fun openAddSongsSheet() {
+        val excludedIds = songs.map { it.id }
+        val addSheet = com.dhananjaysaini.musicplayerapp.utils.AddSongsBottomSheet.newInstance(excludedIds)
+        addSheet.onSongsSelected = { selectedSongs ->
+            val playlistType = arguments?.getString("playlistType")
+            val playlistId = arguments?.getInt("playlistId", -1) ?: -1
+            val context = requireContext()
+
+            if (playlistType == "favourite") {
+                for (song in selectedSongs) {
+                    com.dhananjaysaini.musicplayerapp.utils.FavouriteManager.addFavourite(song)
+                    favouriteVM.setFavourite(song.id, true)
+                }
+                Toast.makeText(context, getString(R.string.songs_added_success, selectedSongs.size), Toast.LENGTH_SHORT).show()
+            } else if (playlistId != -1) {
+                for (song in selectedSongs) {
+                    playlistVM.addSongToPlaylist(playlistId, song.id)
+                }
+                Toast.makeText(context, getString(R.string.songs_added_success, selectedSongs.size), Toast.LENGTH_SHORT).show()
+            }
+        }
+        addSheet.show(parentFragmentManager, "AddSongsBottomSheet")
     }
 
     private fun hideKeyboard() {

@@ -16,6 +16,9 @@ import com.dhananjaysaini.musicplayerapp.service.MusicService
 import com.dhananjaysaini.musicplayerapp.utils.HiddenSongManager
 import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
 import com.dhananjaysaini.musicplayerapp.utils.PlaylistFolderOptionsBottomSheet
+import com.dhananjaysaini.musicplayerapp.utils.SelectSongsBottomSheet
+import com.dhananjaysaini.musicplayerapp.utils.SongSortManager
+import com.dhananjaysaini.musicplayerapp.utils.SortSongsBottomSheet
 import com.dhananjaysaini.musicplayerapp.viewmodel.FolderViewModel
 import com.dhananjaysaini.musicplayerapp.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,6 +28,8 @@ class FolderFragment : Fragment(R.layout.fragment_folder) {
     private lateinit var binding: FragmentFolderBinding
     private lateinit var folderAdapter: FolderAdapter
     private lateinit var folderViewModel: FolderViewModel
+    private lateinit var mainViewModel: MainViewModel
+    private var currentFolders: List<SongFolder> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +37,7 @@ class FolderFragment : Fragment(R.layout.fragment_folder) {
         binding = FragmentFolderBinding.bind(view)
 
         folderViewModel = ViewModelProvider(this).get(FolderViewModel::class.java)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         folderAdapter = FolderAdapter(mutableListOf())
 
         val recycler = binding.folderRecycler
@@ -39,13 +45,59 @@ class FolderFragment : Fragment(R.layout.fragment_folder) {
         recycler.adapter = folderAdapter
 
         folderViewModel.folders.observe(viewLifecycleOwner) {
-            folderAdapter.update(it)
-            binding.totalFolder.text = LocaleHelper.getFolderCountString(requireContext(), it.size)
+            currentFolders = it
+            val sorted = applyFolderSort(it)
+            folderAdapter.update(sorted)
+            binding.totalFolder.text = LocaleHelper.getFolderCountString(requireContext(), sorted.size)
         }
         folderViewModel.loadFolders(requireContext())
 
+        setupActionButtons()
         openFolderSongs()
         setupFolderMenu()
+    }
+
+    private fun applyFolderSort(folders: List<SongFolder>): List<SongFolder> {
+        val type = SongSortManager.getSortType(requireContext())
+        val order = SongSortManager.getSortOrder(requireContext())
+        val sorted = when (type) {
+            SongSortManager.SortType.SIZE, SongSortManager.SortType.PLAY_COUNT -> {
+                folders.sortedBy { it.songCount }
+            }
+            SongSortManager.SortType.RANDOM -> folders.shuffled()
+            else -> folders.sortedBy { it.name.lowercase() }
+        }
+        return if (type == SongSortManager.SortType.RANDOM) {
+            sorted
+        } else if (order == SongSortManager.SortOrder.DESCENDING) {
+            sorted.reversed()
+        } else {
+            sorted
+        }
+    }
+
+    private fun setupActionButtons() {
+        binding.btnSortFolders.setOnClickListener {
+            val sortSheet = SortSongsBottomSheet()
+            sortSheet.onSortApplied = {
+                val sorted = applyFolderSort(currentFolders)
+                folderAdapter.update(sorted)
+            }
+            sortSheet.show(parentFragmentManager, "SortSongsBottomSheet")
+        }
+
+        binding.btnSelectSongs.setOnClickListener {
+            val allSongs = MusicService.allSongs.ifEmpty {
+                try {
+                    mainViewModel.musicListLiveData.value ?: emptyList()
+                } catch (_: Exception) {
+                    emptyList()
+                }
+            }
+            val sorted = SongSortManager.sortSongs(allSongs, requireContext())
+            val selectSheet = SelectSongsBottomSheet.newInstance(ArrayList(sorted))
+            selectSheet.show(parentFragmentManager, "SelectSongsBottomSheet")
+        }
     }
 
     private fun openFolderSongs() {

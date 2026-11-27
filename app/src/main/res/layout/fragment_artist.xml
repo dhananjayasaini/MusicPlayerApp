@@ -29,25 +29,35 @@
             android:textStyle="bold"/>
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/btnCreatePlaylist"
+                android:id="@+id/btnSortArtists"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:visibility="gone"
-                android:src="@drawable/add_icon"
-                app:tint="?attr/colorOnSurface"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/sort_by"
+                android:src="@drawable/ic_sort_arrows" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="#40FFFFFF" />
 
             <ImageView
+                android:id="@+id/btnSelectSongs"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_neon_sort"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/select_songs"
+                android:src="@drawable/ic_list_view" />
         </LinearLayout>
 
     </RelativeLayout>
