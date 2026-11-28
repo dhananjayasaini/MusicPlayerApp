@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardWidgetRoot"
+    android:layout_width="match_parent"
+    android:layout_height="145dp"
+    android:layout_marginBottom="12dp"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_widget_list_card"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <!-- Preview Container (Left): Exactly 16dp margin from card left edge -->
+    <FrameLayout
+        android:id="@+id/previewContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp">
+
+        <!-- Injected widget preview view will be aligned start and centered vertically -->
+    </FrameLayout>
+
+    <!-- Info & ADD Button (Right): Exactly 16dp margin from card right edge -->
+    <LinearLayout
+        android:id="@+id/infoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical|start"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/tvWidgetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Standard"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvWidgetSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Size: 4*2"
+            android:textColor="#D8BED0"
+            android:textSize="13sp"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/btnAddWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:minWidth="76dp"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_btn_add_widget"
+            android:text="@string/widget_btn_add"
+            android:textColor="#FF9F00"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+</LinearLayout>

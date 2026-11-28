@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#160C1D"
+    tools:context=".activities.MixDetailsActivity">
+
+    <!-- Top Navigation Bar -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_neon_back" />
+
+        <TextView
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_btn_save_mix"
+            android:gravity="center"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:text="+ Save"
+            android:textColor="#FFD54F"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 3D Stacked Card Container -->
+            <FrameLayout
+                android:id="@+id/layoutStackContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp">
+
+                <!-- Background Plate 2 (Outer back plate) -->
+                <View
+                    android:id="@+id/cardPlate2"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_gravity="center"
+                    android:alpha="0.22"
+                    android:scaleX="1.16"
+                    android:scaleY="0.86"
+                    android:background="@drawable/bg_mix_artist" />
+
+                <!-- Background Plate 1 (Middle plate) -->
+                <View
+                    android:id="@+id/cardPlate1"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_gravity="center"
+                    android:alpha="0.45"
+                    android:scaleX="1.08"
+                    android:scaleY="0.93"
+                    android:background="@drawable/bg_mix_artist" />
+
+                <!-- Main Top Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardMain"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="8dp"
+                    app:strokeWidth="0dp">
+
+                    <FrameLayout
+                        android:id="@+id/bgCardMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_mix_artist"
+                        android:padding="16dp">
+
+                        <!-- For Normal Mixes: Centered Text -->
+                        <TextView
+                            android:id="@+id/tvCardCenterText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            tools:text="Top Artist\nMix" />
+
+                        <!-- For Music Recap: Headphone watermark + Bottom Text -->
+                        <ImageView
+                            android:id="@+id/ivCardRecapHeadset"
+                            android:layout_width="86dp"
+                            android:layout_height="86dp"
+                            android:layout_gravity="top|end"
+                            android:alpha="0.22"
+                            android:src="@drawable/ic_headset_small"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvCardRecapText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|start"
+                            android:textColor="#FFFFFF"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            tools:text="Oct" />
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
+
+            <!-- Title & Subtitle (Left aligned) -->
+            <TextView
+                android:id="@+id/tvMixTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="Top Artist Mix" />
+
+            <TextView
+                android:id="@+id/tvMixSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="#A08EBC"
+                android:textSize="14sp"
+                tools:text="7 songs • A mix from your top artists" />
+
+            <!-- Buttons: Shuffle & Play -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMixShuffle"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/btn_shuffle"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#111111"
+                    app:icon="@drawable/ic_neon_shuffle"
+                    app:iconTint="#111111"
+                    app:iconGravity="textStart"
+                    app:cornerRadius="24dp"
+                    app:strokeWidth="0dp"
+                    app:backgroundTint="#FFFFFF"
+                    app:elevation="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMixPlay"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/btn_play"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#111111"
+                    app:icon="@drawable/ic_neon_play"
+                    app:iconTint="#111111"
+                    app:iconGravity="textStart"
+                    app:cornerRadius="24dp"
+                    app:strokeWidth="0dp"
+                    app:backgroundTint="#FFFFFF"
+                    app:elevation="2dp" />
+            </LinearLayout>
+
+            <!-- Song List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMixSongs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer Ambient Glow -->
+    <path
+        android:pathData="M12,5 C7,5 2.73,8.11 1.5,12 C2.73,15.89 7,19 12,19 C17,19 21.27,15.89 22.5,12 C21.27,8.11 17,5 12,5 Z"
+        android:strokeWidth="3.4"
+        android:strokeAlpha="0.28"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="2"
+                android:startY="5"
+                android:endX="22"
+                android:endY="19"
+                android:startColor="#B026FF"
+                android:centerColor="#FF007F"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Main Glowing Neon Eye Outline -->
+    <path
+        android:pathData="M12,5 C7,5 2.73,8.11 1.5,12 C2.73,15.89 7,19 12,19 C17,19 21.27,15.89 22.5,12 C21.27,8.11 17,5 12,5 Z"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#1F12052E">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="2"
+                android:startY="5"
+                android:endX="22"
+                android:endY="19"
+                android:startColor="#B026FF"
+                android:centerColor="#FF007F"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Center Neon Pupil Ring -->
+    <path
+        android:pathData="M12,12m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0"
+        android:strokeWidth="1.8"
+        android:strokeColor="#00F5FF"
+        android:fillColor="#00000000" />
+
+    <!-- Diagonal Slash Ambient Glow -->
+    <path
+        android:pathData="M3.5,3.5 L20.5,20.5"
+        android:strokeWidth="3.6"
+        android:strokeAlpha="0.35"
+        android:strokeColor="#FF007F"
+        android:strokeLineCap="round" />
+
+    <!-- Diagonal Slash Neon Tube -->
+    <path
+        android:pathData="M3.5,3.5 L20.5,20.5"
+        android:strokeWidth="2.0"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3.5"
+                android:startY="3.5"
+                android:endX="20.5"
+                android:endY="20.5"
+                android:startColor="#FF007F"
+                android:centerColor="#FF6B9D"
+                android:endColor="#00F5FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Diagonal Slash Bright White Core -->
+    <path
+        android:pathData="M4.2,4.2 L19.8,19.8"
+        android:strokeWidth="0.7"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+</vector>

@@ -1,0 +1,37 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Vinyl black outer disc -->
+    <path
+        android:fillColor="#151517"
+        android:pathData="M32,32m-32,0a32,32 0,1 1,64 0a32,32 0,1 1,-64 0" />
+    <!-- Groove Ring 1 -->
+    <path
+        android:strokeColor="#252528"
+        android:strokeWidth="1"
+        android:pathData="M32,32m-27,0a27,27 0,1 1,54 0a27,27 0,1 1,-54 0" />
+    <!-- Groove Ring 2 -->
+    <path
+        android:strokeColor="#222225"
+        android:strokeWidth="1.2"
+        android:pathData="M32,32m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0" />
+    <!-- Groove Ring 3 -->
+    <path
+        android:strokeColor="#2A2A2E"
+        android:strokeWidth="1"
+        android:pathData="M32,32m-17,0a17,17 0,1 1,34 0a17,17 0,1 1,-34 0" />
+    <!-- Center Sunset Label Circle -->
+    <path
+        android:fillColor="#E66A23"
+        android:pathData="M32,32m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
+    <!-- Center Inner Sun / Sky Detail -->
+    <path
+        android:fillColor="#F6AE32"
+        android:pathData="M32,32m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    <!-- Center Spindle Hole -->
+    <path
+        android:fillColor="#111113"
+        android:pathData="M32,32m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+</vector>

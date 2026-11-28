@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <!-- Genre Avatar Container -->
+    <FrameLayout
+        android:id="@+id/genreAvatarContainer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/genreAvatarBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_artist_avatar"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+        <TextView
+            android:id="@+id/tvGenreInitial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#00F5D4"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:text="P" />
+
+        <ImageView
+            android:id="@+id/ivGenreIconFallback"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_neon_genre"
+            android:visibility="gone" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/genreImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+    </FrameLayout>
+
+    <!-- Name and Subtitle in packed vertical chain centered with avatar -->
+    <TextView
+        android:id="@+id/genreName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Pop"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="?attr/colorOnSurface"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@id/genreAvatarContainer"
+        app:layout_constraintTop_toTopOf="@id/genreAvatarContainer"
+        app:layout_constraintBottom_toTopOf="@id/genreCount"
+        app:layout_constraintEnd_toStartOf="@id/genreMenuIcon"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/genreCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0 song"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@id/genreAvatarContainer"
+        app:layout_constraintTop_toBottomOf="@id/genreName"
+        app:layout_constraintBottom_toBottomOf="@id/genreAvatarContainer"
+        app:layout_constraintEnd_toStartOf="@id/genreMenuIcon" />
+
+    <ImageView
+        android:id="@+id/genreMenuIcon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="6dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_neon_dots"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

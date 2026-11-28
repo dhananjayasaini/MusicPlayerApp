@@ -1,0 +1,79 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Connecting Lines Ambient Glow -->
+    <path
+        android:pathData="M8.4,10.6 L15.6,6.8 M8.4,13.4 L15.6,17.2"
+        android:strokeWidth="3.4"
+        android:strokeAlpha="0.30"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="8"
+                android:startY="6"
+                android:endX="16"
+                android:endY="18"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Connecting Lines Neon Tube -->
+    <path
+        android:pathData="M8.4,10.6 L15.6,6.8 M8.4,13.4 L15.6,17.2"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="8"
+                android:startY="6"
+                android:endX="16"
+                android:endY="18"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Left Node (Electric Cyan) -->
+    <path
+        android:pathData="M6,12m-3.6,0a3.6,3.6 0,1 1,7.2 0a3.6,3.6 0,1 1,-7.2 0"
+        android:fillColor="#3300F5FF" />
+    <path
+        android:pathData="M6,12m-2.6,0a2.6,2.6 0,1 1,5.2 0a2.6,2.6 0,1 1,-5.2 0"
+        android:fillColor="#00F5FF" />
+    <path
+        android:pathData="M6,12m-1.1,0a1.1,1.1 0,1 1,2.2 0a1.1,1.1 0,1 1,-2.2 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Top-Right Node (Neon Green/Lime) -->
+    <path
+        android:pathData="M18,5.5m-3.6,0a3.6,3.6 0,1 1,7.2 0a3.6,3.6 0,1 1,-7.2 0"
+        android:fillColor="#3300FFA3" />
+    <path
+        android:pathData="M18,5.5m-2.6,0a2.6,2.6 0,1 1,5.2 0a2.6,2.6 0,1 1,-5.2 0"
+        android:fillColor="#00FFA3" />
+    <path
+        android:pathData="M18,5.5m-1.1,0a1.1,1.1 0,1 1,2.2 0a1.1,1.1 0,1 1,-2.2 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Bottom-Right Node (Hot Pink) -->
+    <path
+        android:pathData="M18,18.5m-3.6,0a3.6,3.6 0,1 1,7.2 0a3.6,3.6 0,1 1,-7.2 0"
+        android:fillColor="#33FF007F" />
+    <path
+        android:pathData="M18,18.5m-2.6,0a2.6,2.6 0,1 1,5.2 0a2.6,2.6 0,1 1,-5.2 0"
+        android:fillColor="#FF007F" />
+    <path
+        android:pathData="M18,18.5m-1.1,0a1.1,1.1 0,1 1,2.2 0a1.1,1.1 0,1 1,-2.2 0"
+        android:fillColor="#FFFFFF" />
+</vector>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/splashRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash_gradient">
+
+    <!-- Glowing Background Aura behind the logo -->
+    <View
+        android:id="@+id/viewGlowAura"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:alpha="0.8"
+        android:background="@drawable/bg_splash_glow_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSplashLogo"
+        app:layout_constraintEnd_toEndOf="@+id/ivSplashLogo"
+        app:layout_constraintStart_toStartOf="@+id/ivSplashLogo"
+        app:layout_constraintTop_toTopOf="@+id/ivSplashLogo" />
+
+    <!-- Center Logo Container -->
+    <ImageView
+        android:id="@+id/ivSplashLogo"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginBottom="40dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_app_neon_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
+
+    <!-- App Title -->
+    <TextView
+        android:id="@+id/tvSplashTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:letterSpacing="0.04"
+        android:text="@string/app_name"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivSplashLogo" />
+
+    <!-- Tagline: Feel The Beat -->
+    <TextView
+        android:id="@+id/tvSplashTagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:letterSpacing="0.16"
+        android:text="@string/splash_tagline"
+        android:textAllCaps="true"
+        android:textColor="#00F5FF"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSplashTitle" />
+
+    <!-- Soundwave Equalizer Bars -->
+    <LinearLayout
+        android:id="@+id/layoutEqualizerBars"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/tvSplashFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:id="@+id/eqBar1"
+            android:layout_width="3.5dp"
+            android:layout_height="14dp"
+            android:layout_marginHorizontal="2.5dp"
+            android:background="@drawable/bg_splash_equalizer_bar" />
+
+        <View
+            android:id="@+id/eqBar2"
+            android:layout_width="3.5dp"
+            android:layout_height="24dp"
+            android:layout_marginHorizontal="2.5dp"
+            android:background="@drawable/bg_splash_equalizer_bar" />
+
+        <View
+            android:id="@+id/eqBar3"
+            android:layout_width="3.5dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="2.5dp"
+            android:background="@drawable/bg_splash_equalizer_bar" />
+
+        <View
+            android:id="@+id/eqBar4"
+            android:layout_width="3.5dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="2.5dp"
+            android:background="@drawable/bg_splash_equalizer_bar" />
+
+        <View
+            android:id="@+id/eqBar5"
+            android:layout_width="3.5dp"
+            android:layout_height="12dp"
+            android:layout_marginHorizontal="2.5dp"
+            android:background="@drawable/bg_splash_equalizer_bar" />
+    </LinearLayout>
+
+    <!-- Bottom Footer -->
+    <TextView
+        android:id="@+id/tvSplashFooter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:letterSpacing="0.08"
+        android:text="@string/splash_footer"
+        android:textColor="#6F5D88"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

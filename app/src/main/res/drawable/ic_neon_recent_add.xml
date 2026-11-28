@@ -1,0 +1,83 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="26dp"
+    android:height="26dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Ambient Red-Orange Neon Halo Glow -->
+    <path
+        android:pathData="M9.6,5.8 L9.6,17.5 M19.6,2.8 L19.6,14.5"
+        android:strokeWidth="4.2"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.32">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="8.8"
+                android:startY="3.0"
+                android:endX="20.4"
+                android:endY="18.0"
+                android:startColor="#FF1744"
+                android:centerColor="#FF3D00"
+                android:endColor="#FF6D00" />
+        </aapt:attr>
+    </path>
+
+    <!-- Top Sparkle Accent (Neon Red-Orange Mix) -->
+    <path
+        android:pathData="M5.0,3.2 L5.0,7.8 M2.7,5.5 L7.3,5.5"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF3D00" />
+
+    <!-- Stems (Red & Dark Orange Neon Mix Gradient) -->
+    <path
+        android:pathData="M9.6,5.8 L9.6,17.5 M19.6,2.8 L19.6,14.5"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="8.8"
+                android:startY="3.0"
+                android:endX="20.4"
+                android:endY="18.0"
+                android:startColor="#FF1744"
+                android:centerColor="#FF3D00"
+                android:endColor="#FF6D00" />
+        </aapt:attr>
+    </path>
+
+    <!-- Connecting Top Flag / Beam (Red & Dark Orange Mix Gradient) -->
+    <path
+        android:pathData="M8.8,5.8 L20.4,2.8 L20.4,6.2 L8.8,9.2 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="8.8"
+                android:startY="2.8"
+                android:endX="20.4"
+                android:endY="9.2"
+                android:startColor="#FF1744"
+                android:centerColor="#FF3D00"
+                android:endColor="#FF6D00" />
+        </aapt:attr>
+    </path>
+
+    <!-- Left Note Head (Electric Neon Red with White Hot Core) -->
+    <path
+        android:pathData="M7.5,18.0m-3.4,0a3.4,2.4 25,1 1,6.8 0a3.4,2.4 25,1 1,-6.8 0"
+        android:fillColor="#FF1744" />
+    <path
+        android:pathData="M7.5,18.0m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Right Note Head (Dark Orange Neon with White Hot Core) -->
+    <path
+        android:pathData="M17.5,15.0m-3.4,0a3.4,2.4 25,1 1,6.8 0a3.4,2.4 25,1 1,-6.8 0"
+        android:fillColor="#FF6D00" />
+    <path
+        android:pathData="M17.5,15.0m-1.2,0a1.2,1.2 0,1 1,2.4 0a1.2,1.2 0,1 1,-2.4 0"
+        android:fillColor="#FFFFFF" />
+</vector>

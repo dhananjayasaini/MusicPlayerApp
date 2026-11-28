@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Outer eye outline -->
+    <path
+        android:pathData="M12,5 C7,5 2.73,8.11 1,12.5 C2.73,16.89 7,20 12,20 C17,20 21.27,16.89 23,12.5 C21.27,8.11 17,5 12,5 Z"
+        android:strokeWidth="1.8"
+        android:strokeColor="#FFA000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+    <!-- Center hollow ring pupil -->
+    <path
+        android:pathData="M12,12.5m-3.2,0a3.2,3.2 0 1,1 6.4,0a3.2,3.2 0 1,1 -6.4,0"
+        android:strokeWidth="1.8"
+        android:strokeColor="#FFA000"
+        android:fillColor="#00000000" />
+    <!-- Diagonal strike -->
+    <path
+        android:pathData="M3.5,3.5 L20.5,21.5"
+        android:strokeWidth="1.8"
+        android:strokeColor="#FFA000"
+        android:strokeLineCap="round" />
+</vector>

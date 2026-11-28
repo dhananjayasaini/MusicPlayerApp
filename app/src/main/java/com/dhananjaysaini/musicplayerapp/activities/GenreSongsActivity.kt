@@ -1,0 +1,52 @@
+package com.dhananjaysaini.musicplayerapp.activities
+
+import android.content.Context
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
+import com.dhananjaysaini.musicplayerapp.R
+import com.dhananjaysaini.musicplayerapp.fragments.GenreSongsFragment
+import com.dhananjaysaini.musicplayerapp.utils.LocaleHelper
+import com.dhananjaysaini.musicplayerapp.utils.ThemeManager
+
+class GenreSongsActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_genre_songs)
+
+        val rootView = findViewById<View>(R.id.main)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = systemBars.top, bottom = systemBars.bottom)
+            insets
+        }
+
+        val isDark = ThemeManager.isDarkTheme(this)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = !isDark
+
+        if (savedInstanceState == null) {
+            val fragment = GenreSongsFragment().apply {
+                arguments = intent.extras
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.genreSongsContainer, fragment)
+                .commit()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ThemeManager.applyThemeToActivity(this)
+    }
+}

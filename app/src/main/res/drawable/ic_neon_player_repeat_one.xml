@@ -1,0 +1,67 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer Ambient Glow (Active Gold/Pink) -->
+    <path
+        android:pathData="M17,2.8 L20.4,6.2 L17,9.6 M4,11 L4,9.2 C4,7.54 5.34,6.2 7,6.2 L19.8,6.2 M7,21.2 L3.6,17.8 L7,14.4 M20,13 L20,14.8 C20,16.46 18.66,17.8 17,17.8 L4.2,17.8"
+        android:strokeWidth="3.6"
+        android:strokeAlpha="0.34"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3.6"
+                android:startY="3"
+                android:endX="20.4"
+                android:endY="21"
+                android:startColor="#FFD600"
+                android:centerColor="#FF6D00"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Main Neon Active Repeat Arrows -->
+    <path
+        android:pathData="M17,2.8 L20.4,6.2 L17,9.6 M4,11 L4,9.2 C4,7.54 5.34,6.2 7,6.2 L19.8,6.2 M7,21.2 L3.6,17.8 L7,14.4 M20,13 L20,14.8 C20,16.46 18.66,17.8 17,17.8 L4.2,17.8"
+        android:strokeWidth="2.0"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3.6"
+                android:startY="3"
+                android:endX="20.4"
+                android:endY="21"
+                android:startColor="#FFD600"
+                android:centerColor="#FF6D00"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Center "1" Neon Glow -->
+    <path
+        android:pathData="M11,10.3 L12.4,9.1 L12.4,14.9 M11,14.9 L13.8,14.9"
+        android:strokeWidth="3.0"
+        android:strokeAlpha="0.45"
+        android:strokeColor="#00F5FF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+
+    <!-- Center "1" Bright White Core -->
+    <path
+        android:pathData="M11,10.3 L12.4,9.1 L12.4,14.9 M11,14.9 L13.8,14.9"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+</vector>

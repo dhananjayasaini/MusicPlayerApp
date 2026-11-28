@@ -1,0 +1,68 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Outer Glow Circle Frame -->
+    <path
+        android:pathData="M24,24m-21,0a21,21 0,1 1,42 0a21,21 0,1 1,-42 0"
+        android:strokeWidth="2.5">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="3"
+                android:startY="3"
+                android:endX="45"
+                android:endY="45"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="24"
+                android:gradientRadius="21"
+                android:startColor="#180B2B"
+                android:endColor="#080314" />
+        </aapt:attr>
+    </path>
+    <!-- Vinyl Disc Rings -->
+    <path
+        android:pathData="M24,24m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0"
+        android:strokeWidth="1.2"
+        android:strokeColor="#4000F5FF" />
+    <path
+        android:pathData="M24,24m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0"
+        android:strokeWidth="1.2"
+        android:strokeColor="#50B026FF" />
+    <!-- Center Disc Hole -->
+    <path
+        android:pathData="M24,24m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FF007F">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="20"
+                android:startY="20"
+                android:endX="28"
+                android:endY="28"
+                android:startColor="#00F5FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+    <!-- Music Beams / Waves Accent -->
+    <path
+        android:pathData="M16,16 L20,12 L30,15 L30,23"
+        android:strokeWidth="1.8"
+        android:strokeColor="#00F5FF"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M24,23 L24,25"
+        android:strokeWidth="2"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+</vector>

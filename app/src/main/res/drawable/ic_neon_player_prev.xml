@@ -1,0 +1,94 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Left Vertical Bar Ambient Glow -->
+    <path
+        android:pathData="M6,5.5 L6,18.5"
+        android:strokeWidth="4.2"
+        android:strokeAlpha="0.32"
+        android:strokeLineCap="round"
+        android:strokeColor="#00F5FF" />
+
+    <!-- Left Vertical Bar Neon Tube -->
+    <path
+        android:pathData="M6,5.5 L6,18.5"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="6"
+                android:startY="5"
+                android:endX="6"
+                android:endY="19"
+                android:startColor="#00F5FF"
+                android:endColor="#B026FF" />
+        </aapt:attr>
+    </path>
+
+    <!-- Left Vertical Bar White Core -->
+    <path
+        android:pathData="M6,6.2 L6,17.8"
+        android:strokeWidth="0.9"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Left Triangle Ambient Glow -->
+    <path
+        android:pathData="M18.5,6.2 L9.8,12 L18.5,17.8 Z"
+        android:strokeWidth="3.4"
+        android:strokeAlpha="0.30"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="9.8"
+                android:startY="6"
+                android:endX="18.5"
+                android:endY="18"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Left Triangle Neon Tube -->
+    <path
+        android:pathData="M18.5,6.2 L9.8,12 L18.5,17.8 Z"
+        android:strokeWidth="1.8"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="9.8"
+                android:startY="6"
+                android:endX="18.5"
+                android:endY="18"
+                android:startColor="#00F5FF"
+                android:centerColor="#B026FF"
+                android:endColor="#FF007F" />
+        </aapt:attr>
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="9.8"
+                android:startY="6"
+                android:endX="18.5"
+                android:endY="18"
+                android:startColor="#3300F5FF"
+                android:endColor="#33FF007F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Inner Bright White Core -->
+    <path
+        android:pathData="M17.2,8.7 L12.2,12 L17.2,15.3 Z"
+        android:fillColor="#FFFFFF" />
+</vector>
